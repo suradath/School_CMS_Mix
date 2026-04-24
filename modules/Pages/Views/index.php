@@ -1,0 +1,81 @@
+<div class="mb-6 flex justify-between items-center">
+    <a href="/pages/create" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition shadow-md">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        สร้างหน้าใหม่
+    </a>
+</div>
+
+<div class="relative overflow-x-auto shadow-sm sm:rounded-2xl border border-gray-100 bg-white">
+    <table class="w-full text-sm text-left text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-100">
+            <tr>
+                <th scope="col" class="px-6 py-4">หัวข้อหน้าเว็บ</th>
+                <th scope="col" class="px-6 py-4">URL Slug</th>
+                <th scope="col" class="px-6 py-4">สถานะ</th>
+                <th scope="col" class="px-6 py-4">ผู้เขียน</th>
+                <th scope="col" class="px-6 py-4">วันที่สร้าง</th>
+                <th scope="col" class="px-6 py-4 text-right">จัดการ</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+            <?php foreach ($pages as $p): ?>
+                <tr class="hover:bg-gray-50/50 transition">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center">
+                            <div class="h-10 w-10 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 mr-4 border border-gray-100 flex items-center justify-center text-gray-400">
+                                <?php if (!empty($p['featured_image'])): ?>
+                                    <img src="<?= $p['featured_image'] ?>" class="w-full h-full object-cover">
+                                <?php else: ?>
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <?php endif; ?>
+                            </div>
+                            <div class="text-sm font-bold text-slate-800 line-clamp-1"><?= htmlspecialchars($p['title']) ?></div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-xs font-mono text-slate-500">
+                        /p/<?= $p['slug'] ?>
+                    </td>
+                    <td class="px-6 py-4">
+                        <?php if ($p['status'] === 'published'): ?>
+                            <span class="px-3 py-1 text-xs font-bold bg-green-50 text-green-600 rounded-full">เปิดใช้งาน</span>
+                        <?php else: ?>
+                            <span class="px-3 py-1 text-xs font-bold bg-amber-50 text-amber-600 rounded-full">ฉบับร่าง</span>
+                        <?php endif; ?>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-slate-600">
+                        <?= htmlspecialchars($p['author_name'] ?? 'ระบบ') ?>
+                    </td>
+                    <td class="px-6 py-4 text-xs text-slate-500 font-medium">
+                        <?= date('d/m/Y', strtotime($p['created_at'])) ?>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <div class="flex items-center justify-end space-x-2">
+                            <a href="/p/<?= $p['slug'] ?>" target="_blank" class="p-2 text-slate-400 hover:bg-slate-50 rounded-lg transition" title="ดูหน้าเว็บ">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            </a>
+                            <a href="/pages/edit/<?= $p['id'] ?>" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition" title="แก้ไข">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                            </a>
+                            <button onclick="confirmDelete(<?= $p['id'] ?>)" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition" title="ลบ">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            <?php if (empty($pages)): ?>
+            <tr>
+                <td colspan="6" class="px-6 py-10 text-center text-gray-400">ยังไม่มีการสร้างหน้าเว็บ</td>
+            </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function confirmDelete(id) {
+    if (confirm('คุณต้องการลบหน้าเว็บนี้ใช่หรือไม่?')) {
+        window.location.href = '/pages/delete/' + id;
+    }
+}
+</script>
