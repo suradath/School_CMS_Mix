@@ -9,7 +9,7 @@
     $siteLogo = \Core\Database::getSetting('site_logo', '');
     $siteFavicon = \Core\Database::getSetting('site_favicon', '');
     $primaryColor = \Core\Database::getSetting('primary_color', '#1d4ed8');
-    $currentPath = $_SERVER['REQUEST_URI'];
+    $currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
     $socials = [
         'facebook' => \Core\Database::getSetting('social_facebook', ''),
@@ -358,18 +358,18 @@
     </footer>
 
     <?php 
-    // Entry Popup Logic
+    // Consolidated Entry Popup Logic
     if ($currentPath === '/' || $currentPath === '/index.php'):
         $activePopup = \Modules\Settings\Models\EntryPopup::getActive();
         if ($activePopup):
     ?>
     <!-- Entry Popup Modal -->
     <div id="entry-popup-modal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-[100] hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full flex items-center justify-center">
-        <div class="relative w-full max-w-2xl max-h-full">
+        <div class="relative w-fit max-w-[90vw] max-h-full">
             <!-- Modal content -->
             <div class="relative bg-white rounded-[2rem] shadow-2xl overflow-hidden animate-fade-in-up">
                 <!-- Close Button -->
-                <button type="button" class="absolute top-4 right-4 text-white bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-full text-sm w-10 h-10 inline-flex justify-center items-center z-10 transition-all" data-modal-hide="entry-popup-modal">
+                <button type="button" id="close-entry-popup" class="absolute top-4 right-4 text-white bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-full text-sm w-10 h-10 inline-flex justify-center items-center z-10 transition-all">
                     <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                     </svg>
@@ -381,40 +381,83 @@
                         <a href="<?= $activePopup['link_url'] ?>" target="_blank">
                     <?php endif; ?>
                     
-                    <img src="<?= $activePopup['image_url'] ?>" class="w-full h-auto object-contain max-h-[80vh]" alt="<?= htmlspecialchars($activePopup['title']) ?>">
+                    <img src="<?= $activePopup['image_url'] ?>" class="max-w-full h-auto block max-h-[75vh] mx-auto" alt="<?= htmlspecialchars($activePopup['title']) ?>">
                     
                     <?php if ($activePopup['link_url']): ?>
                         </a>
                     <?php endif; ?>
+
+                    <!-- Don't show again option -->
+                    <div class="bg-gray-50/80 backdrop-blur-sm p-4 border-t border-gray-100 flex items-center justify-center">
+                        <label class="inline-flex items-center cursor-pointer group">
+                            <input type="checkbox" id="dont-show-again" class="w-5 h-5 text-primary bg-white border-gray-300 rounded focus:ring-primary focus:ring-offset-0 transition-all cursor-pointer">
+                            <span class="ml-3 text-sm font-bold text-slate-600 group-hover:text-slate-900 transition-colors">ไม่ต้องแสดงประกาศนี้อีก</span>
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if already shown in this session
-            if (!sessionStorage.getItem('entry_popup_shown')) {
-                const modalEl = document.getElementById('entry-popup-modal');
-                if (modalEl) {
-                    const modal = new Modal(modalEl, {
-                        placement: 'center',
-                        backdrop: 'dynamic',
-                        backdropClasses: 'bg-slate-900/60 backdrop-blur-sm fixed inset-0 z-[90]',
-                        closable: true,
-                    });
-                    modal.show();
-                    sessionStorage.setItem('entry_popup_shown', 'true');
+            const popupId = '<?= $activePopup['id'] ?>';
+            const modalEl = document.getElementById('entry-popup-modal');
+            const closeBtn = document.getElementById('close-entry-popup');
+            const dontShowCheck = document.getElementById('dont-show-again');
+            
+            if (modalEl) {
+                if (localStorage.getItem('hide_popup_' + popupId) !== 'true') {
+                    if (typeof Modal !== 'undefined') {
+                        const modal = new Modal(modalEl, {
+                            placement: 'center',
+                            backdrop: 'dynamic',
+                            backdropClasses: 'bg-slate-900/60 backdrop-blur-sm fixed inset-0 z-[90]',
+                            closable: true,
+                            onHide: () => {
+                                // 1. Fix aria-hidden focus warning: Blur any focus within the modal
+                                if (document.activeElement instanceof HTMLElement && modalEl.contains(document.activeElement)) {
+                                    document.activeElement.blur();
+                                }
+                                // 2. Robust cleanup of body classes
+                                if (document.body) {
+                                    document.body.classList.remove('overflow-hidden');
+                                    document.body.style.overflow = '';
+                                }
+                            }
+                        });
+                        
+                        modal.show();
+
+                        // Manual close button handler to avoid data-attribute conflicts
+                        if (closeBtn) {
+                            closeBtn.addEventListener('click', function() {
+                                modal.hide();
+                            });
+                        }
+
+                        if (dontShowCheck) {
+                            dontShowCheck.addEventListener('change', function() {
+                                if (this.checked) {
+                                    localStorage.setItem('hide_popup_' + popupId, 'true');
+                                } else {
+                                    localStorage.removeItem('hide_popup_' + popupId);
+                                }
+                            });
+                        }
+                    }
                 }
             }
         });
     </script>
     <?php 
         endif;
-    endif; 
+    else: 
     ?>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <?php endif; ?>
     <script>
         window.addEventListener('scroll', function () {
             const nav = document.querySelector('nav');
