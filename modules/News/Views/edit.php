@@ -69,3 +69,28 @@
         </form>
     </div>
 </div>
+
+<style>
+    .ck-editor__editable {
+        min-height: 500px !important;
+        border-bottom-left-radius: 1rem !important;
+        border-bottom-right-radius: 1rem !important;
+    }
+    .ck-toolbar {
+        border-top-left-radius: 1rem !important;
+        border-top-right-radius: 1rem !important;
+        background-color: #f9fafb !important;
+    }
+</style>
+
+<script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('textarea[name="content"]'), {
+            toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'insertTable', 'undo', 'redo'],
+            language: 'th'
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>
