@@ -15,9 +15,12 @@
 
 ### ✨ คุณสมบัติเด่น
 - **Modern UI/UX:** ดีไซน์พรีเมียมด้วย Glassmorphism และ Responsive Design รองรับทุกหน้าจอ
-- **Easy Installer:** ระบบติดตั้งอัตโนมัติผ่านหน้าเว็บ (Step-by-step) สะดวกและรวดเร็ว
+- **Academic Calendar:** ปฏิทินวิชาการแสดงผลด้วย FullCalendar พร้อมระบบ Modal แจ้งรายละเอียดกิจกรรม
+- **Entry Popup:** ระบบจัดการป๊อปอัพแจ้งเตือนหน้าแรก (Welcome Popup) พร้อมรองรับรูปภาพและลิงก์
+- **Department Management:** ระบบจัดการกลุ่มสาระฯ และฝ่ายงานโรงเรียน พร้อมระบบเรียงลำดับอิสระ
 - **Branding Control:** ปรับแต่งสีประจำโรงเรียน, โลโก้ และ Favicon ได้โดยตรงจากระบบหลังบ้าน
 - **Modular System:** ระบบจัดการ ข่าวสาร, คณะผู้บริหาร/ครู, และคลังภาพกิจกรรม แยกสัดส่วนชัดเจน
+- **Easy Installer:** ระบบติดตั้งอัตโนมัติผ่านหน้าเว็บ (Step-by-step) สะดวกและรวดเร็ว
 - **SEO Friendly:** รองรับระบบ Clean URLs เพื่อผลการค้นหาที่ดีบน Search Engine
 
 ### 🛠️ เทคโนโลยีที่ใช้
@@ -40,9 +43,12 @@
 
 ### ✨ Key Features
 - **Modern UI/UX:** Premium design with Glassmorphism and Responsive Design for all devices.
-- **Easy Installer:** Automatic web-based setup (Step-by-step) for hassle-free deployment.
+- **Academic Calendar:** Integrated FullCalendar with interactive event modals.
+- **Entry Popup:** Management system for welcome announcements with images and links.
+- **Department Management:** Customizable organizational structure with custom sorting.
 - **Branding Control:** Easily customize school colors, logos, and favicons from the admin dashboard.
 - **Modular System:** Dedicated modules for News, Personnel, and Activity Galleries.
+- **Easy Installer:** Automatic web-based setup (Step-by-step) for hassle-free deployment.
 - **SEO Friendly:** Supports Clean URLs to enhance search engine visibility.
 
 ### 🛠️ Tech Stack

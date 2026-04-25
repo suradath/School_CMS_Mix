@@ -66,6 +66,39 @@ $router->add('settings/home-editor', 'Modules\Settings\Controllers\SettingsContr
 $router->add('settings/update-home', 'Modules\Settings\Controllers\SettingsController@updateHome');
 $router->add('settings/footer-editor', 'Modules\Settings\Controllers\SettingsController@footerEditor');
 $router->add('settings/update-footer', 'Modules\Settings\Controllers\SettingsController@updateFooter');
+
+// Entry Popup Routes
+$router->add('settings/popups', 'Modules\Settings\Controllers\PopupController@index');
+$router->add('settings/popups/create', 'Modules\Settings\Controllers\PopupController@create');
+$router->add('settings/popups/store', 'Modules\Settings\Controllers\PopupController@store');
+$router->add('settings/popups/edit', 'Modules\Settings\Controllers\PopupController@edit');
+$router->add('settings/popups/update', 'Modules\Settings\Controllers\PopupController@update');
+$router->add('settings/popups/delete', 'Modules\Settings\Controllers\PopupController@delete');
+
+// Personnel & Department Routes
+$router->add('personnel', 'Modules\Personnel\Controllers\PersonnelController@index');
+$router->add('personnel/create', 'Modules\Personnel\Controllers\PersonnelController@create');
+$router->add('personnel/store', 'Modules\Personnel\Controllers\PersonnelController@store');
+$router->add('personnel/edit', 'Modules\Personnel\Controllers\PersonnelController@edit');
+$router->add('personnel/update', 'Modules\Personnel\Controllers\PersonnelController@update');
+$router->add('personnel/delete', 'Modules\Personnel\Controllers\PersonnelController@delete');
+
+$router->add('personnel/departments', 'Modules\Personnel\Controllers\DepartmentController@index');
+$router->add('personnel/departments/create', 'Modules\Personnel\Controllers\DepartmentController@create');
+$router->add('personnel/departments/store', 'Modules\Personnel\Controllers\DepartmentController@store');
+$router->add('personnel/departments/edit', 'Modules\Personnel\Controllers\DepartmentController@edit');
+$router->add('personnel/departments/update', 'Modules\Personnel\Controllers\DepartmentController@update');
+$router->add('personnel/departments/delete', 'Modules\Personnel\Controllers\DepartmentController@delete');
+
+// Academic Calendar Routes
+$router->add('calendar', 'Modules\Calendar\Controllers\CalendarController@index');
+$router->add('calendar/create', 'Modules\Calendar\Controllers\CalendarController@create');
+$router->add('calendar/store', 'Modules\Calendar\Controllers\CalendarController@store');
+$router->add('calendar/edit', 'Modules\Calendar\Controllers\CalendarController@edit');
+$router->add('calendar/update', 'Modules\Calendar\Controllers\CalendarController@update');
+$router->add('calendar/delete', 'Modules\Calendar\Controllers\CalendarController@delete');
+$router->add('api/calendar/events', 'Modules\Calendar\Controllers\CalendarController@getEvents');
+
 $router->add('p', 'Modules\Home\Controllers\HomeController@viewPage');
 
 // 7. Resolve Request

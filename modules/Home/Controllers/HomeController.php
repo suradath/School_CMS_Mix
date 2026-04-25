@@ -21,8 +21,10 @@ class HomeController extends Controller
         $latestNews = Database::fetchAll("SELECT * FROM news WHERE status = 'published' ORDER BY published_at DESC LIMIT 6");
         $personnelCount = Database::fetch("SELECT COUNT(*) as count FROM personnel")['count'];
         
-        // Fetch 4 featured personnel (limit to 4)
-        $featuredPersonnel = Database::fetchAll("SELECT * FROM personnel ORDER BY id ASC LIMIT 4");
+        // Fetch personnel from 'ฝ่ายบริหาร' (Administration) department
+        $adminDept = Database::fetch("SELECT id FROM departments WHERE name = 'ฝ่ายบริหาร'");
+        $adminDeptId = $adminDept['id'] ?? 0;
+        $featuredPersonnel = Database::fetchAll("SELECT * FROM personnel WHERE department_id = ? ORDER BY sort_order ASC, id ASC", [$adminDeptId]);
         
         // Fetch 4 latest gallery albums
         $latestAlbums = Database::fetchAll("SELECT * FROM gallery_albums ORDER BY created_at DESC LIMIT 4");

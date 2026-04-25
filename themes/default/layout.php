@@ -261,7 +261,7 @@
             class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50">
         </div>
         <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                 <div class="md:col-span-2">
                     <div class="flex items-center mb-6">
                         <?php if ($siteLogo): ?>
@@ -320,15 +320,6 @@
                     </div>
                 </div>
                 <div>
-                    <h4 class="text-sm font-bold uppercase tracking-widest text-slate-500 mb-6">เมนูหลัก</h4>
-                    <ul class="text-slate-400 space-y-4 font-medium">
-                        <?php foreach ($dynamicMenus as $m): ?>
-                            <li><a href="<?= $m['url'] ?>"
-                                    class="hover:text-primary transition-colors"><?= $m['title'] ?></a></li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-                <div>
                     <h4 class="text-sm font-bold uppercase tracking-widest text-slate-500 mb-6">ติดต่อหน่วยงาน</h4>
                     <ul class="text-slate-400 space-y-4 text-sm leading-relaxed">
                         <li class="flex items-start">
@@ -365,6 +356,63 @@
             </div>
         </div>
     </footer>
+
+    <?php 
+    // Entry Popup Logic
+    if ($currentPath === '/' || $currentPath === '/index.php'):
+        $activePopup = \Modules\Settings\Models\EntryPopup::getActive();
+        if ($activePopup):
+    ?>
+    <!-- Entry Popup Modal -->
+    <div id="entry-popup-modal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-[100] hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full flex items-center justify-center">
+        <div class="relative w-full max-w-2xl max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-[2rem] shadow-2xl overflow-hidden animate-fade-in-up">
+                <!-- Close Button -->
+                <button type="button" class="absolute top-4 right-4 text-white bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-full text-sm w-10 h-10 inline-flex justify-center items-center z-10 transition-all" data-modal-hide="entry-popup-modal">
+                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+                
+                <div class="relative">
+                    <?php if ($activePopup['link_url']): ?>
+                        <a href="<?= $activePopup['link_url'] ?>" target="_blank">
+                    <?php endif; ?>
+                    
+                    <img src="<?= $activePopup['image_url'] ?>" class="w-full h-auto object-contain max-h-[80vh]" alt="<?= htmlspecialchars($activePopup['title']) ?>">
+                    
+                    <?php if ($activePopup['link_url']): ?>
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if already shown in this session
+            if (!sessionStorage.getItem('entry_popup_shown')) {
+                const modalEl = document.getElementById('entry-popup-modal');
+                if (modalEl) {
+                    const modal = new Modal(modalEl, {
+                        placement: 'center',
+                        backdrop: 'dynamic',
+                        backdropClasses: 'bg-slate-900/60 backdrop-blur-sm fixed inset-0 z-[90]',
+                        closable: true,
+                    });
+                    modal.show();
+                    sessionStorage.setItem('entry_popup_shown', 'true');
+                }
+            }
+        });
+    </script>
+    <?php 
+        endif;
+    endif; 
+    ?>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     <script>

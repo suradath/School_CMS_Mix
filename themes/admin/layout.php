@@ -77,6 +77,7 @@
                     ['url' => '/personnel', 'label' => 'บุคลากร', 'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'],
                     ['url' => '/news', 'label' => 'ข่าวสาร', 'icon' => 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2zM7 8h4m-4 4h8m-8 4h8'],
                     ['url' => '/gallery', 'label' => 'คลังภาพ', 'icon' => 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'],
+                    ['url' => '/calendar', 'label' => 'ปฏิทินวิชาการ', 'icon' => 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2V12a2 2 0 002 2z'],
                 ];
                 
                 foreach ($menuItems as $item): 
@@ -100,6 +101,14 @@
                 <a href="/settings/home-editor" class="flex items-center px-4 py-3.5 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-2xl transition-all group <?= $currentPath === '/settings/home-editor' ? 'bg-slate-50 text-slate-900' : '' ?>">
                     <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     แก้ไขหน้าแรก
+                </a>
+                <a href="/personnel/departments" class="flex items-center px-4 py-3.5 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-2xl transition-all group <?= $currentPath === '/personnel/departments' ? 'bg-slate-50 text-slate-900' : '' ?>">
+                    <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                    ตั้งค่ากลุ่มสาระฯ
+                </a>
+                <a href="/settings/popups" class="flex items-center px-4 py-3.5 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-2xl transition-all group <?= $currentPath === '/settings/popups' ? 'bg-slate-50 text-slate-900' : '' ?>">
+                    <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                    จัดการ Popup
                 </a>
                 <a href="/settings/menu" class="flex items-center px-4 py-3.5 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-2xl transition-all group <?= $currentPath === '/settings/menu' ? 'bg-slate-50 text-slate-900' : '' ?>">
                     <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>

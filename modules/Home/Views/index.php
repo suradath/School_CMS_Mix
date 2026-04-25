@@ -300,8 +300,8 @@
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
         <div class="text-center mb-20">
             <div class="h-1 w-20 bg-primary mx-auto mb-6"></div>
-            <h2 class="text-5xl font-extrabold text-slate-900 heading-font mb-4">บุคลากรที่โดดเด่น</h2>
-            <p class="text-slate-500 text-lg font-medium">ทำความรู้จักกับทีมผู้สอนและเจ้าหน้าที่ผู้เชี่ยวชาญของเรา</p>
+            <h2 class="text-5xl font-extrabold text-slate-900 heading-font mb-4">ฝ่ายบริหาร</h2>
+            <p class="text-slate-500 text-lg font-medium">คณะผู้บริหารและหัวหน้าฝ่ายงานโรงเรียนของเรา</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -391,6 +391,155 @@
         </div>
     </section>
 <?php endif; ?>
+<!-- Academic Calendar Section -->
+<section class="py-32 bg-white relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-20">
+            <div class="h-1 w-20 bg-primary mx-auto mb-6"></div>
+            <h2 class="text-5xl font-extrabold text-slate-900 heading-font mb-4">ปฏิทินวิชาการ</h2>
+            <p class="text-slate-500 text-lg font-medium">ติดตามกิจกรรมและกำหนดการสำคัญต่างๆ ของโรงเรียน</p>
+        </div>
+
+        <div class="bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl shadow-slate-200/50 border border-slate-100">
+            <div id="calendar"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Calendar Event Modal -->
+<div id="eventModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeEventModal()"></div>
+    <div class="relative bg-white w-full max-w-xl rounded-[3rem] shadow-2xl overflow-hidden animate-fade-in-up">
+        <div id="modalHeader" class="h-4 w-full"></div>
+        <div class="p-10">
+            <div class="flex justify-between items-start mb-6">
+                <h3 id="modalTitle" class="text-3xl font-extrabold text-slate-900 heading-font leading-tight"></h3>
+                <button onclick="closeEventModal()" class="text-slate-400 hover:text-slate-600 transition-colors">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="flex items-center text-slate-600">
+                    <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-primary mr-4">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">วันที่และเวลา</p>
+                        <p id="modalDate" class="font-bold text-slate-800"></p>
+                    </div>
+                </div>
+
+                <div id="modalResponsibleContainer" class="flex items-center text-slate-600">
+                    <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-primary mr-4">
+                        <i class="fa fa-user"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">ผู้รับผิดชอบ</p>
+                        <p id="modalResponsible" class="font-bold text-slate-800"></p>
+                    </div>
+                </div>
+
+                <div id="modalDescContainer" class="bg-slate-50 p-6 rounded-2xl">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">รายละเอียด</p>
+                    <p id="modalDescription" class="text-slate-600 leading-relaxed"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'th',
+            themeSystem: 'standard',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,listMonth'
+            },
+            buttonText: {
+                today: 'วันนี้',
+                month: 'เดือน',
+                week: 'สัปดาห์',
+                day: 'วัน',
+                list: 'รายการ'
+            },
+            events: '/api/calendar/events',
+            eventClick: function(info) {
+                const event = info.event;
+                const props = event.extendedProps;
+                
+                document.getElementById('modalTitle').innerText = event.title;
+                document.getElementById('modalHeader').style.backgroundColor = event.backgroundColor;
+                
+                // Format Date
+                let dateStr = props.startDate;
+                if (props.endDate && props.endDate !== props.startDate) {
+                    dateStr += ' ถึง ' + props.endDate;
+                }
+                if (props.startTime) {
+                    dateStr += ' (' + props.startTime.substring(0, 5);
+                    if (props.endTime) dateStr += ' - ' + props.endTime.substring(0, 5);
+                    dateStr += ' น.)';
+                }
+                document.getElementById('modalDate').innerText = dateStr;
+                
+                // Responsible
+                if (props.responsible) {
+                    document.getElementById('modalResponsible').innerText = props.responsible;
+                    document.getElementById('modalResponsibleContainer').classList.remove('hidden');
+                } else {
+                    document.getElementById('modalResponsibleContainer').classList.add('hidden');
+                }
+                
+                // Description
+                if (props.description) {
+                    document.getElementById('modalDescription').innerText = props.description;
+                    document.getElementById('modalDescContainer').classList.remove('hidden');
+                } else {
+                    document.getElementById('modalDescContainer').classList.add('hidden');
+                }
+                
+                document.getElementById('eventModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+        calendar.render();
+    });
+
+    function closeEventModal() {
+        document.getElementById('eventModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+</script>
+
+<style>
+    :root {
+        --fc-button-bg-color: #f8fafc;
+        --fc-button-text-color: #64748b;
+        --fc-button-border-color: #e2e8f0;
+        --fc-button-hover-bg-color: #f1f5f9;
+        --fc-button-hover-border-color: #cbd5e1;
+        --fc-button-active-bg-color: #e2e8f0;
+        --fc-button-active-border-color: #cbd5e1;
+        --fc-today-bg-color: #eff6ff;
+        --fc-border-color: #f1f5f9;
+    }
+    .fc { font-family: 'Sarabun', sans-serif; }
+    .fc .fc-toolbar-title { font-family: 'K2D', sans-serif; font-weight: 800; color: #0f172a; font-size: 1.5rem; }
+    .fc .fc-button { font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.75rem; padding: 0.75rem 1.25rem; border-radius: 1rem !important; transition: all 0.3s; }
+    .fc .fc-button-primary:not(:disabled).fc-button-active, .fc .fc-button-primary:not(:disabled):active { background-color: var(--tw-color-primary, #1d4ed8) !important; color: white !important; border-color: transparent !important; }
+    .fc .fc-daygrid-event { border-radius: 0.5rem; padding: 0.25rem 0.5rem; font-weight: 600; font-size: 0.85rem; border: none; margin-top: 2px; }
+    .fc .fc-daygrid-day.fc-day-today { background-color: var(--fc-today-bg-color); }
+    .fc .fc-col-header-cell { padding: 1rem 0; font-weight: 700; color: #94a3b8; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.1em; }
+    .fc-theme-standard td, .fc-theme-standard th { border: 1px solid #f8fafc; }
+    .fc .fc-list-event:hover td { background-color: #f8fafc !important; }
+</style>
 
 <!-- Dynamic Custom Content Blocks -->
 <?php if (!empty($home_custom_content)): ?>
