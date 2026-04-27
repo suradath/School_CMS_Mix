@@ -11,9 +11,8 @@ class GalleryController extends Controller
 {
     public function __construct()
     {
-        if (!isset($_SESSION['user_id'])) {
-            $this->redirect('/auth');
-        }
+        parent::__construct();
+        $this->requireRole(['admin', 'editor']);
     }
 
     /**

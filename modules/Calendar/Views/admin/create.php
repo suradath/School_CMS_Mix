@@ -7,6 +7,7 @@
     </div>
 
     <form action="/calendar/store" method="POST" class="space-y-8">
+            <?= \Core\Security::csrf_field() ?>
         <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-gray-100">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <!-- Title -->

@@ -391,6 +391,42 @@
         </div>
     </section>
 <?php endif; ?>
+<!-- Journals Section -->
+<?php if (!empty($journals)): ?>
+    <section class="bg-white py-32 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 space-y-4 md:space-y-0">
+                <div>
+                    <div class="h-1 w-20 bg-primary mb-6"></div>
+                    <h2 class="text-5xl font-extrabold text-slate-900 heading-font tracking-tight">วารสารประชาสัมพันธ์</h2>
+                    <p class="text-lg text-slate-500 mt-4 max-w-xl leading-relaxed">
+                        ติดตามวารสารและข้อมูลข่าวสารล่าสุดผ่านสื่อสิ่งพิมพ์ดิจิทัลของโรงเรียน</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <?php foreach ($journals as $item): ?>
+                    <div class="group bg-white rounded-5xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 flex flex-col">
+                        <div class="aspect-[3/4] overflow-hidden relative">
+                            <img src="<?= $item['image_url'] ?>" class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="<?= htmlspecialchars($item['title']) ?>">
+                            <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <a href="<?= $item['image_url'] ?>" target="_blank" class="px-6 py-3 bg-white text-primary font-bold rounded-2xl shadow-xl hover:bg-blue-50 transition-all hover:scale-105 text-sm">
+                                    ดูรูปขนาดเต็ม
+                                </a>
+                            </div>
+                        </div>
+                        <div class="p-8 text-center">
+                            <h4 class="text-lg font-bold text-slate-800 line-clamp-1 group-hover:text-primary transition-colors">
+                                <?= htmlspecialchars($item['title']) ?>
+                            </h4>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+<?php endif; ?>
+
 <!-- Academic Calendar Section -->
 <section class="py-32 bg-white relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

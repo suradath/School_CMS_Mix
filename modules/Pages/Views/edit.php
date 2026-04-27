@@ -1,7 +1,7 @@
 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="p-8">
-        <form action="/pages/update/<?= $page['id'] ?>" method="POST" enctype="multipart/form-data" class="space-y-6">
-            <?= \Core\Security::csrf_field() ?>
+        <form action="/pages/update/<?= $page['id'] ?>
+            <?= \Core\Security::csrf_field() ?>" method="POST" enctype="multipart/form-data" class="space-y-6">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Main Content Area -->
                 <div class="lg:col-span-2 space-y-4">

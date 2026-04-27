@@ -11,9 +11,8 @@ class SettingsController extends Controller
 {
     public function __construct()
     {
-        if (!isset($_SESSION['user_id'])) {
-            $this->redirect('/auth');
-        }
+        parent::__construct();
+        $this->requireRole('admin');
     }
 
     /**
@@ -22,12 +21,12 @@ class SettingsController extends Controller
     public function index(): void
     {
         $settings = [
-            'site_name' => Database::getSetting('site_name', 'School CMS Mix V1.2'),
+            'site_name' => Database::getSetting('site_name', 'School CMS Mix V2.0'),
             'primary_color' => Database::getSetting('primary_color', '#1d4ed8'),
             'secondary_color' => Database::getSetting('secondary_color', '#3b82f6'),
             'site_logo' => Database::getSetting('site_logo', ''),
             'site_favicon' => Database::getSetting('site_favicon', ''),
-            'footer_text' => Database::getSetting('footer_text', 'School CMS Mix V1.2 Application'),
+            'footer_text' => Database::getSetting('footer_text', 'School CMS Mix V2.0 Application'),
             'school_address' => Database::getSetting('school_address', ''),
             'school_phone' => Database::getSetting('school_phone', ''),
             'social_facebook' => Database::getSetting('social_facebook', ''),
@@ -274,10 +273,10 @@ class SettingsController extends Controller
     public function footerEditor(): void
     {
         $settings = [
-            'footer_description' => Database::getSetting('footer_description', 'ยกระดับการศึกษาด้วยเทคโนโลยีที่ทันสมัย ระบบบริหารจัดการเนื้อหาโรงเรียน (School CMS Mix V1.2) ที่ออกแบบมาเพื่อความง่ายและประสิทธิภาพสูงสุด'),
+            'footer_description' => Database::getSetting('footer_description', 'ยกระดับการศึกษาด้วยเทคโนโลยีที่ทันสมัย ระบบบริหารจัดการเนื้อหาโรงเรียน (School CMS Mix V2.0) ที่ออกแบบมาเพื่อความง่ายและประสิทธิภาพสูงสุด'),
             'school_address' => Database::getSetting('school_address', '123 ถ.วิทยพัฒนา ต.ในเมือง อ.เมือง จ.ขอนแก่น 40000'),
             'school_phone' => Database::getSetting('school_phone', '043-xxx-xxxx'),
-            'footer_copyright' => Database::getSetting('footer_copyright', '© ' . date('Y') . ' School CMS Mix V1.2. All rights reserved.'),
+            'footer_copyright' => Database::getSetting('footer_copyright', '© ' . date('Y') . ' School CMS Mix V2.0. All rights reserved.'),
         ];
 
         $this->renderWithLayout('Settings.Views.footer_editor', 'themes.admin.layout', [

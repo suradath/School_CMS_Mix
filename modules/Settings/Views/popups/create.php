@@ -7,6 +7,7 @@
     </div>
 
     <form action="/settings/popups/store" method="POST" enctype="multipart/form-data" class="space-y-8">
+            <?= \Core\Security::csrf_field() ?>
         <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-gray-100">
             <div class="space-y-6">
                 <div>

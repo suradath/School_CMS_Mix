@@ -10,9 +10,13 @@ class CalendarController extends Controller
 {
     public function __construct()
     {
-        if (!isset($_SESSION['user_id'])) {
-            $this->redirect('/auth');
+        parent::__construct();
+        // Skip auth for API events (used by frontend)
+        $uri = $_SERVER['REQUEST_URI'];
+        if (strpos($uri, 'api/calendar/events') !== false) {
+            return;
         }
+        $this->requireRole(['admin', 'editor']);
     }
 
     /**

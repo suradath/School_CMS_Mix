@@ -6,7 +6,8 @@
         <h3 class="text-3xl font-extrabold text-slate-900 heading-font">แก้ไข Entry Popup</h3>
     </div>
 
-    <form action="/settings/popups/update/<?= $popup['id'] ?>" method="POST" enctype="multipart/form-data" class="space-y-8">
+    <form action="/settings/popups/update/<?= $popup['id'] ?>
+            <?= \Core\Security::csrf_field() ?>" method="POST" enctype="multipart/form-data" class="space-y-8">
         <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-gray-100">
             <div class="space-y-6">
                 <div>

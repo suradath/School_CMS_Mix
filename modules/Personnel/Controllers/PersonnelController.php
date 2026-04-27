@@ -12,9 +12,29 @@ class PersonnelController extends Controller
 {
     public function __construct()
     {
-        if (!isset($_SESSION['user_id'])) {
-            $this->redirect('/auth');
+        parent::__construct();
+        $this->requireAuth();
+    }
+
+    /**
+     * Check if user has permission to manage this person
+     */
+    private function checkPersonnelPermission(int $personId = null, int $deptId = null): void
+    {
+        if (\Core\Security::checkRole('admin')) return;
+
+        // Editor: Can manage personnel in their department
+        if (\Core\Security::checkRole('editor')) {
+            if ($deptId === (int)($_SESSION['department_id'] ?? 0)) return;
         }
+
+        // Teacher: Can only edit their own profile
+        if (\Core\Security::checkRole('teacher')) {
+            if ($personId === (int)($_SESSION['personnel_id'] ?? 0)) return;
+        }
+
+        header("HTTP/1.1 403 Forbidden");
+        die("Access Denied: You do not have permission to manage this personnel record.");
     }
 
     /**
@@ -35,6 +55,7 @@ class PersonnelController extends Controller
      */
     public function create(): void
     {
+        $this->requireRole(['admin', 'editor']);
         $departments = Database::fetchAll("SELECT * FROM departments ORDER BY sort_order ASC");
         
         $this->renderWithLayout('Personnel.Views.create', 'themes.admin.layout', [
@@ -48,6 +69,7 @@ class PersonnelController extends Controller
      */
     public function store(): void
     {
+        $this->requireRole(['admin', 'editor']);
         $imageUrl = '';
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $imageUrl = Uploader::uploadImage($_FILES['image'], 'personnel');
@@ -73,11 +95,13 @@ class PersonnelController extends Controller
     public function edit(int $id): void
     {
         $person = Personnel::find($id);
-        $departments = Database::fetchAll("SELECT * FROM departments ORDER BY sort_order ASC");
-        
         if (!$person) {
             $this->redirect('/personnel');
         }
+
+        $this->checkPersonnelPermission((int)$person['id'], (int)$person['department_id']);
+        
+        $departments = Database::fetchAll("SELECT * FROM departments ORDER BY sort_order ASC");
 
         $this->renderWithLayout('Personnel.Views.edit', 'themes.admin.layout', [
             'title' => 'แก้ไขข้อมูลบุคลากร',
@@ -95,6 +119,8 @@ class PersonnelController extends Controller
         if (!$person) {
             $this->redirect('/personnel');
         }
+
+        $this->checkPersonnelPermission((int)$person['id'], (int)$person['department_id']);
 
         $imageUrl = $person['image_url'];
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
@@ -125,7 +151,11 @@ class PersonnelController extends Controller
      */
     public function delete(int $id): void
     {
-        Personnel::delete($id);
+        $person = Personnel::find($id);
+        if ($person) {
+            $this->checkPersonnelPermission((int)$person['id'], (int)$person['department_id']);
+            Personnel::delete($id);
+        }
         $this->redirect('/personnel');
     }
 }

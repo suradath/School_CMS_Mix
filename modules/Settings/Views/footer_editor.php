@@ -2,7 +2,6 @@
     <div class="p-8">
         <form action="/settings/update-footer" method="POST" class="space-y-10">
             <?= \Core\Security::csrf_field() ?>
-
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <!-- Footer Description -->
                 <div class="md:col-span-2">

@@ -11,9 +11,39 @@ class NewsController extends Controller
 {
     public function __construct()
     {
-        if (!isset($_SESSION['user_id'])) {
-            $this->redirect('/auth');
+        parent::__construct();
+        $this->requireAuth();
+    }
+
+    /**
+     * Check if user has permission to manage this news item
+     */
+    private function checkNewsPermission(int $newsId = null, int $authorId = null): void
+    {
+        if (\Core\Security::checkRole('admin')) return;
+
+        // Teacher: Can only edit their own news
+        if (\Core\Security::checkRole('teacher')) {
+            if ($authorId === (int)$_SESSION['user_id']) return;
         }
+
+        // Editor: Can manage news from their department
+        if (\Core\Security::checkRole('editor')) {
+            // Fetch author's department
+            $authorDept = \Core\Database::fetch("
+                SELECT p.department_id FROM users u 
+                LEFT JOIN personnel p ON u.personnel_id = p.id 
+                WHERE u.id = ?
+            ", [$authorId]);
+            
+            if ($authorDept && $authorDept['department_id'] === (int)($_SESSION['department_id'] ?? 0)) return;
+            
+            // If creating (no author yet), editors can create
+            if ($authorId === null) return;
+        }
+
+        header("HTTP/1.1 403 Forbidden");
+        die("Access Denied: You do not have permission to manage this news item.");
     }
 
     /**
@@ -33,6 +63,7 @@ class NewsController extends Controller
      */
     public function create(): void
     {
+        $this->checkNewsPermission();
         $categories = News::getCategories();
         $this->renderWithLayout('News.Views.create', 'themes.admin.layout', [
             'title' => 'ลงประกาศข่าวใหม่',
@@ -77,6 +108,8 @@ class NewsController extends Controller
             $this->redirect('/news');
         }
 
+        $this->checkNewsPermission((int)$item['id'], (int)$item['author_id']);
+        
         $categories = News::getCategories();
         $this->renderWithLayout('News.Views.edit', 'themes.admin.layout', [
             'title' => 'แก้ไขข่าวประชาสัมพันธ์',
@@ -90,6 +123,13 @@ class NewsController extends Controller
      */
     public function update(string $id): void
     {
+        $item = News::find((int)$id);
+        if (!$item) {
+            $this->redirect('/news');
+        }
+
+        $this->checkNewsPermission((int)$item['id'], (int)$item['author_id']);
+
         if (!\Core\Security::validate_csrf()) {
             die("Invalid CSRF Token");
         }
@@ -116,11 +156,11 @@ class NewsController extends Controller
      */
     public function delete(string $id): void
     {
-        if (!\Core\Security::validate_csrf()) {
-            die("Invalid CSRF Token");
+        $item = News::find((int)$id);
+        if ($item) {
+            $this->checkNewsPermission((int)$item['id'], (int)$item['author_id']);
+            News::delete((int)$id);
         }
-
-        News::delete((int)$id);
         $this->redirect('/news');
     }
 }

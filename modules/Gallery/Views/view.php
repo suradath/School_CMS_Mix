@@ -42,8 +42,8 @@
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>
                 </button>
             </div>
-            <form action="/gallery/addPhoto/<?= $album['id'] ?>" method="POST" enctype="multipart/form-data" class="p-6 space-y-5">
-                <?= \Core\Security::csrf_field() ?>
+            <form action="/gallery/addPhoto/<?= $album['id'] ?>
+            <?= \Core\Security::csrf_field() ?>" method="POST" enctype="multipart/form-data" class="p-6 space-y-5">
                 <div>
                     <label class="block mb-2 text-xs font-bold text-gray-400 uppercase tracking-widest">เลือกไฟล์รูปภาพ (เลือกได้หลายรูป)</label>
                     <input type="file" name="photos[]" multiple required class="block w-full text-sm text-gray-900 border border-gray-200 rounded-2xl cursor-pointer bg-gray-50 focus:outline-none p-2 transition hover:bg-gray-100" accept="image/*">

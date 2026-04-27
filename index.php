@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /**
- * School CMS Mix V1.2 Entry Point
+ * School CMS Mix V2.0 Entry Point
  */
 
 // 1. Error Reporting
@@ -99,7 +99,44 @@ $router->add('calendar/update', 'Modules\Calendar\Controllers\CalendarController
 $router->add('calendar/delete', 'Modules\Calendar\Controllers\CalendarController@delete');
 $router->add('api/calendar/events', 'Modules\Calendar\Controllers\CalendarController@getEvents');
 
+// User Management Routes
+$router->add('admin/users', 'Modules\Auth\Controllers\UserManagementController@index');
+$router->add('admin/users/create', 'Modules\Auth\Controllers\UserManagementController@create');
+$router->add('admin/users/store', 'Modules\Auth\Controllers\UserManagementController@store');
+$router->add('admin/users/edit', 'Modules\Auth\Controllers\UserManagementController@edit');
+$router->add('admin/users/update', 'Modules\Auth\Controllers\UserManagementController@update');
+$router->add('admin/users/delete', 'Modules\Auth\Controllers\UserManagementController@delete');
+
 $router->add('p', 'Modules\Home\Controllers\HomeController@viewPage');
+
+// Journal Routes
+$router->add('journal', 'Modules\Journal\Controllers\JournalController@index');
+$router->add('journal/store', 'Modules\Journal\Controllers\JournalController@store');
+$router->add('journal/delete', 'Modules\Journal\Controllers\JournalController@delete');
+
+// E-Saraban Routes
+$router->add('saraban', 'Modules\Saraban\Controllers\SarabanController@index');
+$router->add('saraban/inbound', 'Modules\Saraban\Controllers\SarabanController@inbound');
+$router->add('saraban/outbound', 'Modules\Saraban\Controllers\SarabanController@outbound');
+$router->add('saraban/orders', 'Modules\Saraban\Controllers\SarabanController@orders');
+$router->add('saraban/announcements', 'Modules\Saraban\Controllers\SarabanController@announcements');
+$router->add('saraban/create', 'Modules\Saraban\Controllers\DocumentController@create');
+$router->add('saraban/store', 'Modules\Saraban\Controllers\DocumentController@store');
+$router->add('saraban/view', 'Modules\Saraban\Controllers\DocumentController@view');
+$router->add('saraban/batch-endorse', 'Modules\Saraban\Controllers\SarabanController@batchEndorse');
+$router->add('saraban/minute/add', 'Modules\Saraban\Controllers\DocumentController@addMinute');
+$router->add('saraban/minute/print', 'Modules\Saraban\Controllers\DocumentController@printMinute');
+$router->add('saraban/acknowledge', 'Modules\Saraban\Controllers\DocumentController@acknowledge');
+$router->add('saraban/delete', 'Modules\Saraban\Controllers\DocumentController@delete');
+$router->add('saraban/file', 'Modules\Saraban\Controllers\FileController@serve');
+
+// Leave Management Routes
+$router->add('leave', 'Modules\Leave\Controllers\LeaveController@index');
+$router->add('leave/create', 'Modules\Leave\Controllers\LeaveController@create');
+$router->add('leave/store', 'Modules\Leave\Controllers\LeaveController@store');
+$router->add('leave/review', 'Modules\Leave\Controllers\LeaveController@review');
+$router->add('leave/updateStatus', 'Modules\Leave\Controllers\LeaveController@updateStatus');
+$router->add('leave/reports', 'Modules\Leave\Controllers\LeaveController@reports');
 
 // 7. Resolve Request
 $router->resolve();

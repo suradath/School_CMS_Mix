@@ -2,7 +2,6 @@
     <div class="p-8">
         <form action="/settings/update" method="POST" enctype="multipart/form-data" class="space-y-12">
             <?= \Core\Security::csrf_field() ?>
-            
             <!-- Section 1: General Info -->
             <div>
                 <h3 class="text-xl font-bold text-gray-900 border-b border-gray-100 pb-4 mb-6 flex items-center">

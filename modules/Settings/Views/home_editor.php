@@ -2,7 +2,6 @@
     <div class="p-8">
         <form action="/settings/update-home" method="POST" enctype="multipart/form-data" class="space-y-8">
             <?= \Core\Security::csrf_field() ?>
-            
             <!-- Hero Section Settings (Cover & Text) -->
             <div class="space-y-8 bg-slate-50/50 p-8 rounded-[2.5rem] border border-slate-100">
                 <div class="flex items-center justify-between pb-6 border-b border-slate-100">

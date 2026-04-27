@@ -1,7 +1,7 @@
 <div class="max-w-4xl">
     <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-        <form action="/settings/menu/update/<?= $menu['id'] ?>" method="POST" class="p-8 space-y-6">
-            <?= \Core\Security::csrf_field() ?>
+        <form action="/settings/menu/update/<?= $menu['id'] ?>
+            <?= \Core\Security::csrf_field() ?>" method="POST" class="p-8 space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block mb-2 text-sm font-bold text-slate-700">ชื่อเมนู (Menu Title)</label>

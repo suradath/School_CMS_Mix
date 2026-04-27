@@ -6,7 +6,8 @@
         <h3 class="text-3xl font-extrabold text-slate-900 heading-font">แก้ไขกลุ่มสาระฯ / ฝ่ายงาน</h3>
     </div>
 
-    <form action="/personnel/departments/update/<?= $department['id'] ?>" method="POST" class="space-y-8">
+    <form action="/personnel/departments/update/<?= $department['id'] ?>
+            <?= \Core\Security::csrf_field() ?>" method="POST" class="space-y-8">
         <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-gray-100">
             <div class="space-y-6">
                 <div>

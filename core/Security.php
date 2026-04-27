@@ -48,6 +48,35 @@ class Security
     }
 
     /**
+     * Check if user is logged in
+     */
+    public static function isLoggedIn(): bool
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        return isset($_SESSION['user_id']);
+    }
+
+    /**
+     * Check if current user has specific role(s)
+     */
+    public static function checkRole(string|array $roles): bool
+    {
+        if (!self::isLoggedIn()) {
+            return false;
+        }
+
+        $userRole = $_SESSION['user_role'] ?? '';
+        
+        if (is_array($roles)) {
+            return in_array($userRole, $roles);
+        }
+        
+        return $userRole === $roles;
+    }
+
+    /**
      * Set common security headers
      */
     public static function setSecurityHeaders(): void

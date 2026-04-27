@@ -13,7 +13,6 @@
         
         <form action="/gallery/store" method="POST" enctype="multipart/form-data" class="p-8 space-y-6">
             <?= \Core\Security::csrf_field() ?>
-            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Left Side: Basic Info -->
                 <div class="space-y-6">

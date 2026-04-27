@@ -48,6 +48,37 @@
 <div class="mt-8 p-8 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl text-white shadow-lg">
     <h3 class="text-2xl font-bold heading-font mb-2">ยินดีต้อนรับกลับมา, <?= $_SESSION['user_name'] ?>!</h3>
     <p class="opacity-90 max-w-2xl">คุณสามารถจัดการเนื้อหาเว็บไซต์โรงเรียน ทั้งระบบบุคลากร ข่าวประชาสัมพันธ์ และหน้าเว็บต่างๆ ได้จากเมนูทางด้านซ้ายมือ</p>
+    
+    <?php if ($stats['pending_leaves'] > 0 && \Core\Security::checkRole(['admin', 'editor', 'hr', 'director'])): ?>
+    <div class="mt-6 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 flex items-center justify-between">
+        <div class="flex items-center">
+            <div class="w-10 h-10 bg-amber-400 rounded-xl flex items-center justify-center text-amber-900 mr-4 shadow-lg shadow-amber-400/30">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+            </div>
+            <div>
+                <p class="text-sm font-bold">มีคำขอลาใหม่ที่รอการพิจารณา</p>
+                <p class="text-xs opacity-75">จำนวน <?= $stats['pending_leaves'] ?> รายการที่รอการตรวจสอบจากคุณ</p>
+            </div>
+        </div>
+        <a href="/leave/review" class="px-4 py-2 bg-white text-blue-700 text-xs font-bold rounded-lg hover:bg-blue-50 transition shadow-sm">ตรวจสอบตอนนี้</a>
+    </div>
+    <?php endif; ?>
+
+    <?php if ($stats['unread_saraban'] > 0): ?>
+    <div class="mt-4 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 flex items-center justify-between">
+        <div class="flex items-center">
+            <div class="w-10 h-10 bg-rose-500 rounded-xl flex items-center justify-center text-white mr-4 shadow-lg shadow-rose-500/30">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            </div>
+            <div>
+                <p class="text-sm font-bold">มีหนังสือเข้าใหม่ที่คุณยังไม่ได้อ่าน</p>
+                <p class="text-xs opacity-75">จำนวน <?= $stats['unread_saraban'] ?> ฉบับที่ต้องการการตรวจสอบ</p>
+            </div>
+        </div>
+        <a href="/saraban" class="px-4 py-2 bg-white text-blue-700 text-xs font-bold rounded-lg hover:bg-blue-50 transition shadow-sm">เปิดกล่องขาเข้า</a>
+    </div>
+    <?php endif; ?>
+
     <div class="mt-6 flex space-x-4">
         <a href="/pages/create" class="px-5 py-2.5 bg-white text-blue-700 font-semibold rounded-xl text-sm hover:bg-blue-50 transition shadow-sm">สร้างหน้าใหม่</a>
         <a href="/news/create" class="px-5 py-2.5 bg-blue-500 text-white font-semibold rounded-xl text-sm hover:bg-blue-400 transition shadow-sm">ลงข่าวใหม่</a>

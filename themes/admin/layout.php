@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?? 'Dashboard' ?> - School CMS Mix V1.2</title>
+    <title><?= $title ?? 'Dashboard' ?> - School CMS Mix V2.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -19,6 +19,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&family=Outfit:wght@400;600;700&family=K2D:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body { font-family: 'Sarabun', sans-serif; }
         h1, h2, h3, .heading-font { font-family: 'K2D', sans-serif; }
@@ -45,11 +47,57 @@
     </button>
 
     <?php 
-        $siteName = \Core\Database::getSetting('site_name', 'School CMS Mix V1.2'); 
+        $siteName = \Core\Database::getSetting('site_name', 'School CMS Mix V2.0'); 
         $siteLogo = \Core\Database::getSetting('site_logo', '');
         $primaryColor = \Core\Database::getSetting('primary_color', '#1d4ed8');
-        $currentPath = $_SERVER['REQUEST_URI'];
+        $currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+        // Check for unread documents
+        $unreadSarabanCount = 0;
+        if (isset($_SESSION['user_id'])) {
+            $personnelId = (int)($_SESSION['personnel_id'] ?? 0);
+            if ($personnelId > 0) {
+                $personnelData = \Core\Database::fetch("SELECT department_id FROM personnel WHERE id = ?", [$personnelId]);
+                $deptId = $personnelData['department_id'] ?? 0;
+                
+                $unreadSarabanCount = \Core\Database::fetch("
+                    SELECT COUNT(*) as count 
+                    FROM saraban_receivers r 
+                    JOIN saraban_documents d ON r.document_id = d.id
+                    WHERE (r.personnel_id = ? OR r.department_id = ?) 
+                    AND r.status = 'unread' 
+                    AND d.status = 'active'
+                ", [$personnelId, $deptId])['count'] ?? 0;
+            }
+        }
     ?>
+
+    <!-- Global Notifications (SweetAlert2) -->
+    <?php if ($unreadSarabanCount > 0 && strpos($currentPath, '/saraban') === false): ?>
+    <script>
+        window.onload = function() {
+            Swal.fire({
+                title: 'มีเอกสารส่งถึงคุณ!',
+                text: 'คุณมีหนังสือเวียน <?= $unreadSarabanCount ?> รายการที่ยังไม่ได้อ่าน',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'เปิดกล่องขาเข้า',
+                cancelButtonText: 'ไว้ทีหลัง',
+                customClass: {
+                    confirmButton: 'px-6 py-3 bg-primary text-white rounded-xl font-bold text-sm mx-2 shadow-lg shadow-primary/20',
+                    cancelButton: 'px-6 py-3 bg-slate-400 text-white rounded-xl font-bold text-sm mx-2'
+                },
+                buttonsStyling: false,
+                position: 'center',
+                backdrop: `rgba(15, 23, 42, 0.4)`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/saraban';
+                }
+            });
+        };
+    </script>
+    <?php endif; ?>
     
     <!-- Sidebar -->
     <aside id="separator-sidebar" class="fixed top-0 left-0 z-40 w-72 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
@@ -70,17 +118,118 @@
             
             <nav class="space-y-1.5">
                 <?php 
+                $leaveSubmenu = [
+                    ['url' => '/leave', 'label' => 'การลาออนไลน์', 'icon' => 'M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z'],
+                ];
+                if (\Core\Security::checkRole(['admin', 'editor', 'officer', 'hr'])) {
+                    $leaveSubmenu[] = ['url' => '/leave/review', 'label' => 'พิจารณาคำขอลา', 'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'];
+                }
+                if (\Core\Security::checkRole(['admin', 'officer', 'hr'])) {
+                    $leaveSubmenu[] = ['url' => '/leave/reports', 'label' => 'รายงานสรุปการลาภาพรวม', 'icon' => 'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'];
+                }
+
+                $pageSubmenu = [
+                    ['url' => '/pages', 'label' => 'จัดการหน้าเว็บคงที่', 'icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'],
+                    ['url' => '/news', 'label' => 'จัดการข่าวประชาสัมพันธ์', 'icon' => 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2zM7 8h4m-4 4h8m-8 4h8'],
+                    ['url' => '/gallery', 'label' => 'อัลบั้มภาพกิจกรรม', 'icon' => 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'],
+                    ['url' => '/journal', 'label' => 'วารสาร', 'icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'],
+                ];
+
                 $menuItems = [
                     ['url' => '/dashboard', 'label' => 'แผงควบคุม', 'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'],
-                    ['url' => '/pages', 'label' => 'จัดการหน้าเว็บ', 'icon' => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'],
+                    ['label' => 'จัดการหน้าเว็บ', 'icon' => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', 'submenu' => $pageSubmenu],
                     ['url' => '/personnel', 'label' => 'บุคลากร', 'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'],
-                    ['url' => '/news', 'label' => 'ข่าวสาร', 'icon' => 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2zM7 8h4m-4 4h8m-8 4h8'],
-                    ['url' => '/gallery', 'label' => 'คลังภาพ', 'icon' => 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'],
+                    ['label' => 'ระบบการลา', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 9l1.5 1.5L22 9.15', 'submenu' => $leaveSubmenu],
+                    ['label' => 'งานสารบรรณ', 'icon' => 'M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20', 'badge' => $unreadSarabanCount > 0 ? $unreadSarabanCount : null, 'submenu' => [
+                        ['url' => '/saraban', 'label' => 'แผงควบคุมสารบรรณ', 'icon' => 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z'],
+                        ['url' => '/saraban/inbound', 'label' => 'ทะเบียนหนังสือรับ', 'icon' => 'M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12'],
+                        ['url' => '/saraban/outbound', 'label' => 'ทะเบียนหนังสือส่ง', 'icon' => 'M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4'],
+                        ['url' => '/saraban/orders', 'label' => 'ทะเบียนคำสั่ง', 'icon' => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'],
+                        ['url' => '/saraban/announcements', 'label' => 'ทะเบียนประกาศ', 'icon' => 'M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z'],
+                    ]],
                     ['url' => '/calendar', 'label' => 'ปฏิทินวิชาการ', 'icon' => 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2V12a2 2 0 002 2z'],
                 ];
+
+                if (\Core\Security::checkRole('admin')) {
+                    $menuItems[] = ['url' => '/admin/users', 'label' => 'จัดการผู้ใช้งาน', 'icon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'];
+                }
                 
                 foreach ($menuItems as $item): 
-                    $active = strpos($currentPath, $item['url']) === 0;
+                    if (isset($item['submenu'])) {
+                        // Check if any submenu item is active
+                        $anySubActive = false;
+                        foreach ($item['submenu'] as $sub) {
+                            if ($currentPath === $sub['url'] || strpos($currentPath, $sub['url'] . '/') === 0) {
+                                $anySubActive = true;
+                                break;
+                            }
+                        }
+                    ?>
+                        <div x-data="{ open: <?= $anySubActive ? 'true' : 'false' ?> }" class="space-y-1">
+                            <button @click="open = !open" class="w-full flex items-center justify-between px-4 py-3.5 text-sm font-bold transition-all duration-200 rounded-2xl group <?= $anySubActive ? 'bg-primary/5 text-primary' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' ?>">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 mr-3 <?= $anySubActive ? 'text-primary' : 'text-slate-400 group-hover:text-primary transition-colors' ?>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?= $item['icon'] ?>"></path>
+                                    </svg>
+                                    <?= $item['label'] ?>
+                                </div>
+                                <div class="flex items-center">
+                                    <?php if (isset($item['badge'])): ?>
+                                        <span class="mr-2 px-2 py-0.5 bg-rose-500 text-white text-[10px] font-bold rounded-full"><?= $item['badge'] ?></span>
+                                    <?php endif; ?>
+                                    <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </div>
+                            </button>
+                            <div x-show="open" x-transition.opacity class="pl-12 space-y-1">
+                                <?php foreach ($item['submenu'] as $sub): 
+                                    // Check if current path matches sub URL exactly or as a more specific match
+                                    $subActive = ($currentPath === $sub['url']);
+                                    if (!$subActive && $currentPath !== '/') {
+                                        // Prefix match but only if it's a directory-style match and no other subitem is a better match
+                                        if (strpos($currentPath, $sub['url'] . '/') === 0) {
+                                            $subActive = true;
+                                            // Check if there's a more specific subitem
+                                            foreach ($item['submenu'] as $otherSub) {
+                                                if ($otherSub['url'] !== $sub['url'] && strpos($currentPath, $otherSub['url']) === 0) {
+                                                    if (strlen($otherSub['url']) > strlen($sub['url'])) {
+                                                        $subActive = false;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                ?>
+                                    <a href="<?= $sub['url'] ?>" class="flex items-center py-2 text-xs font-medium transition-colors <?= $subActive ? 'text-primary font-bold' : 'text-slate-400 hover:text-slate-900' ?>">
+                                        <?php if (isset($sub['icon'])): ?>
+                                            <svg class="w-3.5 h-3.5 mr-2.5 <?= $subActive ? 'text-primary' : 'text-slate-300' ?>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?= $sub['icon'] ?>"></path>
+                                            </svg>
+                                        <?php endif; ?>
+                                        <?= $sub['label'] ?>
+                                    </a>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    <?php
+                        continue;
+                    }
+
+                    // Normal link logic
+                    $active = ($currentPath === $item['url']) || (strpos($currentPath, $item['url'] . '/') === 0);
+                    
+                    if ($active) {
+                        foreach ($menuItems as $otherItem) {
+                            if (isset($otherItem['url']) && $otherItem['url'] !== $item['url'] && strlen($otherItem['url']) > strlen($item['url'])) {
+                                if (strpos($currentPath, $otherItem['url']) === 0) {
+                                    $active = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 ?>
                 <a href="<?= $item['url'] ?>" class="flex items-center px-4 py-3.5 text-sm font-bold transition-all duration-200 rounded-2xl group <?= $active ? 'nav-item-active' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' ?>">
                     <svg class="w-5 h-5 mr-3 <?= $active ? 'text-white' : 'text-slate-400 group-hover:text-primary transition-colors' ?>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -91,8 +240,8 @@
                 <?php endforeach; ?>
             </nav>
 
-            <div class="mt-10 pt-10 border-t border-gray-50 flex flex-col space-y-1.5">
                 <p class="px-4 mb-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">System Settings</p>
+                <?php if (\Core\Security::checkRole('admin')): ?>
                 <a href="/settings" class="flex items-center px-4 py-3.5 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-2xl transition-all group <?= $currentPath === '/settings' ? 'bg-slate-50 text-slate-900' : '' ?>">
                     <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:rotate-45 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                     ตั้งค่าระบบ
@@ -117,6 +266,7 @@
                     <svg class="w-5 h-5 mr-3 text-slate-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                     แก้ไขส่วนท้าย
                 </a>
+                <?php endif; ?>
                 <a href="/auth/logout" class="flex items-center px-4 py-3.5 text-sm font-bold text-red-500 hover:bg-red-50 rounded-2xl transition-all group">
                     <svg class="w-5 h-5 mr-3 text-red-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                     ออกจากระบบ
@@ -127,7 +277,7 @@
                 <div class="p-4 bg-slate-900 rounded-3xl text-white relative overflow-hidden">
                     <div class="absolute -top-10 -right-10 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
                     <p class="text-[10px] font-bold text-blue-300 uppercase tracking-[0.2em] mb-1">Status</p>
-                    <p class="text-xs font-bold leading-relaxed">System v1.2 Stable</p>
+                    <p class="text-xs font-bold leading-relaxed">System v2.0 Stable</p>
                     <a href="/" target="_blank" class="mt-4 inline-flex items-center text-[10px] font-bold hover:text-blue-300 transition-colors">
                         VIEW LIVE SITE <svg class="w-2.5 h-2.5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </a>
@@ -153,7 +303,15 @@
                 <div class="flex items-center space-x-4">
                     <div class="flex flex-col items-end mr-3">
                         <span class="text-sm font-bold text-slate-900 outfit leading-none"><?= $_SESSION['user_name'] ?? 'Admin' ?></span>
-                        <span class="text-[10px] font-bold text-primary uppercase tracking-widest mt-1">Super Administrator</span>
+                        <span class="text-[10px] font-bold text-primary uppercase tracking-widest mt-1">
+                            <?php 
+                            echo [
+                                'admin' => 'Super Administrator',
+                                'editor' => 'Staff / Editor',
+                                'teacher' => 'Teacher / User'
+                            ][$_SESSION['user_role'] ?? 'teacher'];
+                            ?>
+                        </span>
                     </div>
                     <div class="w-12 h-12 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center text-primary font-bold">
                         <?= substr($_SESSION['user_name'] ?? 'A', 0, 1) ?>

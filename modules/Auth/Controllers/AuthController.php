@@ -30,10 +30,17 @@ class AuthController extends Controller
         $user = User::findByUsername($username);
 
         if ($user && password_verify($password, $user['password'])) {
+            if ($user['status'] !== 'active') {
+                $_SESSION['error'] = 'บัญชีของคุณถูกระงับการใช้งาน กรุณาติดต่อผู้ดูแลระบบ';
+                $this->redirect('/auth');
+            }
+
             session_regenerate_id(true);
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['full_name'];
             $_SESSION['user_role'] = $user['role'];
+            $_SESSION['personnel_id'] = $user['personnel_id'];
+            $_SESSION['department_id'] = $user['department_id'];
             
             User::updateLastLogin((int)$user['id']);
             $this->redirect('/dashboard');

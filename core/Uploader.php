@@ -10,9 +10,6 @@ class Uploader
 {
     private static string $uploadDir = ROOT_PATH . '/uploads';
 
-    /**
-     * Upload and compress an image
-     */
     public static function uploadImage(array $file, string $subDir = '', int $maxSizeMB = 2): string|false
     {
         if ($file['error'] !== UPLOAD_ERR_OK) {
@@ -50,6 +47,35 @@ class Uploader
         if (move_uploaded_file($file['tmp_name'], $targetPath)) {
             // Check file size and compress if it's an image
             self::processImage($targetPath, $extension, $maxSizeMB);
+            return '/uploads' . ($subDir ? '/' . $subDir : '') . '/' . $fileName;
+        }
+
+        return false;
+    }
+
+    /**
+     * Upload any file (PDF, Doc, etc.)
+     */
+    public static function uploadFile(array $file, string $subDir = '', array $allowedExts = ['pdf', 'jpg', 'jpeg', 'png'], int $maxSizeMB = 5): string|false
+    {
+        if ($file['error'] !== UPLOAD_ERR_OK) return false;
+
+        $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        if (!in_array($extension, $allowedExts)) return false;
+
+        // Check size
+        if ($file['size'] > ($maxSizeMB * 1024 * 1024)) return false;
+
+        $fileName = uniqid('file_', true) . '.' . $extension;
+        $targetDir = self::$uploadDir . ($subDir ? '/' . $subDir : '');
+
+        if (!is_dir($targetDir)) {
+            mkdir($targetDir, 0755, true);
+        }
+
+        $targetPath = $targetDir . '/' . $fileName;
+
+        if (move_uploaded_file($file['tmp_name'], $targetPath)) {
             return '/uploads' . ($subDir ? '/' . $subDir : '') . '/' . $fileName;
         }
 
