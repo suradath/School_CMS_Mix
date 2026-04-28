@@ -66,7 +66,10 @@ abstract class Controller
         $this->requireAuth();
         if (!Security::checkRole($roles)) {
             header("HTTP/1.1 403 Forbidden");
-            die("Access Denied: You do not have permission to access this page.");
+            $this->renderWithLayout('themes.admin.error_403', 'themes.admin.layout', [
+                'title' => 'Access Denied'
+            ]);
+            exit;
         }
     }
 

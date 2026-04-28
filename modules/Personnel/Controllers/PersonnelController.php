@@ -13,7 +13,7 @@ class PersonnelController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->requireAuth();
+        $this->requireRole(['admin', 'editor']);
     }
 
     /**

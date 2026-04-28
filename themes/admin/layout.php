@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?? 'Dashboard' ?> - School CMS Mix V2.0</title>
+    <title><?= $title ?? 'Dashboard' ?> - School CMS Mix V2.4</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -21,7 +22,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.tailwind.min.css">
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.tailwind.min.js"></script>
     <style>
+        :root {
+            --primary-color: <?= \Core\Database::getSetting('primary_color', '#1d4ed8') ?>;
+        }
         body { font-family: 'Sarabun', sans-serif; }
         h1, h2, h3, .heading-font { font-family: 'K2D', sans-serif; }
         .outfit { font-family: 'Outfit', sans-serif; }
@@ -128,17 +136,38 @@
                     $leaveSubmenu[] = ['url' => '/leave/reports', 'label' => 'รายงานสรุปการลาภาพรวม', 'icon' => 'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'];
                 }
 
-                $pageSubmenu = [
-                    ['url' => '/pages', 'label' => 'จัดการหน้าเว็บคงที่', 'icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'],
-                    ['url' => '/news', 'label' => 'จัดการข่าวประชาสัมพันธ์', 'icon' => 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2zM7 8h4m-4 4h8m-8 4h8'],
-                    ['url' => '/gallery', 'label' => 'อัลบั้มภาพกิจกรรม', 'icon' => 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'],
-                    ['url' => '/journal', 'label' => 'วารสาร', 'icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'],
+                $pageSubmenu = [];
+                if (\Core\Security::checkRole(['admin', 'editor'])) {
+                    $pageSubmenu = [
+                        ['url' => '/pages', 'label' => 'จัดการหน้าเว็บคงที่', 'icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'],
+                        ['url' => '/news', 'label' => 'จัดการข่าวประชาสัมพันธ์', 'icon' => 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2zM7 8h4m-4 4h8m-8 4h8'],
+                        ['url' => '/gallery', 'label' => 'อัลบั้มภาพกิจกรรม', 'icon' => 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'],
+                        ['url' => '/journal', 'label' => 'วารสาร', 'icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'],
+                    ];
+                }
+
+                $studentSubmenu = [
+                    ['url' => '/students', 'label' => 'ภาพรวมข้อมูลนักเรียน', 'icon' => 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z'],
+                    ['url' => '/students/classroom', 'label' => 'ข้อมูลรายห้องเรียน', 'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'],
+                    ['url' => '/attendance', 'label' => 'ระบบเช็คชื่อเข้าเรียน', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2'],
+                    ['url' => '/attendance/report', 'label' => 'รายงานสรุปผลการเข้าเรียน', 'icon' => 'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'],
+                    ['url' => '/health', 'label' => 'สุขภาพและโภชนาการ', 'icon' => 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'],
                 ];
 
                 $menuItems = [
                     ['url' => '/dashboard', 'label' => 'แผงควบคุม', 'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'],
-                    ['label' => 'จัดการหน้าเว็บ', 'icon' => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', 'submenu' => $pageSubmenu],
-                    ['url' => '/personnel', 'label' => 'บุคลากร', 'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'],
+                    ['label' => 'สารสนเทศนักเรียน', 'icon' => 'M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222', 'submenu' => $studentSubmenu],
+                ];
+
+                if (!empty($pageSubmenu)) {
+                    $menuItems[] = ['label' => 'จัดการหน้าเว็บ', 'icon' => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', 'submenu' => $pageSubmenu];
+                }
+
+                if (\Core\Security::checkRole(['admin', 'editor'])) {
+                    $menuItems[] = ['url' => '/personnel', 'label' => 'บุคลากร', 'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'];
+                }
+
+                $menuItems = array_merge($menuItems, [
                     ['label' => 'ระบบการลา', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 9l1.5 1.5L22 9.15', 'submenu' => $leaveSubmenu],
                     ['label' => 'งานสารบรรณ', 'icon' => 'M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20', 'badge' => $unreadSarabanCount > 0 ? $unreadSarabanCount : null, 'submenu' => [
                         ['url' => '/saraban', 'label' => 'แผงควบคุมสารบรรณ', 'icon' => 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z'],
@@ -148,7 +177,7 @@
                         ['url' => '/saraban/announcements', 'label' => 'ทะเบียนประกาศ', 'icon' => 'M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z'],
                     ]],
                     ['url' => '/calendar', 'label' => 'ปฏิทินวิชาการ', 'icon' => 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2V12a2 2 0 002 2z'],
-                ];
+                ]);
 
                 if (\Core\Security::checkRole('admin')) {
                     $menuItems[] = ['url' => '/admin/users', 'label' => 'จัดการผู้ใช้งาน', 'icon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'];
@@ -320,9 +349,22 @@
             </div>
 
             <!-- Page Content with Bento Grid Container -->
-            <div class="animate-fade-in">
+            <div class="animate-fade-in min-h-[60vh]">
                 <?php if(isset($content)) echo $content; ?>
             </div>
+
+            <!-- Footer -->
+            <footer class="mt-20 py-10 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center text-slate-400">
+                <div class="flex items-center space-x-2 text-sm font-bold">
+                    <span class="text-slate-900 outfit tracking-tight text-lg">School CMS Mix</span>
+                    <span class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[10px] uppercase tracking-widest">v2.4</span>
+                </div>
+                <div class="mt-6 md:mt-0 text-center md:text-right">
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-300">Development & Copyright &copy; 2569</div>
+                    <div class="text-sm font-bold text-slate-700 mt-1">ครูสุรเดช ปุยะติ <span class="mx-1 text-slate-200">|</span> <a href="mailto:suradath@lamplaimat.ac.th" class="hover:text-primary transition-colors">suradath@lamplaimat.ac.th</a></div>
+                    <div class="text-[11px] font-bold text-slate-400 mt-0.5 uppercase tracking-widest">โรงเรียนลำปลายมาศ</div>
+                </div>
+            </footer>
         </div>
     </div>
 

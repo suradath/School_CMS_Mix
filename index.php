@@ -25,6 +25,11 @@ spl_autoload_register(function ($class) {
     }
 });
 
+// 3.1 Load Composer Autoloader (if exists)
+if (file_exists(ROOT_PATH . '/vendor/autoload.php')) {
+    require_once ROOT_PATH . '/vendor/autoload.php';
+}
+
 // 4. Load Configuration (if exists)
 if (file_exists(ROOT_PATH . '/config.php')) {
     $config = require_once ROOT_PATH . '/config.php';
@@ -137,6 +142,31 @@ $router->add('leave/store', 'Modules\Leave\Controllers\LeaveController@store');
 $router->add('leave/review', 'Modules\Leave\Controllers\LeaveController@review');
 $router->add('leave/updateStatus', 'Modules\Leave\Controllers\LeaveController@updateStatus');
 $router->add('leave/reports', 'Modules\Leave\Controllers\LeaveController@reports');
+// Student Information System Routes
+$router->add('students', 'Modules\Students\Controllers\StudentController@index');
+$router->add('students/classroom', 'Modules\Students\Controllers\StudentController@classroom');
+$router->add('students/profile', 'Modules\Students\Controllers\StudentController@profile');
+$router->add('students/import', 'Modules\Students\Controllers\ImportController@index');
+$router->add('students/import-process', 'Modules\Students\Controllers\ImportController@process');
+$router->add('students/clear', 'Modules\Students\Controllers\StudentController@clear');
+
+// Health & Nutrition Routes
+$router->add('health', 'Modules\Health\Controllers\HealthController@index');
+$router->add('health/data', 'Modules\Health\Controllers\HealthController@data');
+
+// Attendance System Routes
+$router->add('attendance', 'Modules\Attendance\Controllers\AttendanceController@index');
+$router->add('attendance/setup', 'Modules\Attendance\Controllers\AttendanceController@setup');
+$router->add('attendance/setup/store', 'Modules\Attendance\Controllers\AttendanceController@storeCourse');
+$router->add('attendance/setup/link', 'Modules\Attendance\Controllers\AttendanceController@linkClassroom');
+$router->add('attendance/setup/unlink', 'Modules\Attendance\Controllers\AttendanceController@unlinkClassroom');
+$router->add('attendance/setup/delete', 'Modules\Attendance\Controllers\AttendanceController@deleteCourse');
+$router->add('attendance/get-students', 'Modules\Attendance\Controllers\AttendanceController@ajaxGetStudents');
+$router->add('attendance/get-report', 'Modules\Attendance\Controllers\AttendanceController@ajaxGetReport');
+$router->add('attendance/get-student-calendar', 'Modules\Attendance\Controllers\AttendanceController@ajaxStudentCalendar');
+$router->add('attendance/report', 'Modules\Attendance\Controllers\AttendanceController@report');
+$router->add('attendance/save', 'Modules\Attendance\Controllers\AttendanceController@store');
+$router->add('attendance/export', 'Modules\Attendance\Controllers\AttendanceController@export');
 
 // 7. Resolve Request
 $router->resolve();

@@ -11,9 +11,14 @@ use Modules\Journal\Models\Journal;
 
 class JournalController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->requireRole(['admin', 'editor']);
+    }
+
     public function index(): void
     {
-        $this->requireAuth();
         $items = Journal::getAll();
         
         $this->renderWithLayout('Journal.Views.index', 'themes.admin.layout', [
@@ -24,8 +29,6 @@ class JournalController extends Controller
 
     public function store(): void
     {
-        $this->requireAuth();
-
         $title = $_POST['title'] ?? '';
         $sort_order = (int)($_POST['sort_order'] ?? 0);
         $image_url = '';
@@ -54,7 +57,6 @@ class JournalController extends Controller
 
     public function delete(int $id): void
     {
-        $this->requireAuth();
         Journal::delete($id);
         $_SESSION['success'] = "ลบวารสารเรียบร้อยแล้ว";
         $this->redirect('/journal');

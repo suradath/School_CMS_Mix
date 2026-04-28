@@ -1,5 +1,5 @@
--- Database Schema for School CMS Mix V2.0
--- Updated: 2026-04-27 (Latest E-Saraban & Leave Module)
+-- Database Schema for School CMS Mix V2.4
+-- Updated: 2026-04-28 (Latest SIS, Health, and Attendance Modules)
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
@@ -263,5 +263,96 @@ INSERT INTO `departments` (`id`, `name`, `description`, `sort_order`) VALUES
 (13, 'ฝ่ายบริหารงานบุคคล', NULL, 12),
 (14, 'ฝ่ายบริหารทั่วไป', NULL, 13);
 
+
+-- 13. Students Information
+CREATE TABLE IF NOT EXISTS `students` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `school_id` VARCHAR(20) COMMENT 'รหัสโรงเรียน',
+    `citizen_id` VARCHAR(13) UNIQUE COMMENT 'เลขประจำตัวประชาชน',
+    `student_code` VARCHAR(20) UNIQUE COMMENT 'เลขประจำตัวนักเรียน',
+    `title` VARCHAR(20) COMMENT 'คำนำหน้าชื่อ',
+    `first_name` VARCHAR(100) COMMENT 'ชื่อ',
+    `last_name` VARCHAR(100) COMMENT 'นามสกุล',
+    `gender` ENUM('ช', 'ญ') COMMENT 'เพศ',
+    `class_level` VARCHAR(20) COMMENT 'ชั้นเรียน เช่น ม.1',
+    `room_number` INT COMMENT 'ห้องเรียน',
+    `birth_date` DATE COMMENT 'วันเกิด',
+    `blood_type` VARCHAR(5) COMMENT 'กลุ่มเลือด',
+    `religion` VARCHAR(50) COMMENT 'ศาสนา',
+    `ethnicity` VARCHAR(50) COMMENT 'เชื้อชาติ',
+    `nationality` VARCHAR(50) COMMENT 'สัญชาติ',
+    `weight` DECIMAL(5,2) COMMENT 'น้ำหนัก',
+    `height` DECIMAL(5,2) COMMENT 'ส่วนสูง',
+    `disadvantage_status` VARCHAR(255) COMMENT 'ความด้อยโอกาส',
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX `idx_class_room` (`class_level`, `room_number`),
+    INDEX `idx_name` (`first_name`, `last_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `student_address` (
+    `student_id` INT PRIMARY KEY,
+    `address_no` VARCHAR(50) COMMENT 'บ้านเลขที่',
+    `moo` VARCHAR(20) COMMENT 'หมู่',
+    `soi_road` VARCHAR(100) COMMENT 'ถนน/ซอย',
+    `sub_district` VARCHAR(100) COMMENT 'ตำบล',
+    `district` VARCHAR(100) COMMENT 'อำเภอ',
+    `province` VARCHAR(100) COMMENT 'จังหวัด',
+    FOREIGN KEY (`student_id`) REFERENCES `students`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `student_parents` (
+    `student_id` INT PRIMARY KEY,
+    `father_name` VARCHAR(200) COMMENT 'ชื่อ-นามสกุลบิดา',
+    `father_occupation` VARCHAR(100) COMMENT 'อาชีพของบิดา',
+    `mother_name` VARCHAR(200) COMMENT 'ชื่อ-นามสกุลมารดา',
+    `mother_occupation` VARCHAR(100) COMMENT 'อาชีพของมารดา',
+    `guardian_name` VARCHAR(200) COMMENT 'ชื่อ-นามสกุลผู้ปกครอง',
+    `guardian_occupation` VARCHAR(100) COMMENT 'อาชีพของผู้ปกครอง',
+    `guardian_relation` VARCHAR(100) COMMENT 'ความเกี่ยวข้องกับนักเรียน',
+    FOREIGN KEY (`student_id`) REFERENCES `students`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- 14. Attendance System
+CREATE TABLE IF NOT EXISTS `attendance_courses` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `teacher_id` INT NOT NULL COMMENT 'ID ของครูเจ้าของวิชา',
+    `course_code` VARCHAR(50) NOT NULL COMMENT 'รหัสวิชา',
+    `course_name` VARCHAR(255) NOT NULL COMMENT 'ชื่อวิชา',
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY `unique_teacher_course` (`teacher_id`, `course_code`),
+    INDEX `idx_teacher` (`teacher_id`),
+    INDEX `idx_course_code` (`course_code`),
+    FOREIGN KEY (`teacher_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `attendance_course_classes` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT NOT NULL,
+    `class_level` VARCHAR(20) NOT NULL COMMENT 'ชั้นเรียน',
+    `room_number` INT NOT NULL COMMENT 'ห้องเรียน',
+    FOREIGN KEY (`course_id`) REFERENCES `attendance_courses`(`id`) ON DELETE CASCADE,
+    INDEX `idx_link_course` (`course_id`),
+    INDEX `idx_link_class` (`class_level`, `room_number`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `attendance_records` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `check_date` DATE NOT NULL,
+    `course_id` INT NOT NULL,
+    `class_level` VARCHAR(20) NOT NULL,
+    `room_number` INT NOT NULL,
+    `student_id` INT NOT NULL,
+    `status` ENUM('present', 'late', 'truant', 'absent', 'personal_leave', 'sick_leave') NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY `unique_attendance` (`check_date`, `course_id`, `student_id`),
+    FOREIGN KEY (`course_id`) REFERENCES `attendance_courses`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`student_id`) REFERENCES `students`(`id`) ON DELETE CASCADE,
+    INDEX `idx_record_date` (`check_date`),
+    INDEX `idx_record_course` (`course_id`),
+    INDEX `idx_record_student` (`student_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;
