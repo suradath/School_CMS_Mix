@@ -4,7 +4,15 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
--- 1. Users & Authentication
+-- 1. Roles & Permissions
+CREATE TABLE IF NOT EXISTS `roles` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(50) NOT NULL UNIQUE,
+    `slug` VARCHAR(50) NOT NULL UNIQUE,
+    `description` TEXT DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 2. Users & Authentication
 CREATE TABLE IF NOT EXISTS `users` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `username` VARCHAR(50) NOT NULL UNIQUE,
@@ -12,12 +20,14 @@ CREATE TABLE IF NOT EXISTS `users` (
     `email` VARCHAR(100) NOT NULL UNIQUE,
     `full_name` VARCHAR(100) NOT NULL,
     `role` ENUM('admin', 'editor', 'teacher', 'officer', 'hr', 'director') DEFAULT 'teacher',
+    `status` ENUM('active', 'inactive') DEFAULT 'active',
     `personnel_id` INT DEFAULT NULL,
     `last_login` DATETIME DEFAULT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX (`username`),
-    INDEX (`role`)
+    INDEX (`role`),
+    FOREIGN KEY (`personnel_id`) REFERENCES `personnel`(`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 2. Page & Content Management
@@ -132,21 +142,41 @@ CREATE TABLE IF NOT EXISTS `leave_types` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(100) NOT NULL,
     `slug` VARCHAR(50) NOT NULL UNIQUE,
-    `quota` INT DEFAULT 30
+    `default_quota` INT DEFAULT 30,
+    `color` VARCHAR(20) DEFAULT '#3b82f6',
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `leave_requests` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `personnel_id` INT NOT NULL,
     `leave_type_id` INT NOT NULL,
-    `title` VARCHAR(255) NOT NULL,
     `start_date` DATE NOT NULL,
     `end_date` DATE NOT NULL,
     `total_days` DECIMAL(5,1) NOT NULL,
     `reason` TEXT,
     `attachment_url` VARCHAR(255) DEFAULT NULL,
-    `status` ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+    `status` ENUM('pending', 'approved', 'rejected', 'cancelled') DEFAULT 'pending',
+    `dept_head_comment` TEXT DEFAULT NULL,
+    `admin_comment` TEXT DEFAULT NULL,
+    `approved_by` INT DEFAULT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (`personnel_id`) REFERENCES `personnel`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`leave_type_id`) REFERENCES `leave_types`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`approved_by`) REFERENCES `users`(`id`) ON DELETE SET NULL,
+    INDEX (`status`),
+    INDEX (`start_date`),
+    INDEX (`personnel_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `personnel_leave_quotas` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `personnel_id` INT NOT NULL,
+    `leave_type_id` INT NOT NULL,
+    `quota` INT NOT NULL,
+    `year` INT NOT NULL,
+    UNIQUE KEY `unique_quota` (`personnel_id`, `leave_type_id`, `year`),
     FOREIGN KEY (`personnel_id`) REFERENCES `personnel`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`leave_type_id`) REFERENCES `leave_types`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -224,12 +254,17 @@ CREATE TABLE IF NOT EXISTS `settings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Initial Data
-INSERT INTO `leave_types` (`name`, `slug`, `quota`) VALUES 
-('ลาป่วย', 'sick', 30),
-('ลากิจส่วนตัว', 'personal', 15),
-('ลาพักผ่อน', 'vacation', 10),
-('ลาคลอดบุตร', 'maternity', 90),
-('ลาอุปสมบท', 'ordination', 120);
+INSERT IGNORE INTO `roles` (`name`, `slug`, `description`) VALUES 
+('Administrator', 'admin', 'Full access to the system'),
+('Editor/Staff', 'editor', 'Manage news, gallery and personnel in their department'),
+('Teacher/User', 'teacher', 'Manage own profile and contributions');
+
+INSERT INTO `leave_types` (`name`, `slug`, `default_quota`, `color`) VALUES 
+('ลาป่วย', 'sick', 30, '#ef4444'),
+('ลากิจส่วนตัว', 'personal', 15, '#f59e0b'),
+('ลาพักผ่อน', 'vacation', 10, '#10b981'),
+('ลาคลอดบุตร', 'maternity', 90, '#ec4899'),
+('ลาอุปสมบท', 'ordination', 120, '#f97316');
 
 INSERT INTO `saraban_types` (`name`, `slug`, `prefix`) VALUES 
 ('ทะเบียนหนังสือรับ', 'inbound', ''),
@@ -353,6 +388,27 @@ CREATE TABLE IF NOT EXISTS `attendance_records` (
     INDEX `idx_record_date` (`check_date`),
     INDEX `idx_record_course` (`course_id`),
     INDEX `idx_record_student` (`student_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 15. Visitor Counter
+CREATE TABLE IF NOT EXISTS `visitor_counter` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `page_url` TEXT NOT NULL,
+    `ip_address` VARCHAR(50) DEFAULT NULL,
+    `session_id` VARCHAR(100) DEFAULT NULL,
+    `user_agent` TEXT DEFAULT NULL,
+    `visited_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX (`session_id`),
+    INDEX (`visited_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 16. Journals
+CREATE TABLE IF NOT EXISTS `journals` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `title` VARCHAR(255) NOT NULL,
+    `image_url` VARCHAR(255) DEFAULT NULL,
+    `sort_order` INT DEFAULT 0,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;
