@@ -38,7 +38,10 @@ if (file_exists(ROOT_PATH . '/config.php')) {
     // If no config, redirect to installer (unless we are already in installer)
     $uri = $_SERVER['REQUEST_URI'];
     if (strpos($uri, 'install.php') === false) {
-        header("Location: /install.php");
+        $scriptName = $_SERVER['SCRIPT_NAME'];
+        $basePath = str_replace('\\', '/', dirname($scriptName));
+        if ($basePath === '/') $basePath = '';
+        header("Location: " . $basePath . "/install.php");
         exit;
     }
 }

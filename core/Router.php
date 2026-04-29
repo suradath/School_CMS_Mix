@@ -30,6 +30,17 @@ class Router
     public function resolve(): void
     {
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        
+        // Handle subdirectory: Get the directory of index.php
+        $scriptName = $_SERVER['SCRIPT_NAME'];
+        $basePath = str_replace('\\', '/', dirname($scriptName));
+        if ($basePath === '/') $basePath = '';
+        
+        // Strip base path from URI
+        if ($basePath !== '' && strpos($uri, $basePath) === 0) {
+            $uri = substr($uri, strlen($basePath));
+        }
+
         $path = $this->trimPath($uri);
         
         // Normalize path: ignore index.php if it's the only path
