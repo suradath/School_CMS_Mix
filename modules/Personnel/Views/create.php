@@ -1,6 +1,6 @@
 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="p-8">
-        <form action="/personnel/store" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="<?= url('/personnel/store') ?>" method="POST" enctype="multipart/form-data" class="space-y-6">
             <?= \Core\Security::csrf_field() ?>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <!-- Left Side: Basic Info -->
@@ -62,7 +62,7 @@
             </div>
 
             <div class="pt-6 border-t border-gray-100 flex justify-end space-x-3">
-                <a href="/personnel" class="px-6 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition shadow-sm">ยกเลิก</a>
+                <a href="<?= url('/personnel') ?>" class="px-6 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition shadow-sm">ยกเลิก</a>
                 <button type="submit" class="px-6 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition shadow-sm">บันทึกข้อมูล</button>
             </div>
         </form>

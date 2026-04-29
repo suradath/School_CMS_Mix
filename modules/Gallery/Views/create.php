@@ -5,13 +5,13 @@
                 <h3 class="text-xl font-bold text-gray-900">สร้างอัลบั้มภาพกิจกรรมใหม่</h3>
                 <p class="text-sm text-gray-500 mt-1">กรอกข้อมูลเพื่อสร้างอัลบั้มสำหรับเก็บรวบรวมรูปภาพกิจกรรมต่างๆ</p>
             </div>
-            <a href="/gallery" class="text-sm font-bold text-gray-400 hover:text-gray-600 transition flex items-center">
+            <a href="<?= url('/gallery') ?>" class="text-sm font-bold text-gray-400 hover:text-gray-600 transition flex items-center">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 ย้อนกลับ
             </a>
         </div>
         
-        <form action="/gallery/store" method="POST" enctype="multipart/form-data" class="p-8 space-y-6">
+        <form action="<?= url('/gallery/store') ?>" method="POST" enctype="multipart/form-data" class="p-8 space-y-6">
             <?= \Core\Security::csrf_field() ?>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Left Side: Basic Info -->

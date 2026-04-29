@@ -1,6 +1,6 @@
 <div class="max-w-4xl">
     <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-        <form action="/settings/menu/store" method="POST" class="p-8 space-y-6">
+        <form action="<?= url('/settings/menu/store') ?>" method="POST" class="p-8 space-y-6">
             <?= \Core\Security::csrf_field() ?>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -47,7 +47,7 @@
                 <button type="submit" class="bg-primary hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-2xl transition shadow-lg shadow-blue-500/20">
                     บันทึกข้อมูล
                 </button>
-                <a href="/settings/menu" class="text-slate-400 hover:text-slate-600 font-bold px-4">ยกเลิก</a>
+                <a href="<?= url('/settings/menu') ?>" class="text-slate-400 hover:text-slate-600 font-bold px-4">ยกเลิก</a>
             </div>
         </form>
     </div>

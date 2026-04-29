@@ -56,7 +56,7 @@
     <?php endif; ?>
 </div>
 
-<form id="batch-form" action="/saraban/batch-endorse" method="POST">
+<form id="batch-form" action="<?= url('/saraban/batch-endorse') ?>" method="POST">
     <?= \Core\Security::csrf_field() ?>
     <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
         <div class="p-8 border-b border-slate-50 flex justify-between items-center">
@@ -126,7 +126,7 @@
                                 </span>
                             </td>
                             <td class="px-8 py-5 text-right">
-                                <a href="/saraban/view/<?= $item['id'] ?>" class="inline-flex items-center text-primary hover:text-primary-dark text-xs font-bold transition-all">
+                                <a href="<?= url('/saraban/view/' . $item['id']) ?>" class="inline-flex items-center text-primary hover:text-primary-dark text-xs font-bold transition-all">
                                     เปิดดู
                                     <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"></path></svg>
                                 </a>

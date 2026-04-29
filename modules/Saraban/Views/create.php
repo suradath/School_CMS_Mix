@@ -1,13 +1,13 @@
 <div class="max-w-4xl mx-auto">
     <div class="mb-8">
-        <a href="/saraban/<?= $type['slug'] ?>" class="text-slate-400 hover:text-primary transition-colors flex items-center text-sm font-bold mb-4">
+        <a href="<?= url('/saraban/' . $type['slug']) ?>" class="text-slate-400 hover:text-primary transition-colors flex items-center text-sm font-bold mb-4">
             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"></path></svg>
             ย้อนกลับ
         </a>
         <h3 class="text-2xl font-bold text-slate-800 heading-font"><?= $title ?></h3>
     </div>
 
-    <form action="/saraban/store" method="POST" enctype="multipart/form-data" class="space-y-8">
+    <form action="<?= url('/saraban/store') ?>" method="POST" enctype="multipart/form-data" class="space-y-8">
         <?= \Core\Security::csrf_field() ?>
         <input type="hidden" name="type_id" value="<?= $type['id'] ?>">
         <input type="hidden" name="budget_year" value="<?= $budget_year ?>">

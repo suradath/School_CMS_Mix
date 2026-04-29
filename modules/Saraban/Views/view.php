@@ -30,20 +30,20 @@
             <p class="text-sm text-slate-500 mt-1">เลขที่ทะเบียน: <?= $doc['doc_no'] ?> | ประเภท: <?= $doc['type_name'] ?></p>
         </div>
         <div class="flex flex-wrap gap-3">
-            <a href="/saraban/minute/print/<?= $doc['id'] ?>" target="_blank" class="px-6 py-3 bg-white border border-slate-200 text-slate-700 rounded-2xl font-bold text-xs hover:bg-slate-50 transition-all flex items-center shadow-sm">
+            <a href="<?= url('/saraban/minute/print/' . $doc['id']) ?>" target="_blank" class="px-6 py-3 bg-white border border-slate-200 text-slate-700 rounded-2xl font-bold text-xs hover:bg-slate-50 transition-all flex items-center shadow-sm">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
                 พิมพ์ใบปะหน้าเกษียณ
             </a>
             
             <?php if ($myAcknowledge && !$myAcknowledge['acknowledged_at']): ?>
-            <a href="/saraban/acknowledge/<?= $doc['id'] ?>" class="px-6 py-3 bg-emerald-600 text-white rounded-2xl font-bold text-xs hover:shadow-lg hover:shadow-emerald-200 transition-all flex items-center">
+            <a href="<?= url('/saraban/acknowledge/' . $doc['id']) ?>" class="px-6 py-3 bg-emerald-600 text-white rounded-2xl font-bold text-xs hover:shadow-lg hover:shadow-emerald-200 transition-all flex items-center">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 กดรับทราบเอกสาร
             </a>
             <?php endif; ?>
             
             <?php if ($doc['file_url']): ?>
-            <a href="/saraban/file/<?= $doc['id'] ?>" target="_blank" class="px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-xs hover:shadow-lg transition-all flex items-center">
+            <a href="<?= url('/saraban/file/' . $doc['id']) ?>" target="_blank" class="px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-xs hover:shadow-lg transition-all flex items-center">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                 ดูไฟล์ตัวจริง
             </a>
@@ -78,9 +78,9 @@
                         }
                     ?>
                     <?php if ($isImage): ?>
-                        <img src="/saraban/file/<?= $doc['id'] ?>" class="w-full h-full object-contain p-8" alt="Document image">
+                        <img src="<?= url('/saraban/file/' . $doc['id']) ?>" class="w-full h-full object-contain p-8" alt="Document image">
                     <?php else: ?>
-                        <iframe src="/saraban/file/<?= $doc['id'] ?>#toolbar=0" class="w-full h-full border-0"></iframe>
+                        <iframe src="<?= url('/saraban/file/' . $doc['id']) ?>#toolbar=0" class="w-full h-full border-0"></iframe>
                     <?php endif; ?>
                 <?php else: ?>
                     <div class="absolute inset-0 flex flex-col items-center justify-center text-slate-300">
@@ -97,7 +97,7 @@
             <?php if (\Core\Security::checkRole(['admin', 'editor', 'officer', 'director'])): ?>
             <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 p-8">
                 <h4 class="text-sm font-bold text-slate-800 uppercase tracking-widest border-b border-slate-50 pb-4 mb-6">บันทึกข้อความเกษียณหนังสือ</h4>
-                <form action="/saraban/minute/add" method="POST" class="space-y-6">
+                <form action="<?= url('/saraban/minute/add') ?>" method="POST" class="space-y-6">
                     <?= \Core\Security::csrf_field() ?>
                     <input type="hidden" name="document_id" value="<?= $doc['id'] ?>">
                     
@@ -266,7 +266,7 @@ function confirmDelete(id) {
         buttonsStyling: false
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = '/saraban/delete/' + id;
+            window.location.href = '<?= url('/saraban/delete/') ?>' + id;
         }
     });
 }

@@ -8,7 +8,7 @@
             <div class="swiper-wrapper">
                 <?php foreach ($home_carousel_data as $slide): ?>
                     <div class="swiper-slide relative">
-                        <img src="<?= $slide['image'] ?>" class="absolute inset-0 w-full h-full object-cover"
+                        <img src="<?= url($slide['image']) ?>" class="absolute inset-0 w-full h-full object-cover"
                             alt="<?= htmlspecialchars($slide['title']) ?>">
                         <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
                             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
@@ -51,7 +51,7 @@
     <!-- Fallback Hero Section with Cover Image -->
     <section
         class="hero-gradient text-white py-32 relative overflow-hidden <?= !empty($home_cover_image) ? 'has-cover' : '' ?>"
-        style="<?= !empty($home_cover_image) ? "background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{$home_cover_image}') center/cover no-repeat;" : "" ?>">
+        style="<?= !empty($home_cover_image) ? "background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('" . url($home_cover_image) . "') center/cover no-repeat;" : "" ?>">
         <div class="absolute inset-0 opacity-10">
             <div class="absolute top-10 left-10 w-64 h-64 bg-white rounded-full blur-3xl scale-150"></div>
             <div class="absolute bottom-10 right-10 w-96 h-96 bg-white rounded-full blur-3xl scale-150"></div>
@@ -70,7 +70,7 @@
                 <?= htmlspecialchars($home_hero_subtitle) ?>
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-6 animate-fade-in-up" style="animation-delay: 0.3s">
-                <a href="<?= htmlspecialchars($home_hero_button_url) ?>"
+                <a href="<?= url(htmlspecialchars($home_hero_button_url)) ?>"
                     class="px-10 py-4 bg-white text-primary font-bold rounded-2xl shadow-2xl hover:bg-blue-50 transition-all hover:scale-105">
                     <?= htmlspecialchars($home_hero_button_text) ?>
                 </a>
@@ -183,7 +183,7 @@
                 <?php
                 $aboutImage = !empty($home_about_image) ? $home_about_image : (!empty($home_cover_image) ? $home_cover_image : \Core\Database::getSetting('site_logo'));
                 if (!empty($aboutImage)): ?>
-                    <img src="<?= $aboutImage ?>" class="w-full h-[500px] object-contain" alt="About School">
+                    <img src="<?= url($aboutImage) ?>" class="w-full h-[500px] object-contain" alt="About School">
                 <?php else: ?>
                     <div class="w-full h-[500px] bg-slate-100 flex items-center justify-center">
                         <i class="fa fa-graduation-cap text-8xl text-slate-200"></i>
@@ -194,7 +194,8 @@
         <div class="lg:w-1/2">
             <div class="h-1 w-20 bg-primary mb-8"></div>
             <h2 class="text-5xl font-extrabold text-slate-900 heading-font mb-8 leading-tight tracking-tight">
-                <?= nl2br(htmlspecialchars($home_about_title)) ?></h2>
+                <?= nl2br(htmlspecialchars($home_about_title)) ?>
+            </h2>
             <p class="text-xl text-slate-600 leading-relaxed mb-10">
                 <?= nl2br(htmlspecialchars($home_about_content)) ?>
             </p>
@@ -211,7 +212,8 @@
                     <?php endif; ?>
                 <?php endforeach; ?>
             </div>
-            <a href="<?= htmlspecialchars($home_about_button_url) ?>" class="inline-flex items-center text-primary font-bold text-lg group">
+            <a href="<?= url(htmlspecialchars($home_about_button_url)) ?>"
+                class="inline-flex items-center text-primary font-bold text-lg group">
                 <?= htmlspecialchars($home_about_button_text) ?>
                 <svg class="w-6 h-6 ml-2 transition-transform group-hover:translate-x-2" fill="none"
                     stroke="currentColor" viewBox="0 0 24 24">
@@ -245,7 +247,7 @@
                     class="bg-white rounded-5xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-2xl transition-all duration-500 flex flex-col group">
                     <div class="h-64 overflow-hidden relative">
                         <?php if (!empty($item['featured_image'])): ?>
-                            <img src="<?= $item['featured_image'] ?>"
+                            <img src="<?= url($item['featured_image']) ?>"
                                 class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="">
                         <?php else: ?>
                             <div
@@ -309,7 +311,7 @@
                 <div
                     class="group relative bg-white rounded-5xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 p-2">
                     <div class="aspect-[4/5] rounded-4xl overflow-hidden relative">
-                        <img src="<?= $p['image_url'] ?: 'https://via.placeholder.com/400x500' ?>"
+                        <img src="<?= $p['image_url'] ? url($p['image_url']) : 'https://via.placeholder.com/400x500' ?>"
                             class="w-full h-full object-cover transition duration-700 group-hover:scale-110"
                             alt="<?= htmlspecialchars($p['name']) ?>">
                         <div
@@ -371,7 +373,7 @@
                 <?php foreach ($latest_albums as $album): ?>
                     <a href="<?= url('/gallery-detail/' . $album['id']) ?>"
                         class="group relative aspect-square rounded-4xl overflow-hidden shadow-2xl">
-                        <img src="<?= $album['cover_image'] ?: 'https://via.placeholder.com/600x600' ?>"
+                        <img src="<?= $album['cover_image'] ? url($album['cover_image']) : 'https://via.placeholder.com/600x600' ?>"
                             class="w-full h-full object-cover transition duration-700 group-hover:scale-110 brightness-75 group-hover:brightness-50"
                             alt="<?= $album['title'] ?>">
                         <div class="absolute inset-0 p-8 flex flex-col justify-end">
@@ -406,17 +408,23 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 <?php foreach ($journals as $item): ?>
-                    <div class="group bg-white rounded-5xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 flex flex-col">
+                    <div
+                        class="group bg-white rounded-5xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 flex flex-col">
                         <div class="aspect-[3/4] overflow-hidden relative">
-                            <img src="<?= $item['image_url'] ?>" class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="<?= htmlspecialchars($item['title']) ?>">
-                            <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                <a href="<?= $item['image_url'] ?>" target="_blank" class="px-6 py-3 bg-white text-primary font-bold rounded-2xl shadow-xl hover:bg-blue-50 transition-all hover:scale-105 text-sm">
+                            <img src="<?= url($item['image_url']) ?>"
+                                class="w-full h-full object-cover transition duration-700 group-hover:scale-110"
+                                alt="<?= htmlspecialchars($item['title']) ?>">
+                            <div
+                                class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <a href="<?= url($item['image_url']) ?>" target="_blank"
+                                    class="px-6 py-3 bg-white text-primary font-bold rounded-2xl shadow-xl hover:bg-blue-50 transition-all hover:scale-105 text-sm">
                                     ดูรูปขนาดเต็ม
                                 </a>
                             </div>
                         </div>
                         <div class="p-8 text-center">
-                            <h4 class="text-lg font-bold text-slate-800 line-clamp-1 group-hover:text-primary transition-colors">
+                            <h4
+                                class="text-lg font-bold text-slate-800 line-clamp-1 group-hover:text-primary transition-colors">
                                 <?= htmlspecialchars($item['title']) ?>
                             </h4>
                         </div>
@@ -451,10 +459,13 @@
             <div class="flex justify-between items-start mb-6">
                 <h3 id="modalTitle" class="text-3xl font-extrabold text-slate-900 heading-font leading-tight"></h3>
                 <button onclick="closeEventModal()" class="text-slate-400 hover:text-slate-600 transition-colors">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
                 </button>
             </div>
-            
+
             <div class="space-y-6">
                 <div class="flex items-center text-slate-600">
                     <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-primary mr-4">
@@ -487,7 +498,7 @@
 
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
@@ -506,13 +517,13 @@
                 list: 'รายการ'
             },
             events: '<?= url('/api/calendar/events') ?>',
-            eventClick: function(info) {
+            eventClick: function (info) {
                 const event = info.event;
                 const props = event.extendedProps;
-                
+
                 document.getElementById('modalTitle').innerText = event.title;
                 document.getElementById('modalHeader').style.backgroundColor = event.backgroundColor;
-                
+
                 // Format Date
                 let dateStr = props.startDate;
                 if (props.endDate && props.endDate !== props.startDate) {
@@ -524,7 +535,7 @@
                     dateStr += ' น.)';
                 }
                 document.getElementById('modalDate').innerText = dateStr;
-                
+
                 // Responsible
                 if (props.responsible) {
                     document.getElementById('modalResponsible').innerText = props.responsible;
@@ -532,7 +543,7 @@
                 } else {
                     document.getElementById('modalResponsibleContainer').classList.add('hidden');
                 }
-                
+
                 // Description
                 if (props.description) {
                     document.getElementById('modalDescription').innerText = props.description;
@@ -540,7 +551,7 @@
                 } else {
                     document.getElementById('modalDescContainer').classList.add('hidden');
                 }
-                
+
                 document.getElementById('eventModal').classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
             }
@@ -566,15 +577,65 @@
         --fc-today-bg-color: #eff6ff;
         --fc-border-color: #f1f5f9;
     }
-    .fc { font-family: 'Sarabun', sans-serif; }
-    .fc .fc-toolbar-title { font-family: 'K2D', sans-serif; font-weight: 800; color: #0f172a; font-size: 1.5rem; }
-    .fc .fc-button { font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.75rem; padding: 0.75rem 1.25rem; border-radius: 1rem !important; transition: all 0.3s; }
-    .fc .fc-button-primary:not(:disabled).fc-button-active, .fc .fc-button-primary:not(:disabled):active { background-color: var(--tw-color-primary, #1d4ed8) !important; color: white !important; border-color: transparent !important; }
-    .fc .fc-daygrid-event { border-radius: 0.5rem; padding: 0.25rem 0.5rem; font-weight: 600; font-size: 0.85rem; border: none; margin-top: 2px; }
-    .fc .fc-daygrid-day.fc-day-today { background-color: var(--fc-today-bg-color); }
-    .fc .fc-col-header-cell { padding: 1rem 0; font-weight: 700; color: #94a3b8; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.1em; }
-    .fc-theme-standard td, .fc-theme-standard th { border: 1px solid #f8fafc; }
-    .fc .fc-list-event:hover td { background-color: #f8fafc !important; }
+
+    .fc {
+        font-family: 'Sarabun', sans-serif;
+    }
+
+    .fc .fc-toolbar-title {
+        font-family: 'K2D', sans-serif;
+        font-weight: 800;
+        color: #0f172a;
+        font-size: 1.5rem;
+    }
+
+    .fc .fc-button {
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.75rem;
+        padding: 0.75rem 1.25rem;
+        border-radius: 1rem !important;
+        transition: all 0.3s;
+    }
+
+    .fc .fc-button-primary:not(:disabled).fc-button-active,
+    .fc .fc-button-primary:not(:disabled):active {
+        background-color: var(--tw-color-primary, #1d4ed8) !important;
+        color: white !important;
+        border-color: transparent !important;
+    }
+
+    .fc .fc-daygrid-event {
+        border-radius: 0.5rem;
+        padding: 0.25rem 0.5rem;
+        font-weight: 600;
+        font-size: 0.85rem;
+        border: none;
+        margin-top: 2px;
+    }
+
+    .fc .fc-daygrid-day.fc-day-today {
+        background-color: var(--fc-today-bg-color);
+    }
+
+    .fc .fc-col-header-cell {
+        padding: 1rem 0;
+        font-weight: 700;
+        color: #94a3b8;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+    }
+
+    .fc-theme-standard td,
+    .fc-theme-standard th {
+        border: 1px solid #f8fafc;
+    }
+
+    .fc .fc-list-event:hover td {
+        background-color: #f8fafc !important;
+    }
 </style>
 
 <!-- Dynamic Custom Content Blocks -->
@@ -595,25 +656,30 @@
 
                 <?php elseif ($block['type'] === 'image'): ?>
                     <div class="text-center">
-                        <?php if(!empty($block['title'])): ?>
-                            <h2 class="text-4xl font-black text-slate-900 heading-font mb-10 leading-tight"><?= htmlspecialchars($block['title']) ?></h2>
+                        <?php if (!empty($block['title'])): ?>
+                            <h2 class="text-4xl font-black text-slate-900 heading-font mb-10 leading-tight">
+                                <?= htmlspecialchars($block['title']) ?>
+                            </h2>
                         <?php endif; ?>
                         <div class="rounded-[3rem] overflow-hidden shadow-2xl inline-block max-w-full">
-                            <img src="<?= $block['image'] ?>" class="w-full max-h-[80vh] object-contain bg-slate-50" alt="<?= htmlspecialchars($block['title'] ?? '') ?>">
+                            <img src="<?= url($block['image']) ?>" class="w-full max-h-[80vh] object-contain bg-slate-50"
+                                alt="<?= htmlspecialchars($block['title'] ?? '') ?>">
                         </div>
                     </div>
 
                 <?php elseif ($block['type'] === 'carousel'): ?>
                     <div class="space-y-10">
-                        <?php if(!empty($block['title'])): ?>
-                            <h2 class="text-4xl font-black text-slate-900 heading-font text-center leading-tight"><?= htmlspecialchars($block['title']) ?></h2>
+                        <?php if (!empty($block['title'])): ?>
+                            <h2 class="text-4xl font-black text-slate-900 heading-font text-center leading-tight">
+                                <?= htmlspecialchars($block['title']) ?>
+                            </h2>
                         <?php endif; ?>
                         <div class="swiper blockCarousel rounded-[3rem] overflow-hidden shadow-2xl aspect-video md:aspect-[21/9]">
                             <div class="swiper-wrapper">
-                                <?php if(!empty($block['images'])): ?>
+                                <?php if (!empty($block['images'])): ?>
                                     <?php foreach ($block['images'] as $imgUrl): ?>
                                         <div class="swiper-slide">
-                                            <img src="<?= $imgUrl ?>" class="w-full h-full object-cover">
+                                            <img src="<?= url($imgUrl) ?>" class="w-full h-full object-cover">
                                         </div>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
@@ -627,9 +693,13 @@
                 <?php elseif ($block['type'] === 'image_text'): ?>
                     <div class="flex flex-col lg:flex-row items-center gap-20">
                         <div class="lg:w-1/2 relative group">
-                            <div class="absolute -inset-4 bg-primary/5 rounded-[4rem] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
-                            <div class="relative rounded-[3rem] overflow-hidden shadow-2xl transition-transform duration-700 group-hover:scale-[1.02]">
-                                <img src="<?= $block['image'] ?>" class="w-full h-full object-cover aspect-[4/3]" alt="<?= htmlspecialchars($block['title']) ?>">
+                            <div
+                                class="absolute -inset-4 bg-primary/5 rounded-[4rem] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000">
+                            </div>
+                            <div
+                                class="relative rounded-[3rem] overflow-hidden shadow-2xl transition-transform duration-700 group-hover:scale-[1.02]">
+                                <img src="<?= url($block['image']) ?>" class="w-full h-full object-cover aspect-[4/3]"
+                                    alt="<?= htmlspecialchars($block['title']) ?>">
                             </div>
                         </div>
                         <div class="lg:w-1/2">
@@ -644,7 +714,8 @@
                     </div>
 
                 <?php elseif ($block['type'] === 'cta'): ?>
-                    <div class="bg-primary rounded-[4rem] p-16 md:p-24 text-center relative overflow-hidden shadow-2xl shadow-primary/20">
+                    <div
+                        class="bg-primary rounded-[4rem] p-16 md:p-24 text-center relative overflow-hidden shadow-2xl shadow-primary/20">
                         <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
                             <div class="absolute top-10 left-10 w-64 h-64 bg-white rounded-full blur-3xl"></div>
                             <div class="absolute bottom-10 right-10 w-96 h-96 bg-white rounded-full blur-3xl"></div>
@@ -657,9 +728,13 @@
                                 <?= htmlspecialchars($block['content']) ?>
                             </p>
                             <?php if (!empty($block['button_text'])): ?>
-                                <a href="<?= htmlspecialchars($block['button_url']) ?>" class="inline-flex items-center px-12 py-5 bg-white text-primary font-black rounded-3xl hover:bg-blue-50 transition-all hover:scale-105 shadow-2xl shadow-black/10 text-xl tracking-tight">
+                                <a href="<?= htmlspecialchars($block['button_url']) ?>"
+                                    class="inline-flex items-center px-12 py-5 bg-white text-primary font-black rounded-3xl hover:bg-blue-50 transition-all hover:scale-105 shadow-2xl shadow-black/10 text-xl tracking-tight">
                                     <?= htmlspecialchars($block['button_text']) ?>
-                                    <svg class="w-6 h-6 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                                    <svg class="w-6 h-6 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                    </svg>
                                 </a>
                             <?php endif; ?>
                         </div>
@@ -667,8 +742,10 @@
 
                 <?php elseif ($block['type'] === 'embed'): ?>
                     <div class="space-y-10">
-                        <?php if(!empty($block['title'])): ?>
-                            <h2 class="text-4xl font-black text-slate-900 heading-font text-center leading-tight"><?= htmlspecialchars($block['title']) ?></h2>
+                        <?php if (!empty($block['title'])): ?>
+                            <h2 class="text-4xl font-black text-slate-900 heading-font text-center leading-tight">
+                                <?= htmlspecialchars($block['title']) ?>
+                            </h2>
                         <?php endif; ?>
                         <div class="rounded-[3rem] overflow-hidden shadow-2xl bg-white">
                             <div style="height: <?= $block['height'] ?? '500' ?>px">
@@ -679,23 +756,35 @@
 
                 <?php elseif ($block['type'] === 'grid'): ?>
                     <div class="space-y-12">
-                        <?php if(!empty($block['title'])): ?>
-                            <h2 class="text-4xl md:text-5xl font-black text-slate-900 heading-font text-center leading-tight"><?= htmlspecialchars($block['title']) ?></h2>
+                        <?php if (!empty($block['title'])): ?>
+                            <h2 class="text-4xl md:text-5xl font-black text-slate-900 heading-font text-center leading-tight">
+                                <?= htmlspecialchars($block['title']) ?>
+                            </h2>
                         <?php endif; ?>
                         <?php $cols = $block['cols'] ?? 2; ?>
                         <div class="grid grid-cols-1 md:grid-cols-<?= $cols ?> lg:grid-cols-<?= $cols ?> gap-8">
                             <?php foreach ($block['items'] as $item): ?>
                                 <?php if (!empty($item['title'])): ?>
-                                    <div class="bg-white p-10 rounded-[3rem] shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2 border border-slate-50 group">
-                                        <div class="w-16 h-16 bg-primary/5 rounded-2xl flex items-center justify-center text-primary mb-8 group-hover:bg-primary group-hover:text-white transition-colors duration-500">
+                                    <div
+                                        class="bg-white p-10 rounded-[3rem] shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2 border border-slate-50 group">
+                                        <div
+                                            class="w-16 h-16 bg-primary/5 rounded-2xl flex items-center justify-center text-primary mb-8 group-hover:bg-primary group-hover:text-white transition-colors duration-500">
                                             <i class="fa <?= htmlspecialchars($item['icon'] ?: 'fa-star') ?> text-2xl"></i>
                                         </div>
-                                        <h3 class="text-2xl font-black text-slate-900 mb-4 heading-font"><?= htmlspecialchars($item['title']) ?></h3>
-                                        <p class="text-slate-600 leading-relaxed mb-8 font-medium"><?= nl2br(htmlspecialchars($item['content'])) ?></p>
+                                        <h3 class="text-2xl font-black text-slate-900 mb-4 heading-font">
+                                            <?= htmlspecialchars($item['title']) ?>
+                                        </h3>
+                                        <p class="text-slate-600 leading-relaxed mb-8 font-medium">
+                                            <?= nl2br(htmlspecialchars($item['content'])) ?>
+                                        </p>
                                         <?php if (!empty($item['url'])): ?>
-                                            <a href="<?= htmlspecialchars($item['url']) ?>" class="inline-flex items-center text-primary font-bold hover:underline">
+                                            <a href="<?= htmlspecialchars($item['url']) ?>"
+                                                class="inline-flex items-center text-primary font-bold hover:underline">
                                                 อ่านเพิ่มเติม
-                                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                                                    </path>
+                                                </svg>
                                             </a>
                                         <?php endif; ?>
                                     </div>
@@ -716,9 +805,9 @@
                     loop: true,
                     autoplay: { delay: 4000 },
                     pagination: { el: el.querySelector('.swiper-pagination'), clickable: true },
-                    navigation: { 
-                        nextEl: el.querySelector('.swiper-button-next'), 
-                        prevEl: el.querySelector('.swiper-button-prev') 
+                    navigation: {
+                        nextEl: el.querySelector('.swiper-button-next'),
+                        prevEl: el.querySelector('.swiper-button-prev')
                     },
                 });
             });

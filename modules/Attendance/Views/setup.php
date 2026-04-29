@@ -3,7 +3,7 @@
     <div class="lg:col-span-5">
         <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 sticky top-10">
             <h3 class="text-xl font-bold text-slate-800 heading-font mb-6">เพิ่มรายวิชาใหม่</h3>
-            <form action="/attendance/setup/store" method="POST" class="space-y-4">
+            <form action="<?= url('/attendance/setup/store') ?>" method="POST" class="space-y-4">
                                                     <input type="hidden" name="csrf_token" value="<?= \Core\Security::csrf_token() ?>">
                 
                 <div>
@@ -41,7 +41,7 @@
             <hr class="my-8 border-gray-100">
 
             <h3 class="text-xl font-bold text-slate-800 heading-font mb-6">ผูกห้องเรียนเพิ่ม</h3>
-            <form action="/attendance/setup/link" method="POST" class="space-y-4">
+            <form action="<?= url('/attendance/setup/link') ?>" method="POST" class="space-y-4">
                                                     <input type="hidden" name="csrf_token" value="<?= \Core\Security::csrf_token() ?>">
                 
                 <div>
@@ -109,7 +109,7 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <form action="/attendance/setup/unlink" method="POST" class="inline" onsubmit="return confirm('ยกเลิกการผูกห้องเรียนนี้?')">
+                                <form action="<?= url('/attendance/setup/unlink') ?>" method="POST" class="inline" onsubmit="return confirm('ยกเลิกการผูกห้องเรียนนี้?')">
                                     <input type="hidden" name="csrf_token" value="<?= \Core\Security::csrf_token() ?>">
                                     <input type="hidden" name="id" value="<?= $c['link_id'] ?>">
                                     <button type="submit" class="p-2 text-amber-500 hover:bg-amber-50 rounded-xl transition-all" title="ยกเลิกการผูกห้อง">
@@ -125,7 +125,7 @@
         </div>
         
         <div class="mt-8 flex justify-end">
-            <a href="/attendance" class="px-8 py-3.5 bg-slate-100 text-slate-600 rounded-2xl font-bold text-sm hover:bg-slate-200 transition-all">
+            <a href="<?= url('/attendance') ?>" class="px-8 py-3.5 bg-slate-100 text-slate-600 rounded-2xl font-bold text-sm hover:bg-slate-200 transition-all">
                 <i class="fa fa-arrow-left mr-2"></i>กลับไปหน้าเช็คชื่อ
             </a>
         </div>
@@ -153,7 +153,7 @@
                     <td class="px-6 py-4 text-sm font-bold text-slate-700 outfit"><?= $c['course_code'] ?></td>
                     <td class="px-6 py-4 text-sm font-bold text-slate-800"><?= $c['course_name'] ?></td>
                     <td class="px-6 py-4 text-center">
-                        <form action="/attendance/setup/delete" method="POST" class="inline" onsubmit="return confirm('ยืนยันการลบรายวิชานี้? (ข้อมูลประวัติการเช็คชื่อทั้งหมดจะหายไป)')">
+                        <form action="<?= url('/attendance/setup/delete') ?>" method="POST" class="inline" onsubmit="return confirm('ยืนยันการลบรายวิชานี้? (ข้อมูลประวัติการเช็คชื่อทั้งหมดจะหายไป)')">
                             <input type="hidden" name="csrf_token" value="<?= \Core\Security::csrf_token() ?>">
                             <input type="hidden" name="id" value="<?= $c['id'] ?>">
                             <button type="submit" class="p-2 text-rose-500 hover:bg-rose-50 rounded-xl transition-all">

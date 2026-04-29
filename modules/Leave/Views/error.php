@@ -12,10 +12,10 @@
         <div class="space-y-4">
             <p class="text-sm font-bold text-slate-400 uppercase tracking-widest">คำแนะนำสำหรับผู้ดูแลระบบ</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="/admin/users" class="bg-primary text-white px-8 py-3 rounded-2xl font-bold text-sm shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all">
+                <a href="<?= url('/admin/users') ?>" class="bg-primary text-white px-8 py-3 rounded-2xl font-bold text-sm shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all">
                     ไปที่หน้าจัดการผู้ใช้งาน
                 </a>
-                <a href="/personnel" class="bg-slate-100 text-slate-700 px-8 py-3 rounded-2xl font-bold text-sm hover:bg-slate-200 transition-all">
+                <a href="<?= url('/personnel') ?>" class="bg-slate-100 text-slate-700 px-8 py-3 rounded-2xl font-bold text-sm hover:bg-slate-200 transition-all">
                     ตรวจสอบรายชื่อบุคลากร
                 </a>
             </div>

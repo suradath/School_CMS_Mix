@@ -3,7 +3,7 @@
         <nav class="flex mb-8 text-sm font-medium text-gray-500" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3">
                 <li class="inline-flex items-center">
-                    <a href="/" class="hover:text-blue-600">หน้าแรก</a>
+                    <a href="<?= url('/') ?>" class="hover:text-blue-600">หน้าแรก</a>
                 </li>
                 <li>
                     <div class="flex items-center">
@@ -18,8 +18,9 @@
             <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 heading-font mb-10 leading-tight">
                 <?= $title ?>
             </h1>
-            <div class="mb-12 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-gray-100 animate-fade-in">
-                <img src="<?= $page['featured_image'] ?>" class="w-full h-auto object-cover max-h-[500px]" alt="<?= $title ?>">
+            <div class="relative group rounded-3xl overflow-hidden shadow-2xl mb-12">
+                <img src="<?= url($page['featured_image']) ?>" class="w-full h-auto object-cover max-h-[500px]" alt="<?= $title ?>">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
             </div>
         <?php else: ?>
             <div class="mb-12 rounded-3xl overflow-hidden shadow-2xl bg-primary text-white p-12 md:p-20 text-center animate-fade-in">

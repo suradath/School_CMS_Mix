@@ -1,6 +1,6 @@
 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="p-8">
-        <form action="/settings/update-footer" method="POST" class="space-y-10">
+        <form action="<?= url('/settings/update-footer') ?>" method="POST" class="space-y-10">
             <?= \Core\Security::csrf_field() ?>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <!-- Footer Description -->

@@ -21,14 +21,14 @@ $statusOptions = [
     <div class="flex items-center space-x-2">
         <button type="button" onclick="bulkSet('present')" class="px-4 py-2 bg-green-50 text-green-600 border border-green-200 rounded-xl text-xs font-bold hover:bg-green-100 transition-all">มาเรียนทั้งหมด</button>
         <button type="button" onclick="bulkSet('absent')" class="px-4 py-2 bg-gray-50 text-gray-600 border border-gray-200 rounded-xl text-xs font-bold hover:bg-gray-100 transition-all">ขาดเรียนทั้งหมด</button>
-        <a href="/attendance/export?date=<?= $date ?>&course_id=<?= $courseId ?>&class_level=<?= urlencode($level) ?>&room_number=<?= $room ?>" 
+        <a href="<?= url('/attendance/export?date=' . $date . '&course_id=' . $courseId . '&class_level=' . urlencode($level) . '&room_number=' . $room) ?>" 
            class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold shadow-lg shadow-blue-200 hover:scale-[1.02] transition-all">
            <i class="fa fa-file-excel-o mr-1"></i>ส่งออก Excel
         </a>
     </div>
 </div>
 
-<form action="/attendance/save" method="POST" id="attendance-form">
+<form action="<?= url('/attendance/save') ?>" method="POST" id="attendance-form">
     <input type="hidden" name="csrf_token" value="<?= \Core\Security::csrf_token() ?>">
     <input type="hidden" name="date" value="<?= $date ?>">
     <input type="hidden" name="course_id" value="<?= $courseId ?>">

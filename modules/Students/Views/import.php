@@ -1,5 +1,5 @@
 <div class="mb-6">
-    <a href="/students" class="text-sm text-gray-500 hover:text-primary transition-colors font-bold">
+    <a href="<?= url('/students') ?>" class="text-sm text-gray-500 hover:text-primary transition-colors font-bold">
         <i class="fa fa-arrow-left mr-1"></i> กลับไปหน้าภาพรวม
     </a>
 </div>
@@ -29,7 +29,7 @@
         <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
             <h3 class="text-xl font-bold text-gray-900 heading-font mb-6 border-b pb-4">อัปโหลดไฟล์ CSV</h3>
             
-            <form action="/students/import-process" method="POST" enctype="multipart/form-data" class="space-y-6" onsubmit="document.getElementById('submitBtn').disabled = true; document.getElementById('submitBtn').innerHTML = '<i class=\'fa fa-spinner fa-spin mr-2\'></i> กำลังนำเข้าข้อมูล...';">
+            <form action="<?= url('/students/import-process') ?>" method="POST" enctype="multipart/form-data" class="space-y-6" onsubmit="document.getElementById('submitBtn').disabled = true; document.getElementById('submitBtn').innerHTML = '<i class=\'fa fa-spinner fa-spin mr-2\'></i> กำลังนำเข้าข้อมูล...';">
                 <?= \Core\Security::csrf_field() ?>
                 
                 <div class="flex items-center justify-center w-full">

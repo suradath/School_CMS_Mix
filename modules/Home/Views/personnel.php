@@ -18,8 +18,8 @@
                     <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition flex flex-col items-center p-8">
                         <div class="relative mb-6">
                             <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-md ring-4 ring-primary ring-opacity-10">
-                                <img src="<?= $person['image_url'] ?: 'https://ui-avatars.com/api/?name='.urlencode($person['name']).'&background=random' ?>" 
-                                     class="w-full h-full object-cover" 
+                                <img src="<?= $person['image_url'] ? url($person['image_url']) : 'https://ui-avatars.com/api/?name='.urlencode($person['name']).'&background=random' ?>" 
+                                     class="w-full h-full object-cover transition duration-500 group-hover:scale-110" 
                                      alt="<?= $person['name'] ?>">
                             </div>
                         </div>

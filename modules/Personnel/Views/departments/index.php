@@ -4,7 +4,7 @@
             <h3 class="text-2xl font-bold text-slate-800 heading-font">กลุ่มสาระฯ / ฝ่ายงาน ทั้งหมด</h3>
             <p class="text-sm text-slate-500 mt-1">จัดการโครงสร้างหน่วยงานและลำดับการแสดงผลของบุคลากร</p>
         </div>
-        <a href="/personnel/departments/create" class="inline-flex items-center px-6 py-3 bg-primary text-white font-bold rounded-2xl hover:bg-blue-700 transition-all shadow-lg shadow-primary/20">
+        <a href="<?= url('/personnel/departments/create') ?>" class="inline-flex items-center px-6 py-3 bg-primary text-white font-bold rounded-2xl hover:bg-blue-700 transition-all shadow-lg shadow-primary/20">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
             เพิ่มกลุ่มสาระฯ / ฝ่ายงาน
         </a>
@@ -32,7 +32,7 @@
                         </td>
                         <td class="px-8 py-5 text-right">
                             <div class="flex justify-end space-x-2">
-                                <a href="/personnel/departments/edit/<?= $dept['id'] ?>" class="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 rounded-xl transition-all" title="แก้ไข">
+                                <a href="<?= url('/personnel/departments/edit/' . $dept['id']) ?>" class="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 rounded-xl transition-all" title="แก้ไข">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                 </a>
                                 <button onclick="confirmDelete(<?= $dept['id'] ?>)" class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all" title="ลบ">
@@ -50,7 +50,7 @@
 <script>
 function confirmDelete(id) {
     if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบกลุ่มสาระฯ นี้? (จะไม่สามารถลบได้หากยังมีบุคลากรอยู่ในกลุ่มนี้)')) {
-        window.location.href = '/personnel/departments/delete/' + id;
+        window.location.href = '<?= url('/personnel/departments/delete/') ?>' + id;
     }
 }
 </script>

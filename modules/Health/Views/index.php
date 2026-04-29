@@ -4,7 +4,7 @@
         <p class="text-gray-500 mt-1">ติดตามสถานะสุขภาพและค่าดัชนีมวลกาย (BMI) ของนักเรียน</p>
     </div>
     <div class="flex items-center space-x-3">
-        <a href="/students" class="px-5 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-colors shadow-sm inline-flex items-center">
+        <a href="<?= url('/students') ?>" class="px-5 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-colors shadow-sm inline-flex items-center">
             <i class="fa fa-users mr-2"></i> ข้อมูลนักเรียน
         </a>
     </div>
@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const room = $('#filterRoom').val();
 
         $.ajax({
-            url: '/health/data',
+            url: '<?= url('/health/data') ?>',
             data: { class_level: classLevel, room_number: room },
             dataType: 'json',
             success: function(data) {

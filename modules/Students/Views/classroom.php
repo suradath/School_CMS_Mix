@@ -1,12 +1,12 @@
 <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0">
-    <a href="/students" class="text-sm text-gray-500 hover:text-primary transition-colors font-bold">
+    <a href="<?= url('/students') ?>" class="text-sm text-gray-500 hover:text-primary transition-colors font-bold">
         <i class="fa fa-arrow-left mr-1"></i> กลับไปหน้าภาพรวม
     </a>
 </div>
 
 <!-- Filters -->
 <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 mb-8">
-    <form method="GET" action="/students/classroom" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+    <form method="GET" action="<?= url('/students/classroom') ?>" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
         <div>
             <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">ค้นหา</label>
             <input type="text" name="search" value="<?= htmlspecialchars($filters['search']) ?>" placeholder="ชื่อ, นามสกุล, รหัสนักเรียน" class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-primary focus:border-primary block p-2.5">
@@ -65,7 +65,7 @@
                             <?= $s['gender'] === 'ช' ? '<span class="text-blue-500 font-bold"><i class="fa fa-male mr-1"></i>ชาย</span>' : '<span class="text-pink-500 font-bold"><i class="fa fa-female mr-1"></i>หญิง</span>' ?>
                         </td>
                         <td class="px-4 py-4 text-right">
-                            <a href="/students/profile/<?= $s['id'] ?>" class="inline-flex items-center px-3 py-1.5 bg-primary/10 text-primary rounded-lg font-bold text-xs hover:bg-primary hover:text-white transition-all">
+                            <a href="<?= url('/students/profile/' . $s['id']) ?>" class="inline-flex items-center px-3 py-1.5 bg-primary/10 text-primary rounded-lg font-bold text-xs hover:bg-primary hover:text-white transition-all">
                                 <i class="fa fa-eye mr-1.5"></i> ดูโปรไฟล์
                             </a>
                         </td>

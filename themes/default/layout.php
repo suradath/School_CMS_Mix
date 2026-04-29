@@ -21,7 +21,7 @@
     ?>
     <title><?= $title ?? 'ยินดีต้อนรับ' ?> - <?= $siteName ?></title>
     <?php if ($siteFavicon): ?>
-        <link rel="icon" type="image/x-icon" href="<?= $siteFavicon ?>">
+        <link rel="icon" type="image/x-icon" href="<?= url($siteFavicon) ?>">
     <?php endif; ?>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -131,7 +131,7 @@
                 <div class="flex items-center">
                     <a href="<?= url('/') ?>" class="flex-shrink-0 flex items-center group">
                         <?php if ($siteLogo): ?>
-                            <img src="<?= $siteLogo ?>" class="h-10 w-auto mr-3 transition-transform group-hover:scale-105"
+                            <img src="<?= url($siteLogo) ?>" class="h-10 w-auto mr-3 transition-transform group-hover:scale-105"
                                 alt="<?= $siteName ?>">
                         <?php endif; ?>
                         <span
@@ -265,7 +265,7 @@
                 <div class="md:col-span-2">
                     <div class="flex items-center mb-6">
                         <?php if ($siteLogo): ?>
-                            <img src="<?= $siteLogo ?>" class="h-8 w-auto mr-3 brightness-0 invert" alt="<?= $siteName ?>">
+                            <img src="<?= url($siteLogo) ?>" class="h-8 w-auto mr-3 brightness-0 invert" alt="<?= $siteName ?>">
                         <?php endif; ?>
                         <h3 class="text-2xl font-bold heading-font tracking-tight"><?= $siteName ?></h3>
                     </div>
@@ -381,7 +381,7 @@
                         <a href="<?= $activePopup['link_url'] ?>" target="_blank">
                     <?php endif; ?>
                     
-                    <img src="<?= $activePopup['image_url'] ?>" class="max-w-full h-auto block max-h-[75vh] mx-auto" alt="<?= htmlspecialchars($activePopup['title']) ?>">
+                    <img src="<?= url($activePopup['image_url']) ?>" class="max-w-full h-auto block max-h-[75vh] mx-auto" alt="<?= htmlspecialchars($activePopup['title']) ?>">
                     
                     <?php if ($activePopup['link_url']): ?>
                         </a>

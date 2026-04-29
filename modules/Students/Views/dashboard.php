@@ -12,18 +12,18 @@ if (isset($_SESSION['error'])) {
 
 <!-- Actions Menu -->
 <div class="flex justify-end mb-6 space-x-3">
-    <a href="/students/classroom" class="px-5 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-colors shadow-sm inline-flex items-center">
+    <a href="<?= url('/students/classroom') ?>" class="px-5 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-colors shadow-sm inline-flex items-center">
         <i class="fa fa-users mr-2"></i> ข้อมูลรายห้อง
     </a>
     <?php if (\Core\Security::checkRole(['admin', 'director'])): ?>
-    <a href="/students/import" class="px-5 py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary-dark transition-colors shadow-sm shadow-primary/30 inline-flex items-center">
+    <a href="<?= url('/students/import') ?>" class="px-5 py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary-dark transition-colors shadow-sm shadow-primary/30 inline-flex items-center">
         <i class="fa fa-upload mr-2"></i> นำเข้าข้อมูล (DMC)
     </a>
     <?php if (\Core\Security::checkRole('admin')): ?>
     <button onclick="confirmClearData()" class="px-5 py-2.5 bg-red-50 text-red-600 border border-red-100 rounded-xl font-bold hover:bg-red-100 transition-colors shadow-sm inline-flex items-center">
         <i class="fa fa-trash mr-2"></i> ล้างข้อมูลทั้งหมด
     </button>
-    <form id="clearDataForm" action="/students/clear" method="POST" class="hidden">
+    <form id="clearDataForm" action="<?= url('/students/clear') ?>" method="POST" class="hidden">
         <?= \Core\Security::csrf_field() ?>
     </form>
     <?php endif; ?>

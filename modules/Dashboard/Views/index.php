@@ -60,7 +60,7 @@
                 <p class="text-xs opacity-75">จำนวน <?= $stats['pending_leaves'] ?> รายการที่รอการตรวจสอบจากคุณ</p>
             </div>
         </div>
-        <a href="/leave/review" class="px-4 py-2 bg-white text-blue-700 text-xs font-bold rounded-lg hover:bg-blue-50 transition shadow-sm">ตรวจสอบตอนนี้</a>
+        <a href="<?= url('/leave/review') ?>" class="px-4 py-2 bg-white text-blue-700 text-xs font-bold rounded-lg hover:bg-blue-50 transition shadow-sm">ตรวจสอบตอนนี้</a>
     </div>
     <?php endif; ?>
 
@@ -75,12 +75,12 @@
                 <p class="text-xs opacity-75">จำนวน <?= $stats['unread_saraban'] ?> ฉบับที่ต้องการการตรวจสอบ</p>
             </div>
         </div>
-        <a href="/saraban" class="px-4 py-2 bg-white text-blue-700 text-xs font-bold rounded-lg hover:bg-blue-50 transition shadow-sm">เปิดกล่องขาเข้า</a>
+        <a href="<?= url('/saraban') ?>" class="px-4 py-2 bg-white text-blue-700 text-xs font-bold rounded-lg hover:bg-blue-50 transition shadow-sm">เปิดกล่องขาเข้า</a>
     </div>
     <?php endif; ?>
 
     <div class="mt-6 flex space-x-4">
-        <a href="/pages/create" class="px-5 py-2.5 bg-white text-blue-700 font-semibold rounded-xl text-sm hover:bg-blue-50 transition shadow-sm">สร้างหน้าใหม่</a>
-        <a href="/news/create" class="px-5 py-2.5 bg-blue-500 text-white font-semibold rounded-xl text-sm hover:bg-blue-400 transition shadow-sm">ลงข่าวใหม่</a>
+        <a href="<?= url('/pages/create') ?>" class="px-5 py-2.5 bg-white text-blue-700 font-semibold rounded-xl text-sm hover:bg-blue-50 transition shadow-sm">สร้างหน้าใหม่</a>
+        <a href="<?= url('/news/create') ?>" class="px-5 py-2.5 bg-blue-500 text-white font-semibold rounded-xl text-sm hover:bg-blue-400 transition shadow-sm">ลงข่าวใหม่</a>
     </div>
 </div>

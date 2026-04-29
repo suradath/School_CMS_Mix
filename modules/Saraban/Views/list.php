@@ -4,7 +4,7 @@
         <p class="text-sm text-slate-500 mt-1">รายการหนังสือทั้งหมดในหมวดหมู่นี้</p>
     </div>
     <?php if (\Core\Security::checkRole(['admin', 'editor', 'officer'])): ?>
-    <a href="/saraban/create/<?= $type ?>" class="bg-primary text-white px-6 py-3 rounded-2xl font-bold text-xs hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center">
+    <a href="<?= url('/saraban/create/' . $type) ?>" class="bg-primary text-white px-6 py-3 rounded-2xl font-bold text-xs hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center">
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
         ลงทะเบียนใหม่
     </a>
@@ -43,7 +43,7 @@
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
         ค้นหา
     </button>
-    <a href="/saraban/<?= $type ?>" class="px-4 py-2.5 text-slate-400 hover:text-slate-600 text-xs font-bold h-[42px] flex items-center">ล้างค่า</a>
+    <a href="<?= url('/saraban/' . $type) ?>" class="px-4 py-2.5 text-slate-400 hover:text-slate-600 text-xs font-bold h-[42px] flex items-center">ล้างค่า</a>
 </form>
 
 <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
@@ -114,11 +114,11 @@
                         </td>
                         <td class="px-8 py-5">
                             <div class="flex space-x-2">
-                                <a href="/saraban/view/<?= $item['id'] ?>" class="p-2 text-slate-400 hover:text-primary transition-colors">
+                                <a href="<?= url('/saraban/view/' . $item['id']) ?>" class="p-2 text-slate-400 hover:text-primary transition-colors">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                 </a>
                                 <?php if ($item['file_url']): ?>
-                                <a href="/saraban/file/<?= $item['id'] ?>" target="_blank" class="p-2 text-slate-400 hover:text-emerald-600 transition-colors">
+                                <a href="<?= url('/saraban/file/' . $item['id']) ?>" target="_blank" class="p-2 text-slate-400 hover:text-emerald-600 transition-colors">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                                 </a>
                                 <?php endif; ?>

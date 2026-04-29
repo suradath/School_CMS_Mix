@@ -49,6 +49,13 @@ CREATE TABLE IF NOT EXISTS `pages` (
     INDEX (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO `pages` (`id`, `title`, `slug`, `content`, `author_id`, `status`, `type`, `meta_description`, `featured_image`, `created_at`, `updated_at`) VALUES
+(1, 'ประวัติความเป็นมา', 'history', '<p>ประวัติโรงเรียนลำปลายมาศ</p>', NULL, 'published', 'page', '', NULL, '2026-04-22 03:23:01', '2026-04-22 13:56:44'),
+(2, 'วิสัยทัศน์และพันธกิจ', 'vision', '<h1>วิสัยทัศน์</h1><p>มุ่งมั่นสู่ความเป็นเลิศ...</p>', NULL, 'published', 'page', NULL, NULL, '2026-04-22 03:23:01', '2026-04-22 03:23:01'),
+(3, 'เกี่ยวกับเรา', 'about-us', '<h1>เกี่ยวกับโรงเรียนของเรา</h1><p>ยินดีต้อนรับสู่หน้าข้อมูลโรงเรียน เรามีความมุ่งมั่นในการจัดการศึกษา...</p>', NULL, 'published', 'page', NULL, NULL, '2026-04-22 03:23:01', '2026-04-22 03:23:01'),
+(4, 'ติดต่อสอบถาม', 'contact-us', '<h1>ติดต่อเรา</h1><p>ที่อยู่: 123 ถนนการเรียนรู้...</p>', NULL, 'published', 'page', NULL, NULL, '2026-04-22 03:23:01', '2026-04-22 03:23:01');
+
+
 -- 3. Departments
 CREATE TABLE IF NOT EXISTS `departments` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -80,6 +87,12 @@ CREATE TABLE IF NOT EXISTS `news_categories` (
     `name` VARCHAR(100) NOT NULL UNIQUE,
     `slug` VARCHAR(100) NOT NULL UNIQUE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `news_categories` (`id`, `name`, `slug`) VALUES
+(1, 'ข่าวประชาสัมพันธ์', 'announcement'),
+(2, 'ข่าวกิจกรรม', 'activities'),
+(3, 'ข่าววิชาการ', 'academic'),
+(4, 'ข่าวรับสมัครงาน/นักเรียน', 'recruitment');
 
 -- 6. News & Events
 CREATE TABLE IF NOT EXISTS `news` (
@@ -117,14 +130,18 @@ CREATE TABLE IF NOT EXISTS `gallery_images` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 8. Academic Calendar
-CREATE TABLE IF NOT EXISTS `academic_calendar` (
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `title` VARCHAR(255) NOT NULL,
-    `description` TEXT DEFAULT NULL,
-    `start_date` DATE NOT NULL,
-    `end_date` DATE DEFAULT NULL,
-    `color` VARCHAR(20) DEFAULT '#1d4ed8',
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE `academic_calendar` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `title` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date DEFAULT NULL,
+  `start_time` time DEFAULT NULL,
+  `end_time` time DEFAULT NULL,
+  `responsible_person` varchar(255) DEFAULT NULL,
+  `color` varchar(20) DEFAULT '#1d4ed8',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 9. Entry Popups
@@ -134,7 +151,8 @@ CREATE TABLE IF NOT EXISTS `entry_popups` (
     `image_url` VARCHAR(255) DEFAULT NULL,
     `link_url` VARCHAR(255) DEFAULT NULL,
     `is_active` TINYINT(1) DEFAULT 1,
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 10. Leave Management
@@ -218,6 +236,7 @@ CREATE TABLE IF NOT EXISTS `saraban_receivers` (
     `department_id` INT DEFAULT NULL,
     `status` ENUM('unread', 'read') DEFAULT 'unread',
     `acknowledged_at` DATETIME DEFAULT NULL,
+	`created_at` timestamp NOT NULL DEFAULT current_timestamp()
     FOREIGN KEY (`document_id`) REFERENCES `saraban_documents`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

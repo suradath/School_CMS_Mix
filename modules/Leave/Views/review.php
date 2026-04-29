@@ -27,7 +27,7 @@
                         <div class="flex items-center">
                         <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-xs mr-3 overflow-hidden border border-gray-100">
                             <?php if (!empty($req['image_url'])): ?>
-                                <img src="<?= $req['image_url'] ?>" class="w-full h-full object-cover" alt="<?= $req['personnel_name'] ?>">
+                                <img src="<?= url($req['image_url']) ?>" class="w-full h-full object-cover" alt="<?= $req['personnel_name'] ?>">
                             <?php else: ?>
                                 <?= mb_substr($req['personnel_name'], 0, 2, 'UTF-8') ?>
                             <?php endif; ?>
@@ -108,7 +108,7 @@
 function openModal(id) {
     const modal = document.getElementById('approvalModal');
     const form = document.getElementById('approvalForm');
-    form.action = '/leave/updateStatus/' + id;
+    form.action = '<?= url('/leave/updateStatus/') ?>' + id;
     modal.classList.remove('hidden');
 }
 function closeModal() {

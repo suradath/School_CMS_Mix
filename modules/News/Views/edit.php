@@ -1,6 +1,6 @@
 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="p-8">
-        <form action="/news/update/<?= $item['id'] ?>" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="<?= url('/news/update/' . $item['id']) ?>" method="POST" enctype="multipart/form-data" class="space-y-6">
             <?= \Core\Security::csrf_field() ?>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Main Content Area -->
@@ -46,7 +46,7 @@
                         <h4 class="font-bold text-gray-800 mb-4 pb-2 border-b border-gray-200">รูปภาพหน้าปก</h4>
                         <?php if($item['featured_image']): ?>
                         <div class="mb-4 relative rounded-xl overflow-hidden shadow-sm">
-                            <img src="<?= $item['featured_image'] ?>" class="w-full h-auto">
+                            <img src="<?= url($item['featured_image']) ?>" class="w-full h-auto">
                         </div>
                         <?php endif; ?>
                         <div class="flex items-center justify-center w-full">
@@ -63,7 +63,7 @@
                     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition shadow-md">
                         บันทึกการเปลี่ยนแปลง
                     </button>
-                    <a href="/news" class="block w-full text-center text-gray-500 hover:text-gray-700 font-semibold py-2">ยกเลิก</a>
+                    <a href="<?= url('/news') ?>" class="block w-full text-center text-gray-500 hover:text-gray-700 font-semibold py-2">ยกเลิก</a>
                 </div>
             </div>
         </form>

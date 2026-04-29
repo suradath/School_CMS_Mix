@@ -1,5 +1,5 @@
 <div class="mb-8">
-    <a href="/gallery" class="text-sm font-semibold text-blue-600 hover:underline mb-4 inline-block">&larr; กลับไปหน้ารวมอัลบั้ม</a>
+    <a href="<?= url('/gallery') ?>" class="text-sm font-semibold text-blue-600 hover:underline mb-4 inline-block">&larr; กลับไปหน้ารวมอัลบั้ม</a>
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
         <div>
             <h3 class="text-3xl font-bold text-gray-900 heading-font"><?= $album['title'] ?></h3>
@@ -14,12 +14,12 @@
 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
     <?php foreach ($images as $img): ?>
     <div class="relative aspect-square group overflow-hidden rounded-2xl bg-gray-200">
-        <img src="<?= $img['image_url'] ?>" class="w-full h-full object-cover transition duration-300 group-hover:scale-110" alt="<?= $img['caption'] ?>">
+        <img src="<?= url($img['image_url']) ?>" class="w-full h-full object-cover transition duration-300 group-hover:scale-110" alt="<?= $img['caption'] ?>">
         <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition p-4 flex flex-col justify-end">
             <p class="text-white text-xs font-medium truncate"><?= $img['caption'] ?></p>
             <div class="mt-2 flex space-x-2">
-                <a href="<?= $img['image_url'] ?>" target="_blank" class="p-1.5 bg-white text-gray-700 rounded-lg hover:bg-gray-100"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></a>
-                <a href="/gallery/deletePhoto/<?= $img['id'] ?>" class="p-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600" onclick="return confirm('คุณต้องการลบรูปภาพนี้ใช่หรือไม่?')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></a>
+                <a href="<?= url($img['image_url']) ?>" target="_blank" class="p-1.5 bg-white text-gray-700 rounded-lg hover:bg-gray-100"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></a>
+                <a href="<?= url('/gallery/deletePhoto/' . $img['id']) ?>" class="p-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600" onclick="return confirm('คุณต้องการลบรูปภาพนี้ใช่หรือไม่?')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></a>
             </div>
         </div>
     </div>
@@ -42,8 +42,8 @@
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>
                 </button>
             </div>
-            <form action="/gallery/addPhoto/<?= $album['id'] ?>
-            <?= \Core\Security::csrf_field() ?>" method="POST" enctype="multipart/form-data" class="p-6 space-y-5">
+            <form action="<?= url('/gallery/addPhoto/' . $album['id']) ?>" method="POST" enctype="multipart/form-data" class="p-6 space-y-5">
+                <?= \Core\Security::csrf_field() ?>
                 <div>
                     <label class="block mb-2 text-xs font-bold text-gray-400 uppercase tracking-widest">เลือกไฟล์รูปภาพ (เลือกได้หลายรูป)</label>
                     <input type="file" name="photos[]" multiple required class="block w-full text-sm text-gray-900 border border-gray-200 rounded-2xl cursor-pointer bg-gray-50 focus:outline-none p-2 transition hover:bg-gray-100" accept="image/*">

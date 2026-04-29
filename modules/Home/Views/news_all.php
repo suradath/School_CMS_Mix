@@ -10,7 +10,7 @@
             <article class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition flex flex-col h-full">
                 <div class="h-56 overflow-hidden relative">
                     <?php if (!empty($item['featured_image'])): ?>
-                        <img src="<?= $item['featured_image'] ?>" class="w-full h-full object-cover transition duration-300 hover:scale-105" alt="">
+                        <img src="<?= url($item['featured_image']) ?>" class="w-full h-full object-cover transition duration-300 hover:scale-105" alt="">
                     <?php else: ?>
                         <div class="w-full h-full bg-primary flex items-center justify-center p-6 transition duration-300 hover:scale-105">
                             <span class="text-white text-lg font-bold text-center line-clamp-3 heading-font">
@@ -30,11 +30,11 @@
                         โดย <?= $item['author_name'] ?>
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-4 leading-tight group-hover:text-primary transition">
-                        <a href="/news-detail/<?= $item['id'] ?>"><?= $item['title'] ?></a>
+                        <a href="<?= url('/news-detail/' . $item['id']) ?>"><?= $item['title'] ?></a>
                     </h3>
                     <p class="text-gray-500 text-sm line-clamp-3 mb-6"><?= strip_tags($item['content']) ?></p>
                     <div class="mt-auto pt-6 border-t border-gray-50">
-                        <a href="/news-detail/<?= $item['id'] ?>" class="text-primary text-sm font-bold hover:underline inline-flex items-center">
+                        <a href="<?= url('/news-detail/' . $item['id']) ?>" class="text-primary text-sm font-bold hover:underline inline-flex items-center">
                             อ่านรายละเอียดเพิ่มเติม
                             <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         </a>

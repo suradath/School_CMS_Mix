@@ -36,7 +36,7 @@
                 <button type="button" onclick="fetchStudents()" class="flex-1 px-6 py-3.5 bg-primary text-white rounded-2xl font-bold text-sm shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
                     <i class="fa fa-search mr-2"></i>ดึงรายชื่อ
                 </button>
-                <a href="/attendance/setup" class="p-3.5 bg-slate-100 text-slate-600 rounded-2xl hover:bg-slate-200 transition-all" title="ตั้งค่ารายวิชา">
+                <a href="<?= url('/attendance/setup') ?>" class="p-3.5 bg-slate-100 text-slate-600 rounded-2xl hover:bg-slate-200 transition-all" title="ตั้งค่ารายวิชา">
                     <i class="fa fa-cog"></i>
                 </a>
             </div>
@@ -76,7 +76,7 @@
             </div>
         `;
 
-        fetch(`/attendance/get-students?date=${date}&course_id=${courseId}&class_level=${encodeURIComponent(level)}&room_number=${room}`)
+        fetch('<?= url('/attendance/get-students') ?>' + `?date=${date}&course_id=${courseId}&class_level=${encodeURIComponent(level)}&room_number=${room}`)
             .then(response => response.text())
             .then(html => {
                 container.innerHTML = html;

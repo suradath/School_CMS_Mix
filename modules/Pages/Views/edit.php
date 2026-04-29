@@ -1,7 +1,7 @@
 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="p-8">
-        <form action="/pages/update/<?= $page['id'] ?>
-            <?= \Core\Security::csrf_field() ?>" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="<?= url('/pages/update/' . $page['id']) ?>" method="POST" enctype="multipart/form-data" class="space-y-6">
+            <?= \Core\Security::csrf_field() ?>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Main Content Area -->
                 <div class="lg:col-span-2 space-y-4">
@@ -44,7 +44,7 @@
                             <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition shadow-md">
                                 อัปเดตหน้าเว็บ
                             </button>
-                            <a href="/pages/delete/<?php echo $page['id']; ?>" onclick="return confirm('คุณแน่ใจหรือไม่ว่าต้องการลบหน้านี้?')" class="block text-center w-full bg-red-50 hover:bg-red-100 text-red-600 font-semibold py-3 px-4 rounded-xl transition border border-red-200 mt-2">
+                            <a href="<?= url('/pages/delete/' . $page['id']) ?>" onclick="return confirm('คุณแน่ใจหรือไม่ว่าต้องการลบหน้านี้?')" class="block text-center w-full bg-red-50 hover:bg-red-100 text-red-600 font-semibold py-3 px-4 rounded-xl transition border border-red-200 mt-2">
                                 ลบหน้านี้
                             </a>
                         </div>

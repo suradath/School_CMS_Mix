@@ -100,7 +100,7 @@
                 backdrop: `rgba(15, 23, 42, 0.4)`
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = '/saraban';
+                    window.location.href = '<?= url('/saraban') ?>';
                 }
             });
         };
@@ -113,7 +113,7 @@
             <div class="flex items-center px-4 mb-10 group">
                 <div class="p-2 bg-primary/10 rounded-2xl mr-3 group-hover:rotate-12 transition-transform">
                     <?php if ($siteLogo): ?>
-                        <img src="<?= $siteLogo ?>" class="h-8 w-auto" alt="<?= $siteName ?>">
+                        <img src="<?= url($siteLogo) ?>" class="h-8 w-auto" alt="<?= $siteName ?>">
                     <?php else: ?>
                         <svg class="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
                     <?php endif; ?>

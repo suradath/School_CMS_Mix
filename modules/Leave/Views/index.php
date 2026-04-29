@@ -23,7 +23,7 @@
 
 <div class="flex justify-between items-center mb-6">
     <h3 class="text-xl font-bold text-slate-800 heading-font">ประวัติการลาของฉัน</h3>
-    <a href="/leave/create" class="bg-primary hover:bg-blue-700 text-white px-6 py-2.5 rounded-2xl font-bold text-sm shadow-lg shadow-primary/20 transition-all flex items-center">
+    <a href="<?= url('/leave/create') ?>" class="bg-primary hover:bg-blue-700 text-white px-6 py-2.5 rounded-2xl font-bold text-sm shadow-lg shadow-primary/20 transition-all flex items-center">
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
         เขียนใบลาใหม่
     </a>

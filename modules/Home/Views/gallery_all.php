@@ -8,12 +8,12 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <?php foreach ($albums as $album): ?>
             <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-2xl transition group h-full flex flex-col">
-                <div class="relative h-60 overflow-hidden">
-                    <img src="<?= $album['cover_image'] ?: 'https://via.placeholder.com/600x450?text=No+Cover' ?>" 
+                <div class="h-64 overflow-hidden relative">
+                    <img src="<?= $album['cover_image'] ? url($album['cover_image']) : 'https://via.placeholder.com/600x450?text=No+Cover' ?>" 
                          class="w-full h-full object-cover transition duration-500 group-hover:scale-110" 
                          alt="<?= $album['title'] ?>">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center p-6">
-                        <a href="/gallery-detail/<?= $album['id'] ?>" class="px-6 py-3 bg-white text-primary font-bold rounded-2xl shadow-2xl transform translate-y-4 group-hover:translate-y-0 transition duration-300">เข้าชมอัลบั้ม</a>
+                        <a href="<?= url('/gallery-detail/' . $album['id']) ?>" class="px-6 py-3 bg-white text-primary font-bold rounded-2xl shadow-2xl transform translate-y-4 group-hover:translate-y-0 transition duration-300">เข้าชมอัลบั้ม</a>
                     </div>
                 </div>
                 <div class="p-8 flex-grow">

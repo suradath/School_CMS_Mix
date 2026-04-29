@@ -1,6 +1,6 @@
 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="p-8">
-        <form action="/settings/update-home" method="POST" enctype="multipart/form-data" class="space-y-8">
+        <form action="<?= url('/settings/update-home') ?>" method="POST" enctype="multipart/form-data" class="space-y-8">
             <?= \Core\Security::csrf_field() ?>
             <!-- Hero Section Settings (Cover & Text) -->
             <div class="space-y-8 bg-slate-50/50 p-8 rounded-[2.5rem] border border-slate-100">
@@ -34,7 +34,7 @@
                             <label class="block mb-2 text-xs font-bold text-slate-400 uppercase tracking-widest">ภาพหน้าปกปัจจุบัน</label>
                             <div class="relative group aspect-video bg-white rounded-[2rem] overflow-hidden border-2 border-dashed border-slate-200 shadow-sm">
                                 <?php if (!empty($settings['home_cover_image'])): ?>
-                                    <img src="<?= $settings['home_cover_image'] ?>" class="w-full h-full object-cover">
+                                    <img src="<?= url($settings['home_cover_image']) ?>" class="w-full h-full object-cover">
                                     <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
                                         <button type="button" onclick="confirmDeleteCover()" class="bg-red-500 text-white p-4 rounded-2xl hover:bg-red-600 shadow-2xl transition-transform hover:scale-110">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
@@ -93,7 +93,7 @@
                                     <div class="flex flex-col md:flex-row gap-6">
                                         <div class="md:w-1/3">
                                             <div class="aspect-video rounded-2xl overflow-hidden bg-slate-50 border border-slate-100 mb-3">
-                                                <img src="<?= $slide['image'] ?>" class="w-full h-full object-cover">
+                                                <img src="<?= url($slide['image']) ?>" class="w-full h-full object-cover">
                                             </div>
                                             <input type="hidden" name="carousel[<?= $idx ?>][existing_image]" value="<?= $slide['image'] ?>">
                                             <input type="file" name="carousel_image[<?= $idx ?>]" accept="image/*" class="text-xs text-slate-500 w-full file:mr-2 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-slate-100 file:text-slate-600">
@@ -146,7 +146,7 @@
                             </div>
                             <div>
                                 <label class="block mb-2 text-xs font-bold text-slate-400 uppercase tracking-widest">ลิงก์ปุ่ม</label>
-                                <input type="text" name="home_about_button_url" value="<?= htmlspecialchars($settings['home_about_button_url'] ?? '/about-us') ?>" class="w-full bg-slate-50 border-none focus:ring-2 focus:ring-emerald-500 rounded-2xl p-4 text-sm font-bold">
+                                <input type="text" name="home_about_button_url" value="<?= htmlspecialchars($settings['home_about_button_url'] ?? url('/about-us')) ?>" class="w-full bg-slate-50 border-none focus:ring-2 focus:ring-emerald-500 rounded-2xl p-4 text-sm font-bold">
                             </div>
                         </div>
                     </div>
@@ -171,7 +171,7 @@
                             <label class="block mb-2 text-xs font-bold text-slate-400 uppercase tracking-widest">รูปภาพประกอบ</label>
                             <div class="flex items-start space-x-4">
                                 <div class="w-32 aspect-square rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
-                                    <img src="<?= $settings['home_about_image'] ?: 'https://via.placeholder.com/300' ?>" class="w-full h-full object-cover" id="about-img-preview">
+                                    <img src="<?= $settings['home_about_image'] ? url($settings['home_about_image']) : 'https://via.placeholder.com/300' ?>" class="w-full h-full object-cover" id="about-img-preview">
                                 </div>
                                 <div class="flex-grow">
                                     <input type="file" name="home_about_image" accept="image/*" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-600 hover:file:bg-emerald-100 transition-all cursor-pointer">
@@ -262,7 +262,7 @@
                                     <div class="<?= $block['type'] == 'image' ? 'md:col-span-2' : '' ?>">
                                         <label class="block mb-2 text-xs font-bold text-slate-400 uppercase tracking-widest">รูปภาพ</label>
                                         <div class="aspect-video rounded-2xl overflow-hidden bg-slate-100 mb-3 border border-slate-200">
-                                            <img src="<?= $block['image'] ?>" class="w-full h-full object-cover">
+                                            <img src="<?= url($block['image']) ?>" class="w-full h-full object-cover">
                                         </div>
                                         <input type="hidden" name="custom_blocks[<?= $index ?>][existing_image]" value="<?= $block['image'] ?>">
                                         <input type="file" name="block_image[<?= $index ?>]" accept="image/*" class="text-xs text-slate-500 w-full file:mr-2 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-indigo-50 file:text-indigo-600">
@@ -276,7 +276,7 @@
                                             <?php if (!empty($block['images'])): ?>
                                                 <?php foreach ($block['images'] as $imgUrl): ?>
                                                 <div class="relative group aspect-video rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
-                                                    <img src="<?= $imgUrl ?>" class="w-full h-full object-cover">
+                                                    <img src="<?= url($imgUrl) ?>" class="w-full h-full object-cover">
                                                     <input type="hidden" name="custom_blocks[<?= $index ?>][existing_images][]" value="<?= $imgUrl ?>">
                                                     <button type="button" onclick="this.parentElement.remove()" class="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>

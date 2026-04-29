@@ -1,12 +1,12 @@
 <div class="max-w-3xl mx-auto">
     <div class="mb-10 flex items-center">
-        <a href="/settings/popups" class="mr-4 p-2 bg-white rounded-xl shadow-sm border border-gray-100 text-slate-400 hover:text-primary transition-colors">
+        <a href="<?= url('/settings/popups') ?>" class="mr-4 p-2 bg-white rounded-xl shadow-sm border border-gray-100 text-slate-400 hover:text-primary transition-colors">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
         </a>
         <h3 class="text-3xl font-extrabold text-slate-900 heading-font">เพิ่ม Entry Popup</h3>
     </div>
 
-    <form action="/settings/popups/store" method="POST" enctype="multipart/form-data" class="space-y-8">
+    <form action="<?= url('/settings/popups/store') ?>" method="POST" enctype="multipart/form-data" class="space-y-8">
             <?= \Core\Security::csrf_field() ?>
         <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-gray-100">
             <div class="space-y-6">

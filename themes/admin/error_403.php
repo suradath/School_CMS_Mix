@@ -19,7 +19,7 @@
     </p>
 
     <div class="flex flex-col sm:flex-row gap-4">
-        <a href="/dashboard" class="px-8 py-4 bg-primary text-white rounded-2xl font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all">
+        <a href="<?= url('/dashboard') ?>" class="px-8 py-4 bg-primary text-white rounded-2xl font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all">
             <i class="fa fa-home mr-2"></i>กลับหน้าหลัก
         </a>
         <button onclick="history.back()" class="px-8 py-4 bg-slate-100 text-slate-600 rounded-2xl font-bold text-sm hover:bg-slate-200 transition-all">

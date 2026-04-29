@@ -3,12 +3,12 @@
         <nav class="flex mb-8 text-sm font-medium text-gray-500" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3">
                 <li class="inline-flex items-center">
-                    <a href="/" class="hover:text-primary font-semibold">หน้าแรก</a>
+                    <a href="<?= url('/') ?>" class="hover:text-primary font-semibold">หน้าแรก</a>
                 </li>
                 <li>
                     <div class="flex items-center">
                         <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/></svg>
-                        <a href="/news-all" class="ml-1 md:ml-2 hover:text-primary font-semibold">ข่าวประชาสัมพันธ์</a>
+                        <a href="<?= url('/news-all') ?>" class="ml-1 md:ml-2 hover:text-primary font-semibold">ข่าวประชาสัมพันธ์</a>
                     </div>
                 </li>
             </ol>
@@ -24,7 +24,7 @@
                 </div>
             </header>
             <div class="mb-12 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-gray-100 animate-fade-in">
-                <img src="<?= $item['featured_image'] ?>" class="w-full h-auto object-cover max-h-[500px]" alt="<?= $title ?>">
+                <img src="<?= url($item['featured_image']) ?>" class="w-full h-auto object-cover max-h-[500px]" alt="<?= $title ?>">
             </div>
         <?php else: ?>
             <div class="mb-12 rounded-3xl overflow-hidden shadow-2xl bg-primary text-white p-12 md:p-20 text-center animate-fade-in">
@@ -42,7 +42,7 @@
         </div>
 
         <div class="mt-16 pt-10 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-8">
-            <a href="/news-all" class="text-primary font-bold flex items-center hover:translate-x-[-4px] transition group">
+            <a href="<?= url('/news-all') ?>" class="text-primary font-bold flex items-center hover:translate-x-[-4px] transition group">
                 <div class="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center mr-3 group-hover:bg-primary group-hover:text-white transition-colors">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 </div>

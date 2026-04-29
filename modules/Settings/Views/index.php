@@ -1,6 +1,6 @@
 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="p-8">
-        <form action="/settings/update" method="POST" enctype="multipart/form-data" class="space-y-12">
+        <form action="<?= url('/settings/update') ?>" method="POST" enctype="multipart/form-data" class="space-y-12">
             <?= \Core\Security::csrf_field() ?>
             <!-- Section 1: General Info -->
             <div>
@@ -42,7 +42,7 @@
                     <div class="p-6 bg-gray-50 rounded-3xl border border-gray-100 flex items-center space-x-6">
                         <div class="flex-shrink-0 w-24 h-24 bg-white rounded-2xl border border-gray-200 flex items-center justify-center p-2">
                             <?php if ($settings['site_logo']): ?>
-                                <img src="<?= $settings['site_logo'] ?>" class="max-w-full max-h-full object-contain">
+                                <img src="<?= url($settings['site_logo']) ?>" class="max-w-full max-h-full object-contain">
                             <?php else: ?>
                                 <span class="text-gray-300 text-xs">ไม่มีโลโก้</span>
                             <?php endif; ?>
@@ -56,7 +56,7 @@
                     <div class="p-6 bg-gray-50 rounded-3xl border border-gray-100 flex items-center space-x-6">
                         <div class="flex-shrink-0 w-16 h-16 bg-white rounded-2xl border border-gray-200 flex items-center justify-center p-2">
                             <?php if ($settings['site_favicon']): ?>
-                                <img src="<?= $settings['site_favicon'] ?>" class="w-8 h-8 object-contain">
+                                <img src="<?= url($settings['site_favicon']) ?>" class="w-8 h-8 object-contain">
                             <?php else: ?>
                                 <span class="text-gray-300 text-xs text-center leading-tight">ไม่มี<br>ไอคอน</span>
                             <?php endif; ?>

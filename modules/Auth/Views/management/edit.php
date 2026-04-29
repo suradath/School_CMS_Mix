@@ -5,7 +5,7 @@
             <p class="text-sm text-slate-500 mt-1">กรอกข้อมูลบัญชีผู้ใช้งานและกำหนดสิทธิ์การเข้าถึง</p>
         </div>
 
-        <form action="<?= isset($user) ? '/admin/users/update/' . $user['id'] : '/admin/users/store' ?>" method="POST" class="p-6 md:p-8 space-y-6">
+        <form action="<?= isset($user) ? url('/admin/users/update/' . $user['id']) : url('/admin/users/store') ?>" method="POST" class="p-6 md:p-8 space-y-6">
             <?= \Core\Security::csrf_field() ?>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -71,7 +71,7 @@
             </div>
 
             <div class="pt-6 border-t border-gray-50 flex items-center justify-end space-x-4">
-                <a href="/admin/users" class="px-6 py-3 text-sm font-bold text-slate-500 hover:text-slate-800 transition-colors">ยกเลิก</a>
+                <a href="<?= url('/admin/users') ?>" class="px-6 py-3 text-sm font-bold text-slate-500 hover:text-slate-800 transition-colors">ยกเลิก</a>
                 <button type="submit" class="px-10 py-3 bg-primary text-white text-sm font-bold rounded-2xl hover:shadow-lg hover:shadow-primary/30 transition-all">
                     บันทึกข้อมูล
                 </button>

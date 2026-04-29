@@ -90,7 +90,7 @@
         
         calendarModal.show();
 
-        fetch(`/attendance/get-student-calendar?student_id=${studentId}&course_id=${courseId}`)
+        fetch('<?= url('/attendance/get-student-calendar') ?>' + `?student_id=${studentId}&course_id=${courseId}`)
             .then(response => response.text())
             .then(html => {
                 modalBody.innerHTML = html;
@@ -123,7 +123,7 @@
             </div>
         `;
 
-        fetch(`/attendance/get-report?course_id=${courseId}&class_level=${encodeURIComponent(level)}&room_number=${room}`)
+        fetch('<?= url('/attendance/get-report') ?>' + `?course_id=${courseId}&class_level=${encodeURIComponent(level)}&room_number=${room}`)
             .then(response => response.text())
             .then(html => {
                 container.innerHTML = html;

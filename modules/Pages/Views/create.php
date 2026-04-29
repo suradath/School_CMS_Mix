@@ -1,6 +1,6 @@
 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="p-8">
-        <form action="/pages/store" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="<?= url('/pages/store') ?>" method="POST" enctype="multipart/form-data" class="space-y-6">
             <?= \Core\Security::csrf_field() ?>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Main Content Area -->

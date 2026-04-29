@@ -35,7 +35,7 @@
                 </div>
             <?php endif; ?>
 
-            <form action="/auth/login" method="POST" class="space-y-4">
+            <form action="<?= url('/auth/login') ?>" method="POST" class="space-y-4">
                 <?= \Core\Security::csrf_field() ?>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>

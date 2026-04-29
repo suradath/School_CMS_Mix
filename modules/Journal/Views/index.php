@@ -25,7 +25,7 @@
     <?php foreach ($items as $item): ?>
     <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-xl transition-all">
         <div class="relative aspect-[3/4] overflow-hidden bg-slate-100">
-            <img src="<?= $item['image_url'] ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="<?= $item['title'] ?>">
+            <img src="<?= url($item['image_url']) ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="<?= $item['title'] ?>">
             <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center space-x-2">
                 <a href="<?= $item['image_url'] ?>" target="_blank" class="p-2 bg-white/20 backdrop-blur-md rounded-xl text-white hover:bg-white/40 transition-all">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
@@ -52,7 +52,7 @@
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
         </div>
-        <form action="/journal/store" method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
+        <form action="<?= url('/journal/store') ?>" method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
             <?= \Core\Security::csrf_field() ?>
             <div>
                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">หัวข้อ/ชื่อวารสาร</label>
@@ -76,7 +76,7 @@
 <script>
 function confirmDelete(id) {
     if (confirm('คุณต้องการลบวารสารนี้ใช่หรือไม่?')) {
-        window.location.href = '/journal/delete/' + id;
+        window.location.href = '<?= url('/journal/delete/') ?>' + id;
     }
 }
 </script>

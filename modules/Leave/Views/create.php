@@ -5,7 +5,7 @@
             <p class="text-sm text-slate-500 mt-1">กรอกรายละเอียดการลาของคุณ ระบบจะคำนวณวันลาอัตโนมัติ (เฉพาะวันทำการ)</p>
         </div>
         
-        <form action="/leave/store" method="POST" enctype="multipart/form-data" class="p-8 space-y-6">
+        <form action="<?= url('/leave/store') ?>" method="POST" enctype="multipart/form-data" class="p-8 space-y-6">
             <?= \Core\Security::csrf_field() ?>
             
             <?php if (isset($_SESSION['error'])): ?>
@@ -66,7 +66,7 @@
             </div>
 
             <div class="pt-6 flex items-center justify-end space-x-4">
-                <a href="/leave" class="px-6 py-3 text-sm font-bold text-slate-500 hover:text-slate-800 transition-colors">ยกเลิก</a>
+                <a href="<?= url('/leave') ?>" class="px-6 py-3 text-sm font-bold text-slate-500 hover:text-slate-800 transition-colors">ยกเลิก</a>
                 <button type="submit" class="px-10 py-3 bg-primary text-white text-sm font-bold rounded-2xl hover:shadow-lg hover:shadow-primary/30 transition-all">
                     ส่งใบลา
                 </button>

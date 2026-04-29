@@ -1,13 +1,19 @@
 <section class="bg-gray-50 py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-12">
-            <a href="/gallery-view" class="text-sm font-bold text-primary hover:underline mb-4 inline-block">&larr; กลับไปหน้ารวมอัลบั้ม</a>
+            <a href="<?= url('/gallery-view') ?>" class="text-sm font-bold text-primary hover:underline mb-4 inline-block">&larr; กลับไปหน้ารวมอัลบั้ม</a>
             <h2 class="text-4xl font-extrabold text-slate-900 heading-font"><?= $title ?></h2>
             <p class="text-gray-500 mt-2"><?= $album['description'] ?></p>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="gallery-container">
-            <?php foreach ($images as $img): ?>
+            <?php 
+            $preparedImages = array_map(function($img) {
+                $img['image_url'] = url($img['image_url']);
+                return $img;
+            }, $images);
+            foreach ($preparedImages as $img): 
+            ?>
             <div class="relative aspect-square group overflow-hidden rounded-2xl bg-gray-200">
                 <img src="<?= $img['image_url'] ?>" 
                      class="w-full h-full object-cover cursor-pointer transition duration-500 group-hover:scale-110" 
@@ -57,7 +63,7 @@
 </div>
 
 <script>
-let currentGalleryImages = <?= json_encode($images) ?>;
+let currentGalleryImages = <?= json_encode($preparedImages) ?>;
 let currentImageIndex = 0;
 
 function openLightbox(src, caption) {
