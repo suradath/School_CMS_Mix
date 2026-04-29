@@ -1,4 +1,4 @@
--- Database Schema for School CMS Mix V2.4
+-- Database Schema for School CMS Mix V2.5
 -- Updated: 2026-04-28 (Latest SIS, Health, and Attendance Modules)
 
 SET NAMES utf8mb4;

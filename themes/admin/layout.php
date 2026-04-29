@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?? 'Dashboard' ?> - School CMS Mix V2.4</title>
+    <title><?= $title ?? 'Dashboard' ?> - School CMS Mix V2.5</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -55,7 +55,7 @@
     </button>
 
     <?php 
-        $siteName = \Core\Database::getSetting('site_name', 'School CMS Mix V2.0'); 
+        $siteName = \Core\Database::getSetting('site_name', 'School CMS Mix V2.5'); 
         $siteLogo = \Core\Database::getSetting('site_logo', '');
         $primaryColor = \Core\Database::getSetting('primary_color', '#1d4ed8');
         $currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -306,7 +306,7 @@
                 <div class="p-4 bg-slate-900 rounded-3xl text-white relative overflow-hidden">
                     <div class="absolute -top-10 -right-10 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
                     <p class="text-[10px] font-bold text-blue-300 uppercase tracking-[0.2em] mb-1">Status</p>
-                    <p class="text-xs font-bold leading-relaxed">System v2.0 Stable</p>
+                    <p class="text-xs font-bold leading-relaxed">System v2.5 Stable</p>
                     <a href="/" target="_blank" class="mt-4 inline-flex items-center text-[10px] font-bold hover:text-blue-300 transition-colors">
                         VIEW LIVE SITE <svg class="w-2.5 h-2.5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </a>
@@ -357,7 +357,7 @@
             <footer class="mt-20 py-10 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center text-slate-400">
                 <div class="flex items-center space-x-2 text-sm font-bold">
                     <span class="text-slate-900 outfit tracking-tight text-lg">School CMS Mix</span>
-                    <span class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[10px] uppercase tracking-widest">v2.4</span>
+                    <span class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[10px] uppercase tracking-widest">v2.5</span>
                 </div>
                 <div class="mt-6 md:mt-0 text-center md:text-right">
                     <div class="text-[11px] font-bold uppercase tracking-wider text-slate-300">Development & Copyright &copy; 2569</div>

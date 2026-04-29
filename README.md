@@ -1,4 +1,4 @@
-# School CMS Mix V2.4
+# School CMS Mix V2.5
 
 [![PHP Version](https://img.shields.io/badge/php-%3E%3D%208.1-777bb4.svg)](https://www.php.net/)
 [![Tailwind CSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
@@ -11,7 +11,7 @@
 ## 🇹🇭 ภาษาไทย
 
 ### รายละเอียดโปรเจกต์
-**School CMS Mix V2.4** คือระบบบริหารจัดการเนื้อหาเว็บไซต์โรงเรียนที่สมบูรณ์แบบที่สุด พัฒนาด้วย PHP 8.1+ ร่วมกับ Tailwind CSS มอบประสบการณ์การใช้งานระดับพรีเมียม (Premium UI/UX) พร้อมโมดูลสารบรรณอิเล็กทรอนิกส์ (E-Saraban) และระบบลาออนไลน์ที่ครบถ้วนตามระเบียบส่วนราชการ
+**School CMS Mix V2.5** คือระบบบริหารจัดการเนื้อหาเว็บไซต์โรงเรียนที่สมบูรณ์แบบที่สุด พัฒนาด้วย PHP 8.1+ ร่วมกับ Tailwind CSS มอบประสบการณ์การใช้งานระดับพรีเมียม (Premium UI/UX) พร้อมโมดูลสารบรรณอิเล็กทรอนิกส์ (E-Saraban) และระบบลาออนไลน์ที่ครบถ้วนตามระเบียบส่วนราชการ
 
 ### ✨ คุณสมบัติเด่น
 - **E-Saraban (ระบบสารบรรณ):** ลงทะเบียนรับ-ส่ง, ออกเลขที่อัตโนมัติ, เกษียณหนังสือแบบ Timeline, และระบบเวียนเอกสารดิจิทัล
@@ -38,7 +38,7 @@
 ## 🇺🇸 English
 
 ### Project Overview
-**School CMS Mix V2.4** is a comprehensive School Management System built on PHP 8.1+ and Tailwind CSS. It features a premium UI/UX design with integrated E-Saraban (Electronic Document) and Online Leave Management modules tailored for educational institutions.
+**School CMS Mix V2.5** is a comprehensive School Management System built on PHP 8.1+ and Tailwind CSS. It features a premium UI/UX design with integrated E-Saraban (Electronic Document) and Online Leave Management modules tailored for educational institutions.
 
 ### ✨ Key Features
 - **E-Saraban System:** Digital document registration, auto-numbering, minute-note timeline, and document distribution.
@@ -79,4 +79,18 @@
 
 ---
 ---
-&copy; 2569 **School CMS Mix V2.4**. พัฒนาโดย **ครูสุรเดช ปุยะติ** (โรงเรียนลำปลายมาศ)
+&copy; 2569 **School CMS Mix V2.5**. พัฒนาโดย **ครูสุรเดช ปุยะติ** (โรงเรียนลำปลายมาศ)
+
+---
+
+### 📸 ภาพตัวอย่างระบบ (System Screenshots)
+
+<div align="center">
+    <img src="screenshot/01.png" width="100%" style="margin-bottom: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <img src="screenshot/02.png" width="100%" style="margin-bottom: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <img src="screenshot/03.png" width="100%" style="margin-bottom: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <img src="screenshot/04.png" width="100%" style="margin-bottom: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <img src="screenshot/05.png" width="100%" style="margin-bottom: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <img src="screenshot/06.png" width="100%" style="margin-bottom: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <img src="screenshot/07.png" width="100%" style="margin-bottom: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+</div>
