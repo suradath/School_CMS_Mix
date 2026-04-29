@@ -129,7 +129,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20">
                 <div class="flex items-center">
-                    <a href="/" class="flex-shrink-0 flex items-center group">
+                    <a href="<?= url('/') ?>" class="flex-shrink-0 flex items-center group">
                         <?php if ($siteLogo): ?>
                             <img src="<?= $siteLogo ?>" class="h-10 w-auto mr-3 transition-transform group-hover:scale-105"
                                 alt="<?= $siteName ?>">
@@ -147,7 +147,7 @@
                         ?>
 
                         <?php if (!$hasChildren): ?>
-                            <a href="<?= $m['url'] ?>"
+                            <a href="<?= url($m['url']) ?>"
                                 class="<?= $isActiveMenu ? 'text-primary' : 'text-slate-600' ?> hover:text-primary font-bold transition-colors flex items-center">
                                 <?php if ($m['icon']): ?>
                                     <i class="fa <?= $m['icon'] ?> fa-fw mr-1.5"></i>
@@ -174,7 +174,7 @@
                                     <div
                                         class="bg-white rounded-2xl shadow-xl border border-slate-100 py-3 mt-2 overflow-hidden">
                                         <?php foreach ($m['children'] as $child): ?>
-                                            <a href="<?= $child['url'] ?>"
+                                            <a href="<?= url($child['url']) ?>"
                                                 class="block px-6 py-2.5 text-sm font-bold text-slate-600 hover:text-primary hover:bg-slate-50 transition-colors flex items-center">
                                                 <?php if ($child['icon']): ?>
                                                     <i class="fa <?= $child['icon'] ?> fa-fw mr-3 opacity-50"></i>
@@ -188,7 +188,7 @@
                         <?php endif; ?>
 
                     <?php endforeach; ?>
-                    <a href="/auth"
+                    <a href="<?= url('/auth') ?>"
                         class="btn-premium text-white px-6 py-2.5 rounded-full font-bold shadow-lg shadow-blue-500/20">เข้าสู่ระบบ</a>
                 </div>
                 <!-- Mobile button -->
@@ -211,7 +211,7 @@
                     ?>
                     <div class="block">
                         <?php if (!$hasChildren): ?>
-                            <a href="<?= $m['url'] ?>"
+                            <a href="<?= url($m['url']) ?>"
                                 class="px-3 py-2 text-slate-700 font-bold hover:bg-slate-50 rounded-lg flex items-center">
                                 <?php if ($m['icon']): ?>
                                     <i class="fa <?= $m['icon'] ?> fa-fw mr-3 text-slate-400"></i>
@@ -235,7 +235,7 @@
                             </button>
                             <div id="sub-menu-<?= $m['id'] ?>" class="hidden bg-slate-50/50 rounded-lg mt-1 space-y-1">
                                 <?php foreach ($m['children'] as $child): ?>
-                                    <a href="<?= $child['url'] ?>"
+                                    <a href="<?= url($child['url']) ?>"
                                         class="block px-10 py-2 text-sm font-bold text-slate-600 hover:text-primary transition-colors">
                                         <?= $child['title'] ?>
                                     </a>
@@ -244,7 +244,7 @@
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
-                <a href="/auth" class="block px-3 py-2 text-blue-600 font-bold">Admin</a>
+                <a href="<?= url('/auth') ?>" class="block px-3 py-2 text-blue-600 font-bold">Admin</a>
             </div>
         </div>
     </nav>

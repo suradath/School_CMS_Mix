@@ -42,9 +42,9 @@ abstract class Controller
     /**
      * Redirect to another URL
      */
-    protected function redirect(string $url): void
+    protected function redirect(string $path): void
     {
-        header("Location: " . $url);
+        header("Location: " . url($path));
         exit;
     }
 

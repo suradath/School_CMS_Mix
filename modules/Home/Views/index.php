@@ -74,7 +74,7 @@
                     class="px-10 py-4 bg-white text-primary font-bold rounded-2xl shadow-2xl hover:bg-blue-50 transition-all hover:scale-105">
                     <?= htmlspecialchars($home_hero_button_text) ?>
                 </a>
-                <a href="/about-us"
+                <a href="<?= url('/about-us') ?>"
                     class="px-10 py-4 bg-transparent border-2 border-white/50 text-white font-bold rounded-2xl hover:bg-white/10 backdrop-blur-sm transition-all hover:border-white">
                     รู้จักโรงเรียนของเรา
                 </a>
@@ -233,7 +233,7 @@
                 <p class="text-lg text-slate-500 mt-4 max-w-xl leading-relaxed">
                     เกาะติดข่าวสารกิจกรรมและประกาศสำคัญของโรงเรียนก่อนใคร</p>
             </div>
-            <a href="/news-all" class="group flex items-center text-primary font-bold text-lg">
+            <a href="<?= url('/news-all') ?>" class="group flex items-center text-primary font-bold text-lg">
                 ดูข่าวทั้งหมด
                 <span class="ml-2 transition-transform group-hover:translate-x-2">&rarr;</span>
             </a>
@@ -272,13 +272,13 @@
                         </div>
                         <h3
                             class="text-2xl font-bold text-slate-900 line-clamp-2 mb-4 leading-tight group-hover:text-primary transition-colors">
-                            <a href="/news-detail/<?= $item['id'] ?>"><?= $item['title'] ?></a>
+                            <a href="<?= url('/news-detail/' . $item['id']) ?>"><?= $item['title'] ?></a>
                         </h3>
                         <p class="text-slate-500 text-sm line-clamp-3 mb-8 leading-relaxed">
                             <?= strip_tags($item['content']) ?>
                         </p>
                         <div class="mt-auto pt-6 border-t border-slate-50">
-                            <a href="/news-detail/<?= $item['id'] ?>"
+                            <a href="<?= url('/news-detail/' . $item['id']) ?>"
                                 class="text-slate-900 font-bold text-sm inline-flex items-center group/btn">
                                 อ่านรายละเอียด
                                 <svg class="w-4 h-4 ml-1 transition-transform group-hover/btn:translate-x-1" fill="none"
@@ -337,7 +337,7 @@
         </div>
 
         <div class="mt-16 text-center">
-            <a href="/personnel-view"
+            <a href="<?= url('/personnel-view') ?>"
                 class="px-10 py-4 bg-slate-900 text-white font-bold rounded-2xl hover:bg-slate-800 transition shadow-xl inline-flex items-center">
                 ทำความรู้จักบุคลากรทั้งหมด
                 <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -361,7 +361,7 @@
                     <p class="text-slate-400 text-lg max-w-xl font-medium italic">
                         ประมวลภาพความประทับใจและกิจกรรมที่เกิดขึ้นในโรงเรียน</p>
                 </div>
-                <a href="/gallery-view" class="group flex items-center text-primary font-bold text-lg">
+                <a href="<?= url('/gallery-view') ?>" class="group flex items-center text-primary font-bold text-lg">
                     ดูคลังภาพทั้งหมด
                     <span class="ml-2 transition-transform group-hover:translate-x-2">&rarr;</span>
                 </a>
@@ -369,7 +369,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <?php foreach ($latest_albums as $album): ?>
-                    <a href="/gallery-detail/<?= $album['id'] ?>"
+                    <a href="<?= url('/gallery-detail/' . $album['id']) ?>"
                         class="group relative aspect-square rounded-4xl overflow-hidden shadow-2xl">
                         <img src="<?= $album['cover_image'] ?: 'https://via.placeholder.com/600x600' ?>"
                             class="w-full h-full object-cover transition duration-700 group-hover:scale-110 brightness-75 group-hover:brightness-50"
@@ -505,7 +505,7 @@
                 day: 'วัน',
                 list: 'รายการ'
             },
-            events: '/api/calendar/events',
+            events: '<?= url('/api/calendar/events') ?>',
             eventClick: function(info) {
                 const event = info.event;
                 const props = event.extendedProps;

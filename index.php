@@ -25,6 +25,23 @@ spl_autoload_register(function ($class) {
     }
 });
 
+// 3.0 Define Base Path and URL Helper
+$scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+$basePath = str_replace('\\', '/', dirname($scriptName));
+if ($basePath === '/') $basePath = '';
+define('BASE_PATH', $basePath);
+
+/**
+ * Generate a URL for the application
+ * @param string $path
+ * @return string
+ */
+function url(string $path = ''): string
+{
+    $path = ltrim($path, '/');
+    return BASE_PATH . '/' . $path;
+}
+
 // 3.1 Load Composer Autoloader (if exists)
 if (file_exists(ROOT_PATH . '/vendor/autoload.php')) {
     require_once ROOT_PATH . '/vendor/autoload.php';

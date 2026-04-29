@@ -3,7 +3,7 @@ RewriteEngine On
 
 # Redirect Trailing Slashes If Not A Directory...
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)/$ /$1 [L,R=301]
+RewriteRule ^(.*)/$ $1 [L,R=301]
 
 # Deny access to sensitive files
 <FilesMatch "\.(sql|bak|log|ini|sh|config|php)$">
