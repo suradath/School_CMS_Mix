@@ -216,83 +216,36 @@
 </div>
 
 <script>
-function reviewSubmission(data) {
-    document.getElementById('sub_id').value = data.submission_id;
-    document.getElementById('review_name').innerText = data.full_name;
-    document.getElementById('review_info').innerText = (data.position || 'บุคลากร') + ' | ' + (data.department || '-');
-    document.getElementById('review_filename').innerText = data.original_filename;
-    document.getElementById('review_file_link').href = '<?= url('') ?>' + data.file_path;
-    document.getElementById('feedback').value = data.feedback || '';
-    
-    // Set radio button
-    const radio = document.querySelector(`input[name="status"][value="${data.status || 'pending'}"]`);
-    if (radio) radio.checked = true;
+    function reviewSubmission(data) {
+        document.getElementById('sub_id').value = data.submission_id;
+        document.getElementById('review_name').innerText = data.full_name;
+        document.getElementById('review_info').innerText = (data.position || 'บุคลากร') + ' | ' + (data.department || '-');
+        document.getElementById('review_filename').innerText = data.original_filename;
+        document.getElementById('review_file_link').href = '<?= url('') ?>' + data.file_path;
+        document.getElementById('feedback').value = data.feedback || '';
+        
+        // Set radio button
+        const radio = document.querySelector(`input[name="status"][value="${data.status || 'pending'}"]`);
+        if (radio) radio.checked = true;
 
-    document.getElementById('reviewModal').classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeReviewModal() {
-    document.getElementById('reviewModal').classList.add('hidden');
-    document.body.style.overflow = 'auto';
-}
-
-// DataTables Initialization with Premium Tailwind Styling
-document.addEventListener('DOMContentLoaded', function() {
-    if (typeof $ !== 'undefined' && $.fn.DataTable) {
-        const table = $('#monitorTable').DataTable({
-            "language": {
-                "sProcessing":   "กำลังดำเนินการ...",
-                "sLengthMenu":   "แสดง _MENU_ แถว",
-                "sZeroRecords":  "ไม่พบข้อมูล",
-                "sInfo":         "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
-                "sInfoEmpty":    "แสดง 0 ถึง 0 จาก 0 แถว",
-                "sInfoFiltered": "(กรองข้อมูล _MAX_ ทุกแถว)",
-                "sInfoPostFix":  "",
-                "sSearch":       "ค้นหา:",
-                "sUrl":          "",
-                "oPaginate": {
-                    "sFirst":    "หน้าแรก",
-                    "sPrevious": "ก่อนหน้า",
-                    "sNext":     "ถัดไป",
-                    "sLast":     "หน้าสุดท้าย"
-                }
-            },
-            "pageLength": 25,
-            "order": [[0, "asc"]],
-            "dom": '<"flex flex-col md:flex-row justify-between items-center gap-4 mb-6"lf>rt<"flex flex-col md:flex-row justify-between items-center gap-4 mt-6"ip>',
-            "drawCallback": function() {
-                // Style pagination buttons
-                $('.dataTables_paginate .paginate_button').addClass('px-4 py-2 bg-white border border-slate-200 text-slate-600 text-sm font-bold rounded-xl hover:bg-slate-50 transition-all mx-1');
-                $('.dataTables_paginate .paginate_button.current').addClass('!bg-primary !text-white !border-primary shadow-lg shadow-primary/20');
-                $('.dataTables_paginate .paginate_button.disabled').addClass('opacity-50 cursor-not-allowed pointer-events-none');
-            }
-        });
-
-        // Add custom styles to search and length inputs
-        $('.dataTables_filter input').addClass('ml-2 px-4 py-2 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all');
-        $('.dataTables_length select').addClass('mx-2 px-4 py-2 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all');
+        document.getElementById('reviewModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
     }
-});
-</script>
 
-<style>
-/* Reset DataTables default styles that might conflict */
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-    padding: 0 !important;
-    margin: 0 !important;
-    border: none !important;
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    background: transparent !important;
-    border: none !important;
-}
-.dataTables_wrapper .dataTables_length, 
-.dataTables_wrapper .dataTables_filter, 
-.dataTables_wrapper .dataTables_info, 
-.dataTables_wrapper .dataTables_paginate {
-    color: #64748b !important;
-    font-weight: 600 !important;
-    font-size: 0.875rem !important;
-}
-</style>
+    function closeReviewModal() {
+        document.getElementById('reviewModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    $(document).ready(function() {
+        if ($('#monitorTable').length) {
+            initPremiumDataTable('#monitorTable', {
+                pageLength: 25,
+                order: [[0, 'asc']],
+                columnDefs: [
+                    { orderable: false, targets: [4] }
+                ]
+            });
+        }
+    });
+</script>

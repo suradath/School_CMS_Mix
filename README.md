@@ -26,6 +26,8 @@
 - **Academic Calendar:** ปฏิทินวิชาการแสดงผลแบบ Interactive พร้อมรายละเอียดกิจกรรม
 - **Entry Popup:** ระบบจัดการป๊อปอัพแจ้งเตือนหน้าแรก (Welcome Popup)
 - **Document Submission System:** ระบบส่งเอกสารและผลงานวิชาการ รองรับ Drag & Drop, ตรวจสอบไฟล์ secure MIME, และระบบอนุมัติ/ตีกลับ (Revision) พร้อมส่งออก Excel
+- **Complaint System:** ระบบรับเรื่องร้องเรียนและข้อเสนอแนะ ติดตามสถานะ และแจ้งเตือนผ่านระบบ
+- **UI/UX Standardization:** ปรับแต่งตารางข้อมูล (DataTables) และระบบแจ้งเตือน (SweetAlert2) ทั่วทั้งระบบให้เป็นมาตรฐานพรีเมียมเดียวกัน
 - **Easy Installer:** ระบบติดตั้งอัตโนมัติผ่านหน้าเว็บ สะดวกและรวดเร็ว
 
 ### 🛠️ เทคโนโลยีที่ใช้
@@ -51,6 +53,8 @@
 - **Student Health & Nutrition:** Health monitoring system with auto BMI calculation and nutrition analysis dashboard (AJAX-powered).
 - **Academic Calendar:** Interactive school calendar with event management.
 - **Document Submission System:** Secure academic document upload system with Drag & Drop, MIME validation, and approval workflow.
+- **Complaint System:** Public feedback and complaint management system with badge notifications and status tracking.
+- **UI/UX Standardization:** System-wide premium DataTables and SweetAlert2 integration for consistent professional experience.
 - **Easy Installer:** User-friendly web installer for quick deployment.
 
 ---

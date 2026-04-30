@@ -48,86 +48,100 @@
 
 <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
     <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
+        <table id="sarabanTable" class="w-full text-left border-collapse">
             <thead>
                 <tr class="bg-slate-50/50">
                     <th class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">สถานะ</th>
-                    <th class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">เลขที่รับ/หนังสือ</th>
+                    <th class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                        <?php 
+                            if ($type === 'order') echo 'เลขที่คำสั่ง';
+                            elseif ($type === 'announcement') echo 'เลขที่ประกาศ';
+                            elseif ($type === 'inbound') echo 'เลขที่รับ/หนังสือ';
+                            else echo 'เลขที่หนังสือ/ทะเบียน';
+                        ?>
+                    </th>
                     <th class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">เรื่อง</th>
                     <th class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">จากหน่วยงาน</th>
-                    <th class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">ความเร่งด่วน</th>
+                    <th class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">ความเร่งด่วน</th>
                     <th class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">วันที่</th>
-                    <th class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">เครื่องมือ</th>
+                    <th class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">เครื่องมือ</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-50">
-                <?php if (empty($items)): ?>
-                    <tr>
-                        <td colspan="7" class="px-8 py-12 text-center text-slate-400 italic">ไม่พบรายการข้อมูลในทะเบียนนี้</td>
-                    </tr>
-                <?php else: ?>
-                    <?php foreach ($items as $item): ?>
-                    <tr class="hover:bg-slate-50/50 transition-colors">
-                        <td class="px-8 py-5">
-                            <?php 
-                                $sConfig = [
-                                    'pending' => ['label' => 'รอเกษียณ', 'class' => 'bg-rose-50 text-rose-600'],
-                                    'minuted' => ['label' => 'เกษียณแล้ว', 'class' => 'bg-amber-50 text-amber-600'],
-                                    'processed' => ['label' => 'สั่งการแล้ว', 'class' => 'bg-emerald-50 text-emerald-600'],
-                                ];
-                                $st = $item['saraban_status'] ?? 'pending';
-                                $cfg = $sConfig[$st] ?? ['label' => 'ไม่ระบุ', 'class' => 'bg-slate-100 text-slate-600'];
-                            ?>
-                            <span class="px-3 py-1 rounded-full text-[10px] font-bold <?= $cfg['class'] ?>">
-                                <?= $cfg['label'] ?>
-                            </span>
-                        </td>
-                        <td class="px-8 py-5">
-                            <div class="text-sm font-bold text-slate-900"><?= $item['doc_no'] ?></div>
-                            <div class="text-[10px] text-slate-400"><?= $item['book_no'] ?></div>
-                        </td>
-                        <td class="px-8 py-5">
-                            <div class="text-sm text-slate-800 font-medium line-clamp-1"><?= $item['title'] ?></div>
-                        </td>
-                        <td class="px-8 py-5">
-                            <div class="text-sm text-slate-600"><?= $item['origin'] ?></div>
-                        </td>
-                        <td class="px-8 py-5">
-                            <?php 
-                                $priorityClass = [
-                                    'normal' => 'bg-slate-100 text-slate-600',
-                                    'urgent' => 'bg-amber-100 text-amber-600',
-                                    'very_urgent' => 'bg-rose-100 text-rose-600'
-                                ];
-                                $priorityLabel = [
-                                    'normal' => 'ปกติ',
-                                    'urgent' => 'ด่วน',
-                                    'very_urgent' => 'ด่วนที่สุด'
-                                ];
-                            ?>
-                            <span class="px-3 py-1 rounded-full text-[10px] font-bold <?= $priorityClass[$item['priority']] ?>">
-                                <?= $priorityLabel[$item['priority']] ?>
-                            </span>
-                        </td>
-                        <td class="px-8 py-5">
-                            <div class="text-sm text-slate-600"><?= date('d/m/Y', strtotime($item['doc_date'])) ?></div>
-                        </td>
-                        <td class="px-8 py-5">
-                            <div class="flex space-x-2">
-                                <a href="<?= url('/saraban/view/' . $item['id']) ?>" class="p-2 text-slate-400 hover:text-primary transition-colors">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                </a>
-                                <?php if ($item['file_url']): ?>
-                                <a href="<?= url('/saraban/file/' . $item['id']) ?>" target="_blank" class="p-2 text-slate-400 hover:text-emerald-600 transition-colors">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                </a>
-                                <?php endif; ?>
-                            </div>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+                <?php foreach ($items as $item): ?>
+                <tr class="hover:bg-slate-50/50 transition-colors">
+                    <td class="px-8 py-5">
+                        <?php 
+                            $sConfig = [
+                                'pending' => ['label' => 'รอเกษียณ', 'class' => 'bg-rose-50 text-rose-600'],
+                                'minuted' => ['label' => 'เกษียณแล้ว', 'class' => 'bg-amber-50 text-amber-600'],
+                                'processed' => ['label' => 'สั่งการแล้ว', 'class' => 'bg-emerald-50 text-emerald-600'],
+                            ];
+                            $st = $item['saraban_status'] ?? 'pending';
+                            $cfg = $sConfig[$st] ?? ['label' => 'ไม่ระบุ', 'class' => 'bg-slate-100 text-slate-600'];
+                        ?>
+                        <span class="px-3 py-1 rounded-full text-[10px] font-bold <?= $cfg['class'] ?>">
+                            <?= $cfg['label'] ?>
+                        </span>
+                    </td>
+                    <td class="px-8 py-5">
+                        <div class="text-sm font-bold text-slate-900"><?= htmlspecialchars($item['doc_no']) ?></div>
+                        <div class="text-[10px] text-slate-400"><?= htmlspecialchars($item['book_no']) ?></div>
+                    </td>
+                    <td class="px-8 py-5">
+                        <div class="text-sm text-slate-800 font-medium line-clamp-1"><?= htmlspecialchars($item['title']) ?></div>
+                    </td>
+                    <td class="px-8 py-5">
+                        <div class="text-sm text-slate-600"><?= htmlspecialchars($item['origin']) ?></div>
+                    </td>
+                    <td class="px-8 py-5 text-center">
+                        <?php 
+                            $priorityClass = [
+                                'normal' => 'bg-slate-100 text-slate-600',
+                                'urgent' => 'bg-amber-100 text-amber-600',
+                                'very_urgent' => 'bg-rose-100 text-rose-600'
+                            ];
+                            $priorityLabel = [
+                                'normal' => 'ปกติ',
+                                'urgent' => 'ด่วน',
+                                'very_urgent' => 'ด่วนที่สุด'
+                            ];
+                        ?>
+                        <span class="px-3 py-1 rounded-full text-[10px] font-bold <?= $priorityClass[$item['priority']] ?>">
+                            <?= $priorityLabel[$item['priority']] ?>
+                        </span>
+                    </td>
+                    <td class="px-8 py-5">
+                        <div class="text-sm text-slate-600"><?= date('d/m/Y', strtotime($item['doc_date'])) ?></div>
+                    </td>
+                    <td class="px-8 py-5 text-right">
+                        <div class="flex items-center justify-end space-x-1">
+                            <a href="<?= url('/saraban/view/' . $item['id']) ?>" class="p-2 text-slate-400 hover:text-primary transition-colors" title="ดูรายละเอียด">
+                                <i class="fa fa-eye text-lg"></i>
+                            </a>
+                            <?php if ($item['file_url']): ?>
+                            <a href="<?= url('/saraban/file/' . $item['id']) ?>" target="_blank" class="p-2 text-slate-400 hover:text-emerald-600 transition-colors" title="ดาวน์โหลดไฟล์">
+                                <i class="fa fa-download text-lg"></i>
+                            </a>
+                            <?php endif; ?>
+                        </div>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        initPremiumDataTable('#sarabanTable', {
+            order: [[5, 'desc']],
+            columnDefs: [
+                { orderable: false, targets: [6] }
+            ]
+        });
+    });
+</script>
     </div>
 </div>

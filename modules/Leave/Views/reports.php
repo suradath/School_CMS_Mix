@@ -224,10 +224,27 @@ new Chart(document.getElementById('monthChart'), {
 </div>
 
 
+<script>
+    $(document).ready(function() {
+        initPremiumDataTable('#summaryTable', {
+            order: [[5, 'desc']]
+        });
+        initPremiumDataTable('#requestsTable', {
+            order: [[2, 'desc']]
+        });
+    });
+</script>
+
 <style>
 @media print {
     .no-print { display: none !important; }
     .bg-white { border: none !important; box-shadow: none !important; }
     body { background: white !important; }
+    .dataTables_wrapper .dataTables_filter,
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_paginate,
+    .dataTables_wrapper .dataTables_info {
+        display: none !important;
+    }
 }
 </style>

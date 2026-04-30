@@ -165,45 +165,70 @@
 </form>
 
 <script>
-function openModal() {
-    document.getElementById('modalTitle').innerText = 'เพิ่มหัวข้อการส่งเอกสาร';
-    document.getElementById('topicForm').reset();
-    document.getElementById('topic_id').value = '';
-    document.getElementById('topicModal').classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
-    document.getElementById('topicModal').classList.add('hidden');
-    document.body.style.overflow = 'auto';
-}
-
-function editTopic(data) {
-    document.getElementById('modalTitle').innerText = 'แก้ไขหัวข้อการส่งเอกสาร';
-    document.getElementById('topic_id').value = data.id;
-    document.getElementById('title').value = data.title;
-    document.getElementById('description').value = data.description;
-    document.getElementById('academic_year').value = data.academic_year;
-    document.getElementById('semester').value = data.semester;
-    document.getElementById('max_file_size').value = data.max_file_size;
-    document.getElementById('status').value = data.status;
-    
-    // Check checkboxes
-    const checkboxes = document.querySelectorAll('input[name="allowed_files[]"]');
-    checkboxes.forEach(cb => {
-        cb.checked = data.allowed_files.includes(cb.value);
+    $(document).ready(function() {
+        initPremiumDataTable('#topicsTable', {
+            order: [[0, 'desc']],
+            columnDefs: [
+                { orderable: false, targets: [2, 5] }
+            ]
+        });
     });
 
-    document.getElementById('topicModal').classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-}
-
-function confirmDelete(id) {
-    if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบหัวข้อนี้? ข้อมูลการส่งงานที่เกี่ยวข้องทั้งหมดจะถูกลบออกด้วย')) {
-        document.getElementById('delete_id').value = id;
-        document.getElementById('deleteForm').submit();
+    function openModal() {
+        document.getElementById('modalTitle').innerText = 'เพิ่มหัวข้อการส่งเอกสาร';
+        document.getElementById('topicForm').reset();
+        document.getElementById('topic_id').value = '';
+        document.getElementById('topicModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
     }
-}
+
+    function closeModal() {
+        document.getElementById('topicModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    function editTopic(data) {
+        document.getElementById('modalTitle').innerText = 'แก้ไขหัวข้อการส่งเอกสาร';
+        document.getElementById('topic_id').value = data.id;
+        document.getElementById('title').value = data.title;
+        document.getElementById('description').value = data.description;
+        document.getElementById('academic_year').value = data.academic_year;
+        document.getElementById('semester').value = data.semester;
+        document.getElementById('max_file_size').value = data.max_file_size;
+        document.getElementById('status').value = data.status;
+        
+        // Check checkboxes
+        const checkboxes = document.querySelectorAll('input[name="allowed_files[]"]');
+        checkboxes.forEach(cb => {
+            cb.checked = data.allowed_files.includes(cb.value);
+        });
+
+        document.getElementById('topicModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'ยืนยันการลบหัวข้อนี้?',
+            text: "ข้อมูลการส่งงานที่เกี่ยวข้องทั้งหมดจะถูกลบออกด้วย!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#94a3b8',
+            confirmButtonText: 'ใช่, ลบเลย',
+            cancelButtonText: 'ยกเลิก',
+            borderRadius: '1.5rem',
+            customClass: {
+                confirmButton: 'rounded-xl font-bold px-6 py-3',
+                cancelButton: 'rounded-xl font-bold px-6 py-3'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete_id').value = id;
+                document.getElementById('deleteForm').submit();
+            }
+        });
+    }
 </script>
 
 <style>

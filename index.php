@@ -204,5 +204,13 @@ $router->add('submissions/monitor', 'Modules\Submissions\Controllers\Submissions
 $router->add('submissions/update-status', 'Modules\Submissions\Controllers\SubmissionsController@updateStatus');
 $router->add('submissions/export', 'Modules\Submissions\Controllers\SubmissionsController@export');
 
+// Complaint System Routes
+$router->add('complaint', 'Modules\Complaint\Controllers\ComplaintController@index');
+$router->add('complaint/store', 'Modules\Complaint\Controllers\ComplaintController@store');
+$router->add('admin/complaints', 'Modules\Complaint\Controllers\ComplaintController@adminIndex');
+$router->add('admin/complaints/view', 'Modules\Complaint\Controllers\ComplaintController@adminView');
+$router->add('admin/complaints/update-status', 'Modules\Complaint\Controllers\ComplaintController@adminUpdateStatus');
+$router->add('admin/complaints/delete', 'Modules\Complaint\Controllers\ComplaintController@adminDelete');
+
 // 7. Resolve Request
 $router->resolve();

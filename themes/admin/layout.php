@@ -45,6 +45,42 @@
             box-shadow: 0 10px 15px -3px rgba(30, 64, 175, 0.3);
         }
     </style>
+    <style>
+        /* Global Premium DataTables Styling */
+        .dataTables_wrapper .dataTables_filter input {
+            @apply bg-slate-50 border-none rounded-xl text-sm px-4 py-2 focus:ring-2 focus:ring-primary/10 ml-2;
+            width: 250px;
+        }
+        .dataTables_wrapper .dataTables_length select {
+            @apply bg-slate-50 border-none rounded-xl text-sm px-8 py-2 focus:ring-2 focus:ring-primary/10 mx-2;
+        }
+        .dataTables_wrapper .dataTables_info {
+            @apply text-sm text-slate-500 font-medium;
+        }
+        .dataTables_wrapper .dataTables_paginate {
+            @apply flex items-center gap-2 mt-6;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            @apply px-4 py-2 text-sm font-bold rounded-xl transition-all cursor-pointer border border-slate-200 bg-white text-slate-600 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            min-width: 40px;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            @apply bg-primary text-white shadow-lg shadow-primary/20 border-primary !important;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button:not(.current):not(.disabled):hover {
+            @apply bg-slate-50 text-primary border-primary/30 !important;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+            @apply text-slate-300 border-slate-100 bg-slate-50 cursor-not-allowed !important;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button.previous,
+        .dataTables_wrapper .dataTables_paginate .paginate_button.next {
+            @apply px-6; 
+        }
+    </style>
 </head>
 <body class="bg-gray-50/50">
     
@@ -84,6 +120,12 @@
                 FROM document_submissions 
                 WHERE user_id = ? AND status = 'revision'
             ", [$_SESSION['user_id']])['count'] ?? 0;
+
+            // Check for unread complaints (for Admin/Director)
+            $unreadComplaintCount = 0;
+            if (\Core\Security::hasRole(['admin', 'director'])) {
+                $unreadComplaintCount = (int)\Core\Database::fetchColumn("SELECT COUNT(*) FROM complaints WHERE status = 'unread'");
+            }
         }
     ?>
 
@@ -224,6 +266,15 @@
 
                 if (\Core\Security::checkRole('admin')) {
                     $menuItems[] = ['url' => '/admin/users', 'label' => 'จัดการผู้ใช้งาน', 'icon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'];
+                }
+
+                if (\Core\Security::checkRole(['admin', 'director'])) {
+                    $menuItems[] = [
+                        'url' => '/admin/complaints', 
+                        'label' => 'ระบบรับเรื่องร้องเรียน', 
+                        'icon' => 'M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z',
+                        'badge' => $unreadComplaintCount > 0 ? $unreadComplaintCount : null
+                    ];
                 }
                 
                 foreach ($menuItems as $item): 
@@ -438,5 +489,44 @@
             to { opacity: 1; }
         }
     </style>
+    <!-- DataTables Global Initialization -->
+    <script>
+        function initPremiumDataTable(selector, options = {}) {
+            const defaultOptions = {
+                dom: '<"flex flex-wrap items-center justify-between gap-4 mb-6 p-6 pb-0"lf>rt<"flex flex-wrap items-center justify-between gap-4 mt-6 p-6 pt-0"ip>',
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/th.json',
+                    search: "ค้นหา:",
+                    searchPlaceholder: "ค้นหาข้อมูล...",
+                    lengthMenu: "แสดง _MENU_ รายการ",
+                    info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
+                    infoEmpty: "แสดง 0 ถึง 0 จาก 0 รายการ",
+                    infoFiltered: "(กรองจากทั้งหมด _MAX_ รายการ)",
+                    zeroRecords: "ไม่พบข้อมูลที่ค้นหา",
+                    paginate: {
+                        first: '<i class="fa fa-angle-double-left"></i>',
+                        last: '<i class="fa fa-angle-double-right"></i>',
+                        next: 'ถัดไป',
+                        previous: 'ก่อนหน้า'
+                    }
+                },
+                drawCallback: function() {
+                    $('.dataTables_paginate .paginate_button').each(function() {
+                        $(this).removeClass('px-4 py-2 border rounded-md'); 
+                        $(this).addClass('inline-flex items-center justify-center px-4 py-2 text-sm font-bold rounded-xl transition-all cursor-pointer border mx-0.5');
+                        
+                        if ($(this).hasClass('current')) {
+                            $(this).addClass('bg-primary text-white shadow-lg shadow-primary/20 border-primary').removeClass('bg-white text-slate-600 border-slate-200');
+                        } else if ($(this).hasClass('disabled')) {
+                            $(this).addClass('text-slate-300 border-slate-100 bg-slate-50 cursor-not-allowed').removeClass('bg-white text-slate-600 border-slate-200');
+                        } else {
+                            $(this).addClass('bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-primary hover:border-primary/30');
+                        }
+                    });
+                }
+            };
+            return $(selector).DataTable($.extend(true, defaultOptions, options));
+        }
+    </script>
 </body>
 </html>

@@ -23,6 +23,11 @@ class Uploader
             return false;
         }
 
+        // Check file size
+        if ($file['size'] > ($maxSizeMB * 1024 * 1024)) {
+            return false;
+        }
+
         // Security: Verify MIME type
         $check = getimagesize($file['tmp_name']);
         if ($check === false) {

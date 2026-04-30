@@ -314,7 +314,8 @@ INSERT IGNORE INTO `roles` (`name`, `slug`, `description`) VALUES
 ('Administrator', 'admin', 'Full access to the system'),
 ('Editor/Staff', 'editor', 'Manage news, gallery and personnel in their department'),
 ('Academic/Admin', 'academic', 'Manage document submission system and monitoring'),
-('Teacher/User', 'teacher', 'Manage own profile and contributions');
+('Teacher/User', 'teacher', 'Manage own profile and contributions'),
+('Director', 'director', 'School executive with monitoring access');
 
 INSERT INTO `leave_types` (`name`, `slug`, `default_quota`, `color`) VALUES 
 ('ลาป่วย', 'sick', 30, '#ef4444'),
@@ -466,6 +467,20 @@ CREATE TABLE IF NOT EXISTS `journals` (
     `image_url` VARCHAR(255) DEFAULT NULL,
     `sort_order` INT DEFAULT 0,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 19. Complaint System
+CREATE TABLE IF NOT EXISTS `complaints` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `topic` VARCHAR(255) NOT NULL,
+    `details` TEXT NOT NULL,
+    `attachment` VARCHAR(255) DEFAULT NULL,
+    `contact_name` VARCHAR(255) DEFAULT NULL,
+    `contact_info` VARCHAR(255) DEFAULT NULL,
+    `status` ENUM('unread', 'read', 'in_progress', 'resolved') DEFAULT 'unread',
+    `read_by` INT DEFAULT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`read_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;

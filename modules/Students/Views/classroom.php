@@ -76,74 +76,15 @@
     </div>
 </div>
 
-<style>
-/* DataTables Premium Styling */
-.dataTables_wrapper .dataTables_length select {
-    padding-right: 2.5rem;
-    border-radius: 0.75rem;
-    border-color: #f1f5f9;
-    background-color: #f8fafc;
-    font-size: 0.875rem;
-}
-.dataTables_wrapper .dataTables_filter input {
-    border-radius: 0.75rem;
-    border-color: #f1f5f9;
-    background-color: #f8fafc;
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    margin-left: 0.5rem;
-}
-.dataTables_wrapper .dataTables_info {
-    font-size: 0.75rem;
-    color: #64748b;
-    padding-top: 1.5rem;
-}
-.dataTables_wrapper .dataTables_paginate {
-    padding-top: 1.5rem;
-    display: flex;
-    gap: 0.25rem;
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-    border-radius: 0.75rem !important;
-    border: 1px solid #f1f5f9 !important;
-    background: #fff !important;
-    color: #475569 !important;
-    padding: 0.4rem 0.8rem !important;
-    font-weight: 600 !important;
-    font-size: 0.875rem !important;
-    transition: all 0.2s;
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    background: #f8fafc !important;
-    border-color: #e2e8f0 !important;
-    color: #1e293b !important;
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button.current {
-    background: var(--tw-color-primary, #1d4ed8) !important;
-    color: white !important;
-    border-color: var(--tw-color-primary, #1d4ed8) !important;
-    box-shadow: 0 4px 6px -1px rgba(29, 78, 216, 0.2);
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-</style>
-
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    $('#studentDataTable').DataTable({
-        pageLength: 20,
-        lengthMenu: [10, 20, 50, 100],
-        language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/th.json',
-            search: "_INPUT_",
-            searchPlaceholder: "ค้นหาในหน้านี้..."
-        },
-        columnDefs: [
-            { orderable: false, targets: 'no-sort' }
-        ],
-        order: [[0, 'asc']] // Default sort by Student Code
+    $(document).ready(function() {
+        initPremiumDataTable('#studentDataTable', {
+            pageLength: 20,
+            lengthMenu: [10, 20, 50, 100],
+            order: [[0, 'asc']],
+            columnDefs: [
+                { orderable: false, targets: [4] }
+            ]
+        });
     });
-});
 </script>

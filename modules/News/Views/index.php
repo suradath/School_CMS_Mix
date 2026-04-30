@@ -5,72 +5,93 @@
     </a>
 </div>
 
-<div class="relative overflow-x-auto shadow-sm sm:rounded-2xl border border-gray-100 bg-white">
-    <table class="w-full text-sm text-left text-gray-500">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-100">
-            <tr>
-                <th scope="col" class="px-6 py-4">ข่าวประชาสัมพันธ์</th>
-                <th scope="col" class="px-6 py-4">หมวดหมู่</th>
-                <th scope="col" class="px-6 py-4">วันที่เผยแพร่</th>
-                <th scope="col" class="px-6 py-4">สถานะ</th>
-                <th scope="col" class="px-6 py-4 text-right">จัดการ</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($news as $item): ?>
-            <tr class="hover:bg-gray-50/50 transition">
-                <td class="px-6 py-4">
-                    <div class="flex items-center">
-                        <div class="h-10 w-16 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 mr-4 border border-gray-100">
-                            <?php if ($item['featured_image']): ?>
-                                <img src="<?= url($item['featured_image']) ?>" class="w-full h-full object-cover">
-                            <?php else: ?>
-                                <div class="flex items-center justify-center h-full text-gray-300">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                </div>
-                            <?php endif; ?>
+<div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table id="newsTable" class="w-full text-left">
+            <thead>
+                <tr class="bg-slate-50/50 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    <th class="px-8 py-5">ข่าวประชาสัมพันธ์</th>
+                    <th class="px-8 py-5">หมวดหมู่</th>
+                    <th class="px-8 py-5">วันที่เผยแพร่</th>
+                    <th class="px-8 py-5 text-right">จัดการ</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+                <?php foreach ($news as $item): ?>
+                <tr class="hover:bg-slate-50/50 transition-colors">
+                    <td class="px-8 py-5">
+                        <div class="flex items-center">
+                            <div class="h-10 w-16 shrink-0 rounded-xl overflow-hidden bg-gray-100 mr-4 border border-gray-100">
+                                <?php if ($item['featured_image']): ?>
+                                    <img src="<?= url($item['featured_image']) ?>" class="w-full h-full object-cover">
+                                <?php else: ?>
+                                    <div class="flex items-center justify-center h-full text-slate-300">
+                                        <i class="fa fa-picture-o"></i>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            <div>
+                                <div class="text-sm font-bold text-slate-800 line-clamp-1"><?= htmlspecialchars($item['title']) ?></div>
+                                <div class="text-[10px] text-slate-400 mt-1 uppercase font-bold tracking-tight"><?= htmlspecialchars($item['category_name']) ?> • โดย <?= htmlspecialchars($item['author_name']) ?></div>
+                            </div>
                         </div>
-                        <div>
-                            <div class="text-sm font-bold text-slate-800 line-clamp-1"><?= htmlspecialchars($item['title']) ?></div>
-                            <div class="text-xs text-slate-400 mt-1"><?= $item['category_name'] ?> • โดย <?= $item['author_name'] ?></div>
+                    </td>
+                    <td class="px-8 py-5">
+                        <?php if ($item['status'] === 'published'): ?>
+                            <span class="px-3 py-1 text-[10px] font-bold bg-emerald-50 text-emerald-600 rounded-full border border-emerald-100">เผยแพร่แล้ว</span>
+                        <?php else: ?>
+                            <span class="px-3 py-1 text-[10px] font-bold bg-amber-50 text-amber-600 rounded-full border border-amber-100">ฉบับร่าง</span>
+                        <?php endif; ?>
+                    </td>
+                    <td class="px-8 py-5 text-xs text-slate-500 font-medium">
+                        <?= date('d/m/Y H:i', strtotime($item['published_at'] ?? 'now')) ?>
+                    </td>
+                    <td class="px-8 py-5 text-right">
+                        <div class="flex items-center justify-end space-x-1">
+                            <a href="<?= url('/news/edit/' . $item['id']) ?>" class="p-2 text-slate-400 hover:text-primary hover:bg-primary/5 rounded-xl transition-all" title="แก้ไข">
+                                <i class="fa fa-pencil text-lg"></i>
+                            </a>
+                            <button onclick="confirmDelete(<?= $item['id'] ?>)" class="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all" title="ลบ">
+                                <i class="fa fa-trash-o text-lg"></i>
+                            </button>
                         </div>
-                    </div>
-                </td>
-                <td class="px-6 py-4">
-                    <?php if ($item['status'] === 'published'): ?>
-                        <span class="px-3 py-1 text-xs font-bold bg-green-50 text-green-600 rounded-full">เผยแพร่แล้ว</span>
-                    <?php else: ?>
-                        <span class="px-3 py-1 text-xs font-bold bg-amber-50 text-amber-600 rounded-full">ฉบับร่าง</span>
-                    <?php endif; ?>
-                </td>
-                <td class="px-6 py-4 text-xs text-slate-500 font-medium">
-                    <?= date('d/m/Y H:i', strtotime($item['published_at'])) ?>
-                </td>
-                <td class="px-6 py-4 text-right">
-                    <div class="flex items-center justify-end space-x-2">
-                        <a href="<?= url('/news/edit/' . $item['id']) ?>" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition" title="แก้ไข">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                        </a>
-                        <button onclick="confirmDelete(<?= $item['id'] ?>)" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition" title="ลบ">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-            <?php if (empty($news)): ?>
-            <tr>
-                <td colspan="4" class="px-6 py-10 text-center text-gray-400">ยังไม่มีข่าวประชาสัมพันธ์</td>
-            </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>
-function confirmDelete(id) {
-    if (confirm('คุณต้องการลบข่าวนี้ใช่หรือไม่?')) {
-        window.location.href = '<?= url('/news/delete/') ?>' + id;
+    $(document).ready(function() {
+        initPremiumDataTable('#newsTable', {
+            order: [[2, 'desc']],
+            columnDefs: [
+                { orderable: false, targets: [3] }
+            ]
+        });
+    });
+
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'ยืนยันการลบข่าว?',
+            text: "คุณต้องการลบข่าวนี้ใช่หรือไม่?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#94a3b8',
+            confirmButtonText: 'ใช่, ลบเลย',
+            cancelButtonText: 'ยกเลิก',
+            borderRadius: '1.5rem',
+            customClass: {
+                confirmButton: 'rounded-xl font-bold px-6 py-3',
+                cancelButton: 'rounded-xl font-bold px-6 py-3'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '<?= url('/news/delete/') ?>' + id;
+            }
+        });
     }
-}
 </script>

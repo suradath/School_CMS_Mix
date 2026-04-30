@@ -5,50 +5,45 @@
 
 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="overflow-x-auto">
-        <table class="w-full text-left">
+        <table id="leaveReviewTable" class="w-full text-left">
             <thead>
                 <tr class="bg-slate-50/50">
                     <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">ผู้ขอลา</th>
                     <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">รายละเอียด</th>
                     <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">จำนวนวัน</th>
-                    <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">สถานะ</th>
+                    <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">สถานะ</th>
                     <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">การจัดการ</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-50">
-                <?php if (empty($requests)): ?>
-                <tr>
-                    <td colspan="5" class="px-6 py-10 text-center text-slate-400 font-medium">ไม่มีรายการใบลาที่ต้องพิจารณา</td>
-                </tr>
-                <?php endif; ?>
                 <?php foreach ($requests as $req): ?>
                 <tr class="hover:bg-slate-50/50 transition-colors">
                     <td class="px-6 py-4">
                         <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-xs mr-3 overflow-hidden border border-gray-100">
-                            <?php if (!empty($req['image_url'])): ?>
-                                <img src="<?= url($req['image_url']) ?>" class="w-full h-full object-cover" alt="<?= $req['personnel_name'] ?>">
-                            <?php else: ?>
-                                <?= mb_substr($req['personnel_name'], 0, 2, 'UTF-8') ?>
-                            <?php endif; ?>
-                        </div>
+                            <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-xs mr-3 overflow-hidden border border-gray-100 shrink-0">
+                                <?php if (!empty($req['image_url'])): ?>
+                                    <img src="<?= url($req['image_url']) ?>" class="w-full h-full object-cover" alt="<?= htmlspecialchars($req['personnel_name']) ?>">
+                                <?php else: ?>
+                                    <?= mb_substr($req['personnel_name'], 0, 2, 'UTF-8') ?>
+                                <?php endif; ?>
+                            </div>
                             <div>
-                                <div class="text-sm font-bold text-slate-800"><?= $req['personnel_name'] ?></div>
-                                <div class="text-[10px] font-bold text-primary uppercase tracking-tight"><?= $req['department_name'] ?></div>
+                                <div class="text-sm font-bold text-slate-800"><?= htmlspecialchars($req['personnel_name']) ?></div>
+                                <div class="text-[10px] font-bold text-primary uppercase tracking-tight"><?= htmlspecialchars($req['department_name']) ?></div>
                             </div>
                         </div>
                     </td>
                     <td class="px-6 py-4">
                         <div class="flex items-center mb-1">
                             <span class="w-2 h-2 rounded-full mr-2" style="background-color: <?= $req['leave_type_color'] ?>"></span>
-                            <span class="text-xs font-bold text-slate-600"><?= $req['leave_type_name'] ?></span>
+                            <span class="text-xs font-bold text-slate-600"><?= htmlspecialchars($req['leave_type_name']) ?></span>
                         </div>
                         <div class="text-xs font-medium text-slate-500"><?= date('d/m/Y', strtotime($req['start_date'])) ?> - <?= date('d/m/Y', strtotime($req['end_date'])) ?></div>
                     </td>
                     <td class="px-6 py-4 text-center">
                         <span class="inline-flex items-center px-3 py-1 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs"><?= $req['total_days'] ?> วัน</span>
                     </td>
-                    <td class="px-6 py-4">
+                    <td class="px-6 py-4 text-center">
                         <?php 
                         $statusColors = [
                             'pending' => 'bg-amber-50 text-amber-600 border-amber-100',
@@ -85,7 +80,7 @@
         <div class="p-6 border-b border-gray-50 flex justify-between items-center">
             <h4 class="text-lg font-bold text-slate-800">พิจารณาใบลา</h4>
             <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg>
+                <i class="fa fa-times text-xl"></i>
             </button>
         </div>
         <form id="approvalForm" method="POST" class="p-6 space-y-4">
@@ -105,13 +100,22 @@
 </div>
 
 <script>
-function openModal(id) {
-    const modal = document.getElementById('approvalModal');
-    const form = document.getElementById('approvalForm');
-    form.action = '<?= url('/leave/updateStatus/') ?>' + id;
-    modal.classList.remove('hidden');
-}
-function closeModal() {
-    document.getElementById('approvalModal').classList.add('hidden');
-}
+    $(document).ready(function() {
+        initPremiumDataTable('#leaveReviewTable', {
+            order: [[1, 'desc']], // Default by date
+            columnDefs: [
+                { orderable: false, targets: [4] }
+            ]
+        });
+    });
+
+    function openModal(id) {
+        const modal = document.getElementById('approvalModal');
+        const form = document.getElementById('approvalForm');
+        form.action = '<?= url('/leave/updateStatus/') ?>' + id;
+        modal.classList.remove('hidden');
+    }
+    function closeModal() {
+        document.getElementById('approvalModal').classList.add('hidden');
+    }
 </script>

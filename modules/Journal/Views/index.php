@@ -75,8 +75,24 @@
 
 <script>
 function confirmDelete(id) {
-    if (confirm('คุณต้องการลบวารสารนี้ใช่หรือไม่?')) {
-        window.location.href = '<?= url('/journal/delete/') ?>' + id;
-    }
+    Swal.fire({
+        title: 'ยืนยันการลบวารสาร?',
+        text: "คุณแน่ใจหรือไม่ว่าต้องการลบวารสารประชาสัมพันธ์นี้?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#94a3b8',
+        confirmButtonText: 'ใช่, ลบเลย',
+        cancelButtonText: 'ยกเลิก',
+        borderRadius: '1.5rem',
+        customClass: {
+            confirmButton: 'rounded-xl font-bold px-6 py-3',
+            cancelButton: 'rounded-xl font-bold px-6 py-3'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '<?= url('/journal/delete/') ?>' + id;
+        }
+    });
 }
 </script>

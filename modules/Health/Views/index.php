@@ -78,69 +78,9 @@
     </div>
 </div>
 
-<style>
-/* DataTables Premium Styling - Synced with other modules */
-.dataTables_wrapper .dataTables_length select {
-    padding-right: 2.5rem;
-    border-radius: 0.75rem;
-    border-color: #f1f5f9;
-    background-color: #f8fafc;
-    font-size: 0.875rem;
-}
-.dataTables_wrapper .dataTables_filter input {
-    border-radius: 0.75rem;
-    border-color: #f1f5f9;
-    background-color: #f8fafc;
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    margin-left: 0.5rem;
-}
-.dataTables_wrapper .dataTables_info {
-    font-size: 0.75rem;
-    color: #64748b;
-    padding-top: 1.5rem;
-}
-.dataTables_wrapper .dataTables_paginate {
-    padding-top: 1.5rem;
-    display: flex;
-    gap: 0.25rem;
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-    border-radius: 0.75rem !important;
-    border: 1px solid #f1f5f9 !important;
-    background: #fff !important;
-    color: #475569 !important;
-    padding: 0.4rem 0.8rem !important;
-    font-weight: 600 !important;
-    font-size: 0.875rem !important;
-    transition: all 0.2s;
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    background: #f8fafc !important;
-    border-color: #e2e8f0 !important;
-    color: #1e293b !important;
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button.current {
-    background: var(--tw-color-primary, #1d4ed8) !important;
-    color: white !important;
-    border-color: var(--tw-color-primary, #1d4ed8) !important;
-    box-shadow: 0 4px 6px -1px rgba(29, 78, 216, 0.2);
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-/* Increase Row Height */
-#healthDataTable tbody td {
-    padding-top: 1.25rem !important;
-    padding-bottom: 1.25rem !important;
-}
-</style>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const $ = jQuery;
+$(document).ready(function() {
     let doughnutChart, barChart, dataTable;
 
     // Initialize Charts
@@ -209,27 +149,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (dataTable) {
                     dataTable.clear().rows.add(data.students).draw();
                 } else {
-                    dataTable = $('#healthDataTable').DataTable({
+                    dataTable = initPremiumDataTable('#healthDataTable', {
                         data: data.students,
-                        pageLength: 20,
-                        lengthMenu: [10, 20, 50, 100],
                         columns: [
                             { data: 'student_code' },
-                            { data: null, render: function(d) { return d.title + d.first_name + ' ' + d.last_name; }, className: 'font-bold text-gray-900' },
-                            { data: null, render: function(d) { return d.class_level + '/' + d.room_number; } },
+                            { data: null, render: function(d) { return `<div class="font-bold text-slate-900">${d.title}${d.first_name} ${d.last_name}</div>`; } },
+                            { data: null, render: function(d) { return `<span class="px-2 py-1 bg-slate-50 text-slate-500 rounded-lg text-xs font-bold">${d.class_level}/${d.room_number}</span>`; } },
                             { data: 'weight', className: 'text-center' },
                             { data: 'height', className: 'text-center' },
-                            { data: 'bmi', className: 'text-center font-bold text-primary' },
+                            { data: 'bmi', className: 'text-center font-bold text-primary outfit' },
                             { data: null, render: function(d) { 
-                                return `<span class="px-3 py-1 rounded-lg text-xs font-bold ${d.status_bg}">${d.status}</span>`;
+                                return `<span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${d.status_bg}">${d.status}</span>`;
                             }, className: 'text-center' }
-                        ],
-                        language: {
-                            url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/th.json',
-                            search: "_INPUT_",
-                            searchPlaceholder: "ค้นหาชื่อหรือรหัส..."
-                        },
-                        dom: 'frtip'
+                        ]
                     });
                 }
             },

@@ -66,11 +66,11 @@
             </div>
         </div>
         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
+            <table id="inboxTable" class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-slate-50/50">
                         <th class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest w-10">
-                            <input type="checkbox" onclick="toggleAll(this)" class="rounded border-slate-200 text-primary focus:ring-primary">
+                            <input type="checkbox" id="selectAll" class="rounded border-slate-200 text-primary focus:ring-primary cursor-pointer">
                         </th>
                         <th class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">สถานะ</th>
                         <th class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">เลขที่รับ/ลงวันที่</th>
@@ -80,60 +80,53 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-50">
-                    <?php if (empty($inbox)): ?>
-                        <tr>
-                            <td colspan="6" class="px-8 py-12 text-center text-slate-400 italic">ไม่มีรายการหนังสือในกล่องขาเข้า</td>
-                        </tr>
-                    <?php else: ?>
-                        <?php foreach ($inbox as $item): ?>
-                        <tr class="hover:bg-slate-50/50 transition-colors <?= $item['read_status'] === 'unread' ? 'bg-blue-50/10' : '' ?>">
-                            <td class="px-8 py-5">
-                                <input type="checkbox" name="doc_ids[]" value="<?= $item['id'] ?>" class="rounded border-slate-200 text-primary focus:ring-primary">
-                            </td>
-                            <td class="px-8 py-5">
-                                <div class="flex items-center space-x-2">
-                                    <?php if ($item['read_status'] === 'unread'): ?>
-                                        <span class="flex h-2 w-2 rounded-full bg-blue-500"></span>
-                                        <span class="text-[10px] font-bold text-blue-500 uppercase">ใหม่</span>
-                                    <?php else: ?>
-                                        <span class="text-emerald-500"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></span>
-                                    <?php endif; ?>
-                                </div>
-                            </td>
-                            <td class="px-8 py-5">
-                                <div class="text-xs font-bold text-slate-900"><?= $item['doc_no'] ?></div>
-                                <div class="text-[9px] text-slate-400 uppercase"><?= date('d/m/Y', strtotime($item['doc_date'])) ?></div>
-                            </td>
-                            <td class="px-8 py-5">
-                                <div class="text-sm font-bold text-slate-800 line-clamp-1"><?= $item['title'] ?></div>
-                                <div class="text-[10px] text-slate-400"><?= $item['origin'] ?></div>
-                            </td>
-                            <td class="px-8 py-5">
-                                <?php 
-                                    $priorityClass = [
-                                        'normal' => 'bg-slate-50 text-slate-500',
-                                        'urgent' => 'bg-amber-50 text-amber-600',
-                                        'very_urgent' => 'bg-rose-50 text-rose-600'
-                                    ];
-                                    $priorityLabel = [
-                                        'normal' => 'ปกติ',
-                                        'urgent' => 'ด่วน',
-                                        'very_urgent' => 'ด่วนที่สุด'
-                                    ];
-                                ?>
-                                <span class="px-2 py-0.5 rounded-full text-[9px] font-bold border border-current opacity-70">
-                                    <?= $priorityLabel[$item['priority']] ?>
-                                </span>
-                            </td>
-                            <td class="px-8 py-5 text-right">
-                                <a href="<?= url('/saraban/view/' . $item['id']) ?>" class="inline-flex items-center text-primary hover:text-primary-dark text-xs font-bold transition-all">
-                                    เปิดดู
-                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"></path></svg>
-                                </a>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
+                    <?php foreach ($inbox as $item): ?>
+                    <tr class="hover:bg-slate-50/50 transition-colors <?= $item['read_status'] === 'unread' ? 'bg-blue-50/10' : '' ?>">
+                        <td class="px-8 py-5">
+                            <input type="checkbox" name="doc_ids[]" value="<?= $item['id'] ?>" class="doc-checkbox rounded border-slate-200 text-primary focus:ring-primary cursor-pointer">
+                        </td>
+                        <td class="px-8 py-5">
+                            <div class="flex items-center space-x-2">
+                                <?php if ($item['read_status'] === 'unread'): ?>
+                                    <span class="flex h-2 w-2 rounded-full bg-blue-500"></span>
+                                    <span class="text-[10px] font-bold text-blue-500 uppercase">ใหม่</span>
+                                <?php else: ?>
+                                    <span class="text-emerald-500"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></span>
+                                <?php endif; ?>
+                            </div>
+                        </td>
+                        <td class="px-8 py-5">
+                            <div class="text-xs font-bold text-slate-900 outfit"><?= $item['doc_no'] ?></div>
+                            <div class="text-[9px] text-slate-400 uppercase"><?= date('d/m/Y', strtotime($item['doc_date'])) ?></div>
+                        </td>
+                        <td class="px-8 py-5">
+                            <div class="text-sm font-bold text-slate-800 line-clamp-1"><?= $item['title'] ?></div>
+                            <div class="text-[10px] text-slate-400"><?= $item['origin'] ?></div>
+                        </td>
+                        <td class="px-8 py-5">
+                            <?php 
+                                $priorityLabel = [
+                                    'normal' => 'ปกติ',
+                                    'urgent' => 'ด่วน',
+                                    'very_urgent' => 'ด่วนที่สุด'
+                                ];
+                                $priorityClass = [
+                                    'normal' => 'bg-slate-50 text-slate-500 border-slate-200',
+                                    'urgent' => 'bg-amber-50 text-amber-600 border-amber-200',
+                                    'very_urgent' => 'bg-rose-50 text-rose-600 border-rose-200'
+                                ];
+                            ?>
+                            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold border <?= $priorityClass[$item['priority']] ?>">
+                                <?= $priorityLabel[$item['priority']] ?>
+                            </span>
+                        </td>
+                        <td class="px-8 py-5 text-right">
+                            <a href="<?= url('/saraban/view/' . $item['id']) ?>" class="p-2 text-primary hover:bg-primary/5 rounded-xl transition-all inline-flex items-center" title="เปิดดู">
+                                <i class="fa fa-external-link text-lg"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
@@ -141,23 +134,32 @@
 </form>
 
 <script>
-function toggleAll(source) {
-    checkboxes = document.getElementsByName('doc_ids[]');
-    for(var i=0, n=checkboxes.length;i<n;i++) {
-        checkboxes[i].checked = source.checked;
-    }
-}
+$(document).ready(function() {
+    initPremiumDataTable('#inboxTable', {
+        order: [[2, 'desc']],
+        columnDefs: [
+            { orderable: false, targets: [0, 1, 5] }
+        ]
+    });
+
+    $('#selectAll').on('change', function() {
+        $('.doc-checkbox').prop('checked', this.checked);
+    });
+});
 
 function submitBatch() {
     const checkboxes = document.querySelectorAll('input[name="doc_ids[]"]:checked');
     if (checkboxes.length === 0) {
         Swal.fire({
+            title: 'กรุณาเลือกรายการ',
+            text: 'กรุณาเลือกรายการหนังสือที่ต้องการเกษียณด่วน',
             icon: 'warning',
             confirmButtonText: 'ตกลง',
+            confirmButtonColor: '#1d4ed8',
+            borderRadius: '1rem',
             customClass: {
-                confirmButton: 'px-6 py-3 bg-primary text-white rounded-xl font-bold text-sm shadow-lg shadow-primary/20',
-            },
-            buttonsStyling: false
+                confirmButton: 'rounded-xl font-bold px-6 py-3',
+            }
         });
         return;
     }
@@ -167,13 +169,15 @@ function submitBatch() {
         text: 'คุณกำลังจะเกษียณหนังสือ ' + checkboxes.length + ' รายการ โดยลงความเห็นว่า "ทราบ/ถือปฏิบัติ" ยืนยันหรือไม่?',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonText: 'ยืนยัน',
+        confirmButtonText: 'ยืนยันการรับทราบ',
         cancelButtonText: 'ยกเลิก',
+        confirmButtonColor: '#f59e0b',
+        cancelButtonColor: '#94a3b8',
+        borderRadius: '1.5rem',
         customClass: {
-            confirmButton: 'px-6 py-3 bg-amber-500 text-white rounded-xl font-bold text-sm mx-2 shadow-lg shadow-amber-200',
-            cancelButton: 'px-6 py-3 bg-slate-400 text-white rounded-xl font-bold text-sm mx-2'
-        },
-        buttonsStyling: false
+            confirmButton: 'rounded-xl font-bold px-6 py-3',
+            cancelButton: 'rounded-xl font-bold px-6 py-3'
+        }
     }).then((result) => {
         if (result.isConfirmed) {
             document.getElementById('batch-form').submit();
