@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /**
- * School CMS Mix V2.5 Entry Point
+ * School CMS Mix V2.6 Entry Point
  */
 
 // 1. Error Reporting
@@ -31,15 +31,20 @@ $basePath = str_replace('\\', '/', dirname($scriptName));
 if ($basePath === '/') $basePath = '';
 define('BASE_PATH', $basePath);
 
-/**
- * Generate a URL for the application
- * @param string $path
- * @return string
- */
 function url(string $path = ''): string
 {
     $path = ltrim($path, '/');
     return BASE_PATH . '/' . $path;
+}
+
+/**
+ * Check if the current user has specific role(s)
+ * @param string|array $roles
+ * @return bool
+ */
+function hasRole(string|array $roles): bool
+{
+    return \Core\Security::hasRole($roles);
 }
 
 // 3.1 Load Composer Autoloader (if exists)
@@ -153,6 +158,7 @@ $router->add('saraban/minute/add', 'Modules\Saraban\Controllers\DocumentControll
 $router->add('saraban/minute/print', 'Modules\Saraban\Controllers\DocumentController@printMinute');
 $router->add('saraban/acknowledge', 'Modules\Saraban\Controllers\DocumentController@acknowledge');
 $router->add('saraban/delete', 'Modules\Saraban\Controllers\DocumentController@delete');
+$router->add('saraban/minute/delete', 'Modules\Saraban\Controllers\DocumentController@deleteMinute');
 $router->add('saraban/file', 'Modules\Saraban\Controllers\FileController@serve');
 
 // Leave Management Routes
@@ -187,6 +193,16 @@ $router->add('attendance/get-student-calendar', 'Modules\Attendance\Controllers\
 $router->add('attendance/report', 'Modules\Attendance\Controllers\AttendanceController@report');
 $router->add('attendance/save', 'Modules\Attendance\Controllers\AttendanceController@store');
 $router->add('attendance/export', 'Modules\Attendance\Controllers\AttendanceController@export');
+
+// Document Submission System Routes
+$router->add('submissions', 'Modules\Submissions\Controllers\SubmissionsController@index');
+$router->add('submissions/submit', 'Modules\Submissions\Controllers\SubmissionsController@submit');
+$router->add('submissions/topics', 'Modules\Submissions\Controllers\SubmissionsController@topics');
+$router->add('submissions/topics/store', 'Modules\Submissions\Controllers\SubmissionsController@storeTopic');
+$router->add('submissions/topics/delete', 'Modules\Submissions\Controllers\SubmissionsController@deleteTopic');
+$router->add('submissions/monitor', 'Modules\Submissions\Controllers\SubmissionsController@monitor');
+$router->add('submissions/update-status', 'Modules\Submissions\Controllers\SubmissionsController@updateStatus');
+$router->add('submissions/export', 'Modules\Submissions\Controllers\SubmissionsController@export');
 
 // 7. Resolve Request
 $router->resolve();

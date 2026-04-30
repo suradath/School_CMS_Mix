@@ -97,6 +97,14 @@ class Database
     }
 
     /**
+     * Fetch a single column value
+     */
+    public static function fetchColumn(string $sql, array $params = []): mixed
+    {
+        return self::query($sql, $params)->fetchColumn();
+    }
+
+    /**
      * Insert and return last inserted ID
      */
     public static function insert(string $sql, array $params = []): string|false
@@ -126,5 +134,29 @@ class Database
             self::query("INSERT INTO settings (setting_key, setting_value) VALUES (?, ?)", [$key, $value]);
         }
         return true;
+    }
+
+    /**
+     * Begin a transaction
+     */
+    public static function beginTransaction(): bool
+    {
+        return self::getInstance()->beginTransaction();
+    }
+
+    /**
+     * Commit a transaction
+     */
+    public static function commit(): bool
+    {
+        return self::getInstance()->commit();
+    }
+
+    /**
+     * Roll back a transaction
+     */
+    public static function rollBack(): bool
+    {
+        return self::getInstance()->rollBack();
     }
 }

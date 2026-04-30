@@ -27,17 +27,24 @@
                     <input type="text" name="full_name" value="<?= $user['full_name'] ?? '' ?>" required class="w-full px-4 py-3 rounded-2xl border border-gray-100 bg-slate-50 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-sm">
                 </div>
 
-                <!-- Role -->
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">บทบาทการใช้งาน (Role)</label>
-                    <select name="role" required class="w-full px-4 py-3 rounded-2xl border border-gray-100 bg-slate-50 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-sm appearance-none">
-                        <option value="teacher" <?= (isset($user) && $user['role'] === 'teacher') ? 'selected' : '' ?>>ครู/บุคลากร (Teacher)</option>
-                        <option value="officer" <?= (isset($user) && $user['role'] === 'officer') ? 'selected' : '' ?>>เจ้าหน้าที่ธุรการ (Officer)</option>
-                        <option value="director" <?= (isset($user) && $user['role'] === 'director') ? 'selected' : '' ?>>ผู้อำนวยการ (Director)</option>
-                        <option value="hr" <?= (isset($user) && $user['role'] === 'hr') ? 'selected' : '' ?>>เจ้าหน้างานบุคคล (HR)</option>
-                        <option value="editor" <?= (isset($user) && $user['role'] === 'editor') ? 'selected' : '' ?>>เจ้าหน้าที่ระบบ (Editor)</option>
-                        <option value="admin" <?= (isset($user) && $user['role'] === 'admin') ? 'selected' : '' ?>>ผู้ดูแลระบบ (Admin)</option>
-                    </select>
+                <!-- Roles -->
+                <div class="md:col-span-2" x-data="{ selectedRoles: <?= json_encode(isset($user['roles']) ? array_column($user['roles'], 'id') : []) ?> }">
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">บทบาทการใช้งาน (Roles) <span class="text-primary">* เลือกได้มากกว่า 1 บทบาท</span></label>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <?php foreach ($allRoles as $role): ?>
+                        <label class="relative flex items-center p-4 rounded-2xl border transition-all cursor-pointer group" 
+                               :class="selectedRoles.includes(<?= $role['id'] ?>) ? 'border-primary bg-primary/5 ring-4 ring-primary/5' : 'border-gray-100 bg-slate-50 hover:bg-white hover:border-primary/30'">
+                            <input type="checkbox" name="roles[]" value="<?= $role['id'] ?>" 
+                                   class="w-5 h-5 rounded-lg border-gray-300 text-primary focus:ring-primary transition-all"
+                                   x-model="selectedRoles"
+                                   :value="<?= $role['id'] ?>">
+                            <div class="ml-3">
+                                <p class="text-sm font-bold transition-colors" :class="selectedRoles.includes(<?= $role['id'] ?>) ? 'text-primary' : 'text-slate-700'"><?= $role['name'] ?></p>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-tight"><?= $role['slug'] ?></p>
+                            </div>
+                        </label>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
 
                 <!-- Personnel Mapping -->

@@ -1,5 +1,5 @@
--- Database Schema for School CMS Mix V2.5
--- Updated: 2026-04-28 (Latest SIS, Health, and Attendance Modules)
+-- Database Schema for School CMS Mix V2.6
+-- Updated: 2026-04-30 (Added Document Submission System)
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     `password` VARCHAR(255) NOT NULL,
     `email` VARCHAR(100) NOT NULL UNIQUE,
     `full_name` VARCHAR(100) NOT NULL,
-    `role` ENUM('admin', 'editor', 'teacher', 'officer', 'hr', 'director') DEFAULT 'teacher',
+    `role` ENUM('admin', 'editor', 'teacher', 'officer', 'hr', 'director', 'academic') DEFAULT 'teacher',
     `status` ENUM('active', 'inactive') DEFAULT 'active',
     `personnel_id` INT DEFAULT NULL,
     `last_login` DATETIME DEFAULT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     FOREIGN KEY (`personnel_id`) REFERENCES `personnel`(`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 2. Page & Content Management
+-- 3. Page & Content Management
 CREATE TABLE IF NOT EXISTS `pages` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `title` VARCHAR(255) NOT NULL,
@@ -56,7 +56,7 @@ INSERT INTO `pages` (`id`, `title`, `slug`, `content`, `author_id`, `status`, `t
 (4, 'ติดต่อสอบถาม', 'contact-us', '<h1>ติดต่อเรา</h1><p>ที่อยู่: 123 ถนนการเรียนรู้...</p>', NULL, 'published', 'page', NULL, NULL, '2026-04-22 03:23:01', '2026-04-22 03:23:01');
 
 
--- 3. Departments
+-- 4. Departments
 CREATE TABLE IF NOT EXISTS `departments` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(150) NOT NULL UNIQUE,
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `departments` (
     `sort_order` INT DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 4. Personnel Management
+-- 5. Personnel Management
 CREATE TABLE IF NOT EXISTS `personnel` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(150) NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `personnel` (
     INDEX (`department_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 5. News Categories
+-- 6. News Categories
 CREATE TABLE IF NOT EXISTS `news_categories` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(100) NOT NULL UNIQUE,
@@ -94,7 +94,7 @@ INSERT INTO `news_categories` (`id`, `name`, `slug`) VALUES
 (3, 'ข่าววิชาการ', 'academic'),
 (4, 'ข่าวรับสมัครงาน/นักเรียน', 'recruitment');
 
--- 6. News & Events
+-- 7. News & Events
 CREATE TABLE IF NOT EXISTS `news` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `title` VARCHAR(255) NOT NULL,
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `news` (
     INDEX (`published_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 7. Media Gallery
+-- 8. Media Gallery
 CREATE TABLE IF NOT EXISTS `gallery_albums` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `title` VARCHAR(255) NOT NULL,
@@ -129,8 +129,8 @@ CREATE TABLE IF NOT EXISTS `gallery_images` (
     FOREIGN KEY (`album_id`) REFERENCES `gallery_albums`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 8. Academic Calendar
-CREATE TABLE `academic_calendar` (
+-- 9. Academic Calendar
+CREATE TABLE IF NOT EXISTS `academic_calendar` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `title` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
@@ -144,7 +144,7 @@ CREATE TABLE `academic_calendar` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 9. Entry Popups
+-- 10. Entry Popups
 CREATE TABLE IF NOT EXISTS `entry_popups` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `title` VARCHAR(255) NOT NULL,
@@ -155,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `entry_popups` (
 	`updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 10. Leave Management
+-- 11. Leave Management
 CREATE TABLE IF NOT EXISTS `leave_types` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(100) NOT NULL,
@@ -199,7 +199,7 @@ CREATE TABLE IF NOT EXISTS `personnel_leave_quotas` (
     FOREIGN KEY (`leave_type_id`) REFERENCES `leave_types`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 11. E-Saraban (Electronic Document Management)
+-- 12. E-Saraban (Electronic Document Management)
 CREATE TABLE IF NOT EXISTS `saraban_types` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(100) NOT NULL,
@@ -236,7 +236,7 @@ CREATE TABLE IF NOT EXISTS `saraban_receivers` (
     `department_id` INT DEFAULT NULL,
     `status` ENUM('unread', 'read') DEFAULT 'unread',
     `acknowledged_at` DATETIME DEFAULT NULL,
-	`created_at` timestamp NOT NULL DEFAULT current_timestamp()
+	`created_at` timestamp NOT NULL DEFAULT current_timestamp(),
     FOREIGN KEY (`document_id`) REFERENCES `saraban_documents`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -251,7 +251,44 @@ CREATE TABLE IF NOT EXISTS `saraban_minutes` (
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 12. Menus & Settings
+-- 13. Document Submission System
+CREATE TABLE IF NOT EXISTS `submission_topics` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `title` VARCHAR(255) NOT NULL,
+    `description` TEXT DEFAULT NULL,
+    `semester` ENUM('1', '2') DEFAULT '1',
+    `academic_year` INT NOT NULL,
+    `max_file_size` INT DEFAULT 20 COMMENT 'Max size in MB',
+    `status` ENUM('active', 'inactive') DEFAULT 'active',
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `topic_allowed_files` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `topic_id` INT NOT NULL,
+    `extension` VARCHAR(10) NOT NULL,
+    FOREIGN KEY (`topic_id`) REFERENCES `submission_topics`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `document_submissions` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `topic_id` INT NOT NULL,
+    `user_id` INT NOT NULL,
+    `file_path` VARCHAR(255) NOT NULL,
+    `original_filename` VARCHAR(255) NOT NULL,
+    `mime_type` VARCHAR(100) DEFAULT NULL,
+    `status` ENUM('pending', 'approved', 'revision') DEFAULT 'pending',
+    `feedback` TEXT DEFAULT NULL,
+    `submitted_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (`topic_id`) REFERENCES `submission_topics`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+    INDEX (`status`),
+    INDEX (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 14. Menus & Settings
 CREATE TABLE IF NOT EXISTS `menus` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `title` VARCHAR(100) NOT NULL,
@@ -276,6 +313,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
 INSERT IGNORE INTO `roles` (`name`, `slug`, `description`) VALUES 
 ('Administrator', 'admin', 'Full access to the system'),
 ('Editor/Staff', 'editor', 'Manage news, gallery and personnel in their department'),
+('Academic/Admin', 'academic', 'Manage document submission system and monitoring'),
 ('Teacher/User', 'teacher', 'Manage own profile and contributions');
 
 INSERT INTO `leave_types` (`name`, `slug`, `default_quota`, `color`) VALUES 
@@ -318,7 +356,7 @@ INSERT INTO `departments` (`id`, `name`, `description`, `sort_order`) VALUES
 (14, 'ฝ่ายบริหารทั่วไป', NULL, 13);
 
 
--- 13. Students Information
+-- 15. Students Information
 CREATE TABLE IF NOT EXISTS `students` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `school_id` VARCHAR(20) COMMENT 'รหัสโรงเรียน',
@@ -368,7 +406,7 @@ CREATE TABLE IF NOT EXISTS `student_parents` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- 14. Attendance System
+-- 16. Attendance System
 CREATE TABLE IF NOT EXISTS `attendance_courses` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `teacher_id` INT NOT NULL COMMENT 'ID ของครูเจ้าของวิชา',
@@ -409,7 +447,7 @@ CREATE TABLE IF NOT EXISTS `attendance_records` (
     INDEX `idx_record_student` (`student_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 15. Visitor Counter
+-- 17. Visitor Counter
 CREATE TABLE IF NOT EXISTS `visitor_counter` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `page_url` TEXT NOT NULL,
@@ -421,7 +459,7 @@ CREATE TABLE IF NOT EXISTS `visitor_counter` (
     INDEX (`visited_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 16. Journals
+-- 18. Journals
 CREATE TABLE IF NOT EXISTS `journals` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `title` VARCHAR(255) NOT NULL,

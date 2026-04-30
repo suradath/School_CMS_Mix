@@ -37,19 +37,31 @@
                         </div>
                     </td>
                     <td class="px-6 py-4">
-                        <?php 
-                        $roleClass = [
-                            'admin' => 'bg-red-100 text-red-600',
-                            'editor' => 'bg-blue-100 text-blue-600',
-                            'teacher' => 'bg-green-100 text-green-600'
-                        ][$user['role']] ?? 'bg-gray-100 text-gray-600';
-                        $roleName = [
-                            'admin' => 'ผู้ดูแลระบบ',
-                            'editor' => 'เจ้าหน้าที่ (Editor)',
-                            'teacher' => 'ครู/บุคลากร'
-                        ][$user['role']] ?? $user['role'];
-                        ?>
-                        <span class="px-3 py-1 text-[10px] font-bold rounded-lg uppercase <?= $roleClass ?>"><?= $roleName ?></span>
+                        <div class="flex flex-wrap gap-1">
+                            <?php 
+                            if (!empty($user['roles_slugs'])) {
+                                $slugs = explode(',', $user['roles_slugs']);
+                                $names = explode(', ', $user['roles_display']);
+                                
+                                foreach ($slugs as $index => $slug) {
+                                    $roleName = $names[$index] ?? $slug;
+                                    $roleClass = [
+                                        'admin' => 'bg-red-100 text-red-600',
+                                        'editor' => 'bg-blue-100 text-blue-600',
+                                        'teacher' => 'bg-green-100 text-green-600',
+                                        'dept_head' => 'bg-purple-100 text-purple-600',
+                                        'staff' => 'bg-orange-100 text-orange-600',
+                                        'director' => 'bg-indigo-100 text-indigo-600',
+                                        'hr' => 'bg-pink-100 text-pink-600',
+                                        'officer' => 'bg-cyan-100 text-cyan-600'
+                                    ][$slug] ?? 'bg-gray-100 text-gray-600';
+                                    echo '<span class="px-2 py-0.5 text-[9px] font-bold rounded-md uppercase ' . $roleClass . '">' . $roleName . '</span>';
+                                }
+                            } else {
+                                echo '<span class="px-2 py-0.5 text-[9px] font-bold rounded-md uppercase bg-gray-50 text-gray-400">ไม่มีบทบาท</span>';
+                            }
+                            ?>
+                        </div>
                     </td>
                     <td class="px-6 py-4">
                         <p class="text-sm text-slate-600"><?= $user['personnel_name'] ?: '<span class="text-slate-300">ไม่ได้เชื่อมโยง</span>' ?></p>

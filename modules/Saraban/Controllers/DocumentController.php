@@ -16,7 +16,7 @@ class DocumentController extends Controller
 {
     public function create(string $typeSlug): void
     {
-        $this->requireRole(['admin', 'editor', 'officer']);
+        $this->requireRole(['admin', 'officer']);
         $type = SarabanType::findBySlug($typeSlug);
         if (!$type) $this->redirect('/saraban');
 
@@ -45,7 +45,7 @@ class DocumentController extends Controller
 
     public function store(): void
     {
-        $this->requireRole(['admin', 'editor', 'officer']);
+        $this->requireRole(['admin', 'officer']);
         
         $typeId = (int)$_POST['type_id'];
         $budgetYear = (int)$_POST['budget_year'];
@@ -120,18 +120,28 @@ class DocumentController extends Controller
         if (!$doc) $this->redirect('/saraban');
 
         $receivers = SarabanReceiver::getReceivers($id);
-        
         $personnelId = (int)($_SESSION['personnel_id'] ?? 0);
+        
+        // Get user department ID
+        $personnel = Database::fetch("SELECT department_id FROM personnel WHERE id = ?", [$personnelId]);
+        $userDeptId = (int)($personnel['department_id'] ?? 0);
+
+        // Security check: Only Admin, Officer, or Receiver (person/dept) can view
+        $isReceiver = false;
         $myAcknowledge = null;
         foreach ($receivers as $r) {
-            if ($r['personnel_id'] == $personnelId) {
-                $myAcknowledge = $r;
-                break;
+            if ($r['personnel_id'] == $personnelId || ($r['department_id'] > 0 && $r['department_id'] == $userDeptId)) {
+                $isReceiver = true;
+                if ($r['personnel_id'] == $personnelId) {
+                    $myAcknowledge = $r;
+                }
             }
         }
 
-        $personnel = Database::fetch("SELECT department_id FROM personnel WHERE id = ?", [$personnelId]);
-        $userDeptId = (int)($personnel['department_id'] ?? 0);
+        if (!hasRole(['admin', 'officer']) && !$isReceiver) {
+            $_SESSION['error'] = "คุณไม่มีสิทธิ์เข้าถึงเอกสารฉบับนี้";
+            $this->redirect('/saraban');
+        }
 
         $minutes = SarabanMinute::getByDocumentId($id);
 
@@ -147,9 +157,37 @@ class DocumentController extends Controller
 
     public function addMinute(): void
     {
-        $this->requireRole(['admin', 'editor', 'officer', 'director']);
-        
+        $this->requireAuth();
         $docId = (int)$_POST['document_id'];
+        
+        // 1. Check if user is a receiver
+        $receivers = SarabanReceiver::getReceivers($docId);
+        $personnelId = (int)($_SESSION['personnel_id'] ?? 0);
+        $personnel = Database::fetch("SELECT department_id FROM personnel WHERE id = ?", [$personnelId]);
+        $userDeptId = (int)($personnel['department_id'] ?? 0);
+        
+        $isReceiver = false;
+        foreach ($receivers as $r) {
+            if ($r['personnel_id'] == $personnelId || ($r['department_id'] > 0 && $r['department_id'] == $userDeptId)) {
+                $isReceiver = true;
+                break;
+            }
+        }
+
+        if (!hasRole(['admin', 'officer']) && !$isReceiver) {
+            $_SESSION['error'] = "คุณไม่มีสิทธิ์เกษียณหนังสือฉบับนี้";
+            $this->redirect('/saraban/view/' . $docId);
+        }
+
+        // 2. Check if already minuted
+        $minutes = SarabanMinute::getByDocumentId($docId);
+        foreach ($minutes as $m) {
+            if ($m['user_id'] == $_SESSION['user_id']) {
+                $_SESSION['error'] = "คุณได้เกษียณหนังสือฉบับนี้ไปแล้ว";
+                $this->redirect('/saraban/view/' . $docId);
+            }
+        }
+
         $note = $_POST['note'] ?? '';
         $decision = $_POST['decision'] ?? 'none';
         
@@ -167,8 +205,7 @@ class DocumentController extends Controller
 
         if ($success) {
             // Update document status based on role and decision
-            $role = $_SESSION['user_role'] ?? '';
-            if ($role === 'director') {
+            if (hasRole('director')) {
                 SarabanMinute::updateDocumentStatus($docId, 'processed');
                 // Notify back to staff by resetting unread status
                 SarabanReceiver::resetStatus($docId);
@@ -181,6 +218,25 @@ class DocumentController extends Controller
         }
 
         $this->redirect('/saraban/view/' . $docId);
+    }
+
+    public function deleteMinute(): void
+    {
+        $this->requireAuth();
+        $id = (int)$_POST['id'];
+        $minute = SarabanMinute::find($id);
+        
+        if (!$minute) $this->redirect('/saraban');
+
+        // Only owner or admin can delete
+        if ($minute['user_id'] != $_SESSION['user_id'] && !hasRole(['admin', 'officer'])) {
+            die("Access Denied");
+        }
+
+        if (SarabanMinute::delete($id)) {
+            $_SESSION['success'] = "ยกเลิกข้อความเกษียณเรียบร้อยแล้ว";
+        }
+        $this->redirect('/saraban/view/' . $minute['document_id']);
     }
 
     public function printMinute(int $id): void

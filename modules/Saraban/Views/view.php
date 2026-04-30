@@ -1,3 +1,4 @@
+<?php $personnelId = (int)($_SESSION['personnel_id'] ?? 0); ?>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Header -->
     <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -94,7 +95,23 @@
         <!-- Timeline & Form Column -->
         <div class="xl:col-span-5 space-y-8">
             <!-- Minute Form (If allowed) -->
-            <?php if (\Core\Security::checkRole(['admin', 'editor', 'officer', 'director'])): ?>
+            <?php 
+            $alreadyMinuted = false;
+            foreach ($minutes as $m) {
+                if ($m['user_id'] == $_SESSION['user_id']) {
+                    $alreadyMinuted = true;
+                    break;
+                }
+            }
+            $isReceiver = false;
+            foreach ($receivers as $r) {
+                if ($r['personnel_id'] == $personnelId || ($r['department_id'] > 0 && $r['department_id'] == ($userDeptId ?? 0))) {
+                    $isReceiver = true;
+                    break;
+                }
+            }
+            if ((hasRole(['admin', 'officer']) || $isReceiver) && !$alreadyMinuted): 
+            ?>
             <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 p-8">
                 <h4 class="text-sm font-bold text-slate-800 uppercase tracking-widest border-b border-slate-50 pb-4 mb-6">บันทึกข้อความเกษียณหนังสือ</h4>
                 <form action="<?= url('/saraban/minute/add') ?>" method="POST" class="space-y-6">
@@ -109,8 +126,15 @@
                                     'officer' => ['เรียนเสนอเพื่อโปรดพิจารณา', 'แจ้งผู้เกี่ยวข้องถือปฏิบัติ', 'เห็นควรดำเนินการตามเสนอ'],
                                     'director' => ['ทราบ/ถือปฏิบัติ', 'อนุมัติ', 'มอบงานให้กลุ่มสาระฯ', 'แจ้งผู้เกี่ยวข้องดำเนินการ']
                                 ];
-                                $userRole = $_SESSION['user_role'] ?? 'teacher';
-                                $relevantTemplates = $templates[$userRole] ?? $templates['officer'];
+                                
+                                // Priority role for templates
+                                if (hasRole('director')) {
+                                    $relevantTemplates = $templates['director'];
+                                } elseif (hasRole(['admin', 'editor', 'officer'])) {
+                                    $relevantTemplates = $templates['officer'];
+                                } else {
+                                    $relevantTemplates = [];
+                                }
                             ?>
                             <?php foreach ($relevantTemplates as $tpl): ?>
                             <button type="button" onclick="document.getElementById('minute-note').value = '<?= $tpl ?>'" class="px-3 py-1 bg-slate-50 text-slate-500 rounded-lg text-[10px] font-bold hover:bg-primary hover:text-white transition-all">
@@ -121,7 +145,7 @@
                         <textarea id="minute-note" name="note" required rows="4" class="w-full px-6 py-4 rounded-2xl border border-slate-100 bg-slate-50 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-sm" placeholder="พิมพ์ข้อความที่นี่..."></textarea>
                     </div>
 
-                    <?php if (($userRole === 'director' || $userRole === 'admin') && $userDeptId === 1): ?>
+                    <?php if ((hasRole('director') || hasRole('admin')) && $userDeptId === 1): ?>
                     <div>
                         <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">การวินิจฉัย (Director Only)</label>
                         <div class="grid grid-cols-2 gap-3">
@@ -191,16 +215,27 @@
 
                                     <p class="text-sm text-slate-700 leading-relaxed mb-4"><?= nl2br(htmlspecialchars($m['note'])) ?></p>
                                     
-                                    <div class="flex items-center pt-4 border-t border-slate-100">
-                                        <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 text-[10px] font-bold mr-3 uppercase">
-                                            <?= substr($m['full_name'], 0, 2) ?>
+                                    <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 text-[10px] font-bold mr-3 uppercase">
+                                                <?= substr($m['full_name'], 0, 2) ?>
+                                            </div>
+                                            <div>
+                                                <p class="text-[11px] font-bold text-slate-900"><?= $m['full_name'] ?></p>
+                                                <p class="text-[9px] text-slate-400 uppercase tracking-tighter">
+                                                    <?= $m['position'] ?> • <?= date('d/m/Y H:i', strtotime($m['created_at'])) ?>
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p class="text-[11px] font-bold text-slate-900"><?= $m['full_name'] ?></p>
-                                            <p class="text-[9px] text-slate-400 uppercase tracking-tighter">
-                                                <?= $m['position'] ?> • <?= date('d/m/Y H:i', strtotime($m['created_at'])) ?>
-                                            </p>
-                                        </div>
+                                        <?php if ($m['user_id'] == $_SESSION['user_id'] || hasRole(['admin', 'officer'])): ?>
+                                        <form action="<?= url('/saraban/minute/delete') ?>" method="POST" onsubmit="return confirm('ยืนยันการยกเลิกข้อความเกษียณนี้?')">
+                                            <?= \Core\Security::csrf_field() ?>
+                                            <input type="hidden" name="id" value="<?= $m['id'] ?>">
+                                            <button type="submit" class="text-[9px] font-bold text-rose-500 hover:text-rose-700 uppercase tracking-widest bg-rose-50 px-2 py-1 rounded-md transition-all">
+                                                ยกเลิก
+                                            </button>
+                                        </form>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>

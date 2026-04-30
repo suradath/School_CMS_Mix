@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /**
- * School CMS Mix V2.5 Installer - Modern Edition
+ * School CMS Mix V2.6 Installer - Modern Edition
  */
 
 session_start();
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School CMS Mix V2.5 Installer - Modern Setup</title>
+    <title>School CMS Mix V2.6 Installer - Modern Setup</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&family=Outfit:wght@400;600;700&family=K2D:wght@400;600;700&display=swap" rel="stylesheet">
@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="w-16 h-16 bg-blue-600 rounded-3xl flex items-center justify-center shadow-2xl shadow-blue-500/20 mb-4">
                 <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
             </div>
-            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">School CMS Mix V2.5</h1>
+            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">School CMS Mix V2.6</h1>
             <p class="text-slate-400 font-bold text-[10px] uppercase tracking-widest mt-2">Installation Wizard</p>
         </div>
 
@@ -182,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php elseif($step === 3): ?>
                     <div class="text-center mb-10">
                         <h2 class="text-3xl font-bold text-slate-900 mb-2">ตั้งค่าเว็ปไซต์และแอดมิน</h2>
-                        <p class="text-slate-400">ขั้นตอนสุดท้ายในการเริ่มต้นระบบ School CMS Mix V2.5</p>
+                        <p class="text-slate-400">ขั้นตอนสุดท้ายในการเริ่มต้นระบบ School CMS Mix V2.6</p>
                     </div>
                     <form action="install.php?step=3" method="POST" class="space-y-6">
                         <div>
@@ -210,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <svg class="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                         </div>
                         <h2 class="text-4xl font-bold text-slate-900 mb-4">ติดตั้งสำเร็จ!</h2>
-                        <p class="text-slate-400 mb-10 max-w-sm mx-auto">ระบบ School CMS Mix V2.5 พร้อมใช้งานแล้ว กรุณาลบไฟล์ install.php ออกจากเซิร์ฟเวอร์เพื่อความปลอดภัย</p>
+                        <p class="text-slate-400 mb-10 max-w-sm mx-auto">ระบบ School CMS Mix V2.6 พร้อมใช้งานแล้ว กรุณาลบไฟล์ install.php ออกจากเซิร์ฟเวอร์เพื่อความปลอดภัย</p>
                         <a href="index.php" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 px-12 rounded-2xl shadow-xl shadow-blue-500/20 transition-all hover:-translate-y-1">
                             เข้าสู่หน้าเว็ปไซต์
                         </a>
@@ -220,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         
         <p class="text-center mt-10 text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] opacity-50">
-            &copy; <?= date('Y') ?> School CMS Mix V2.5 Application
+            &copy; <?= date('Y') ?> School CMS Mix V2.6 Application
         </p>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>

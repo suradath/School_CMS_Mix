@@ -38,7 +38,15 @@ class AuthController extends Controller
             session_regenerate_id(true);
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['full_name'];
-            $_SESSION['user_role'] = $user['role'];
+            
+            // Fetch and store all roles
+            $roles = User::getRoles((int)$user['id']);
+            $roleSlugs = array_column($roles, 'slug');
+            $_SESSION['user_roles'] = $roleSlugs;
+            
+            // Keep user_role for backward compatibility (using the first role or 'teacher' as default)
+            $_SESSION['user_role'] = $roleSlugs[0] ?? 'teacher';
+            
             $_SESSION['personnel_id'] = $user['personnel_id'];
             $_SESSION['department_id'] = $user['department_id'];
             

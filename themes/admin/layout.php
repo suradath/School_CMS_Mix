@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?? 'Dashboard' ?> - School CMS Mix V2.5</title>
+    <title><?= $title ?? 'Dashboard' ?> - School CMS Mix V2.6</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -55,7 +55,7 @@
     </button>
 
     <?php 
-        $siteName = \Core\Database::getSetting('site_name', 'School CMS Mix V2.5'); 
+        $siteName = \Core\Database::getSetting('site_name', 'School CMS Mix V2.6'); 
         $siteLogo = \Core\Database::getSetting('site_logo', '');
         $primaryColor = \Core\Database::getSetting('primary_color', '#1d4ed8');
         $currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -77,6 +77,13 @@
                     AND d.status = 'active'
                 ", [$personnelId, $deptId])['count'] ?? 0;
             }
+
+            // Check for submissions needing revision (for Teachers)
+            $revisionCount = \Core\Database::fetch("
+                SELECT COUNT(*) as count 
+                FROM document_submissions 
+                WHERE user_id = ? AND status = 'revision'
+            ", [$_SESSION['user_id']])['count'] ?? 0;
         }
     ?>
 
@@ -179,6 +186,42 @@
                     ['url' => '/calendar', 'label' => 'ปฏิทินวิชาการ', 'icon' => 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2V12a2 2 0 002 2z'],
                 ]);
 
+                // Document Submission System Menu
+                $revisionCount = 0;
+                $pendingReviewCount = 0;
+                if (\Core\Security::isLoggedIn()) {
+                    $userId = (int)$_SESSION['user_id'];
+                    // Count revisions for teacher
+                    $revisionCount = (int)\Core\Database::fetchColumn("SELECT COUNT(*) FROM document_submissions WHERE user_id = ? AND status = 'revision'", [$userId]);
+                    
+                    // Count pending reviews for academic/admin
+                    if (\Core\Security::checkRole(['admin', 'academic'])) {
+                        $pendingReviewCount = (int)\Core\Database::fetchColumn("SELECT COUNT(*) FROM document_submissions WHERE status = 'pending'");
+                    }
+                }
+
+                $submissionSubmenu = [
+                    ['url' => '/submissions', 'label' => 'ส่งเอกสารและผลงาน', 'icon' => 'M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12'],
+                ];
+                if (\Core\Security::checkRole(['admin', 'academic', 'director'])) {
+                    $submissionSubmenu[] = [
+                        'url' => '/submissions/monitor', 
+                        'label' => 'ติดตามการส่งเอกสาร', 
+                        'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2',
+                        'badge' => (\Core\Security::checkRole(['admin', 'academic']) && $pendingReviewCount > 0) ? $pendingReviewCount : null
+                    ];
+                }
+                if (\Core\Security::checkRole(['admin', 'academic'])) {
+                    $submissionSubmenu[] = ['url' => '/submissions/topics', 'label' => 'ตั้งค่าหัวข้อการส่ง', 'icon' => 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z'];
+                }
+
+                $menuItems[] = [
+                    'label' => 'ระบบส่งเอกสาร', 
+                    'icon' => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', 
+                    'badge' => isset($revisionCount) && $revisionCount > 0 ? $revisionCount : null,
+                    'submenu' => $submissionSubmenu
+                ];
+
                 if (\Core\Security::checkRole('admin')) {
                     $menuItems[] = ['url' => '/admin/users', 'label' => 'จัดการผู้ใช้งาน', 'icon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'];
                 }
@@ -237,7 +280,12 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<?= $sub['icon'] ?>"></path>
                                             </svg>
                                         <?php endif; ?>
-                                        <?= $sub['label'] ?>
+                                        <div class="flex-1 flex justify-between items-center min-w-0">
+                                            <span class="truncate"><?= $sub['label'] ?></span>
+                                            <?php if (isset($sub['badge'])): ?>
+                                                <span class="px-1.5 py-0.5 bg-rose-500 text-white text-[9px] font-bold rounded-full"><?= $sub['badge'] ?></span>
+                                            <?php endif; ?>
+                                        </div>
                                     </a>
                                 <?php endforeach; ?>
                             </div>
@@ -306,7 +354,7 @@
                 <div class="p-4 bg-slate-900 rounded-3xl text-white relative overflow-hidden">
                     <div class="absolute -top-10 -right-10 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
                     <p class="text-[10px] font-bold text-blue-300 uppercase tracking-[0.2em] mb-1">Status</p>
-                    <p class="text-xs font-bold leading-relaxed">System v2.5 Stable</p>
+                    <p class="text-xs font-bold leading-relaxed">System v2.6 Stable</p>
                     <a href="<?= url('/') ?>" target="_blank" class="mt-4 inline-flex items-center text-[10px] font-bold hover:text-blue-300 transition-colors">
                         VIEW LIVE SITE <svg class="w-2.5 h-2.5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </a>
@@ -334,11 +382,23 @@
                         <span class="text-sm font-bold text-slate-900 outfit leading-none"><?= $_SESSION['user_name'] ?? 'Admin' ?></span>
                         <span class="text-[10px] font-bold text-primary uppercase tracking-widest mt-1">
                             <?php 
-                            echo [
-                                'admin' => 'Super Administrator',
-                                'editor' => 'Staff / Editor',
-                                'teacher' => 'Teacher / User'
-                            ][$_SESSION['user_role'] ?? 'teacher'];
+                            if (!empty($_SESSION['user_roles'])) {
+                                $roleNames = [];
+                                foreach ($_SESSION['user_roles'] as $slug) {
+                                    $roleNames[] = [
+                                        'admin' => 'ผู้ดูแลระบบ',
+                                        'editor' => 'เจ้าหน้าที่ระบบ',
+                                        'teacher' => 'ครู/บุคลากร',
+                                        'dept_head' => 'หัวหน้ากลุ่มสาระฯ',
+                                        'staff' => 'เจ้าหน้าที่ทั่วไป',
+                                        'director' => 'ผู้อำนวยการ',
+                                        'hr' => 'งานบุคคล'
+                                    ][$slug] ?? ucfirst($slug);
+                                }
+                                echo implode(' / ', $roleNames);
+                            } else {
+                                echo 'User';
+                            }
                             ?>
                         </span>
                     </div>
@@ -357,7 +417,7 @@
             <footer class="mt-20 py-10 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center text-slate-400">
                 <div class="flex items-center space-x-2 text-sm font-bold">
                     <span class="text-slate-900 outfit tracking-tight text-lg">School CMS Mix</span>
-                    <span class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[10px] uppercase tracking-widest">v2.5</span>
+                    <span class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[10px] uppercase tracking-widest">v2.6</span>
                 </div>
                 <div class="mt-6 md:mt-0 text-center md:text-right">
                     <div class="text-[11px] font-bold uppercase tracking-wider text-slate-300">Development & Copyright &copy; 2569</div>

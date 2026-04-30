@@ -60,6 +60,9 @@ class Security
 
     /**
      * Check if current user has specific role(s)
+     * 
+     * @param string|array $roles A single role slug or an array of role slugs
+     * @return bool
      */
     public static function checkRole(string|array $roles): bool
     {
@@ -67,13 +70,29 @@ class Security
             return false;
         }
 
-        $userRole = $_SESSION['user_role'] ?? '';
+        $userRoles = $_SESSION['user_roles'] ?? [];
         
-        if (is_array($roles)) {
-            return in_array($userRole, $roles);
+        // Fallback for legacy sessions or single role systems
+        if (empty($userRoles) && isset($_SESSION['user_role'])) {
+            $userRoles = [$_SESSION['user_role']];
         }
+
+        if (empty($userRoles)) {
+            return false;
+        }
+
+        $requiredRoles = is_array($roles) ? $roles : [$roles];
         
-        return $userRole === $roles;
+        // Check if there's an intersection between user roles and required roles
+        return !empty(array_intersect($userRoles, $requiredRoles));
+    }
+
+    /**
+     * Helper function to check roles (Alias for checkRole)
+     */
+    public static function hasRole(string|array $roles): bool
+    {
+        return self::checkRole($roles);
     }
 
     /**

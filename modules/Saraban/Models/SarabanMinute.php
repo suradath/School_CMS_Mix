@@ -36,4 +36,14 @@ class SarabanMinute
     {
         Database::query("UPDATE saraban_documents SET saraban_status = ? WHERE id = ?", [$status, $docId]);
     }
+
+    public static function delete(int $id): bool
+    {
+        return (bool)Database::query("DELETE FROM saraban_minutes WHERE id = ?", [$id]);
+    }
+
+    public static function find(int $id): ?array
+    {
+        return Database::fetch("SELECT * FROM saraban_minutes WHERE id = ?", [$id]);
+    }
 }

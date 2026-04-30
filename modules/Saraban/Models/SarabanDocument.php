@@ -75,38 +75,49 @@ class SarabanDocument
         return Database::fetchAll($sql, $params);
     }
 
-    public static function getAllByType(string $typeSlug, array $filters = []): array
+    public static function getAllByType(string $typeSlug, array $filters = [], array $userAuth = []): array
     {
         $sql = "SELECT d.*, t.name as type_name 
                 FROM saraban_documents d
-                JOIN saraban_types t ON d.type_id = t.id
-                WHERE t.slug = ?";
+                JOIN saraban_types t ON d.type_id = t.id";
         
-        $params = [$typeSlug];
+        $params = [];
+        $where = ["t.slug = ?"];
+        $params[] = $typeSlug;
+
+        // Restriction logic: if not admin or officer, only see what's addressed to them
+        if (!empty($userAuth) && !$userAuth['is_privileged']) {
+            $sql .= " JOIN saraban_receivers r ON d.id = r.document_id";
+            $where[] = "(r.personnel_id = ? OR r.department_id = ?)";
+            $params[] = $userAuth['personnel_id'];
+            $params[] = $userAuth['department_id'];
+        }
 
         if (!empty($filters['q'])) {
-            $sql .= " AND (d.title LIKE ? OR d.doc_no LIKE ? OR d.book_no LIKE ?)";
+            $where[] = "(d.title LIKE ? OR d.doc_no LIKE ? OR d.book_no LIKE ?)";
             $params[] = '%' . $filters['q'] . '%';
             $params[] = '%' . $filters['q'] . '%';
             $params[] = '%' . $filters['q'] . '%';
         }
 
         if (!empty($filters['start_date'])) {
-            $sql .= " AND d.doc_date >= ?";
+            $where[] = "d.doc_date >= ?";
             $params[] = $filters['start_date'];
         }
 
         if (!empty($filters['end_date'])) {
-            $sql .= " AND d.doc_date <= ?";
+            $where[] = "d.doc_date <= ?";
             $params[] = $filters['end_date'];
         }
 
         if (!empty($filters['status'])) {
-            $sql .= " AND d.status = ?";
+            $where[] = "d.status = ?";
             $params[] = $filters['status'];
         }
 
+        $sql .= " WHERE " . implode(" AND ", $where);
         $sql .= " ORDER BY d.created_at DESC";
+        
         return Database::fetchAll($sql, $params);
     }
 

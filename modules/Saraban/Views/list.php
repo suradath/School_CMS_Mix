@@ -3,7 +3,7 @@
         <h3 class="text-xl font-bold text-slate-800 heading-font"><?= $title ?></h3>
         <p class="text-sm text-slate-500 mt-1">รายการหนังสือทั้งหมดในหมวดหมู่นี้</p>
     </div>
-    <?php if (\Core\Security::checkRole(['admin', 'editor', 'officer'])): ?>
+    <?php if (\Core\Security::checkRole(['admin', 'officer'])): ?>
     <a href="<?= url('/saraban/create/' . $type) ?>" class="bg-primary text-white px-6 py-3 rounded-2xl font-bold text-xs hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center">
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
         ลงทะเบียนใหม่
