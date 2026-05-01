@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /**
- * School CMS Mix V2.6 Entry Point
+ * School CMS Mix V2.7 Entry Point
  */
 
 // 1. Error Reporting

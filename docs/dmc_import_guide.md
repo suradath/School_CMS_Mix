@@ -1,6 +1,6 @@
 # คู่มือการนำเข้าข้อมูลนักเรียนจากระบบ DMC (SIS Module)
 
-ระบบ **Student Information System (SIS)** ใน School CMS Mix V2.6 รองรับการนำเข้าข้อมูลนักเรียนอย่างรวดเร็วผ่านไฟล์ CSV ที่ส่งออกจากระบบ **DMC (Data Management Center)** ของสพฐ.
+ระบบ **Student Information System (SIS)** ใน School CMS Mix V2.7 รองรับการนำเข้าข้อมูลนักเรียนอย่างรวดเร็วผ่านไฟล์ CSV ที่ส่งออกจากระบบ **DMC (Data Management Center)** ของสพฐ.
 
 ## 1. การเตรียมไฟล์จากระบบ DMC
 1. เข้าใช้งานระบบ DMC ของโรงเรียน

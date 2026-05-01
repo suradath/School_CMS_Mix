@@ -16,7 +16,7 @@ class HomeController extends Controller
      */
     public function index(): void
     {
-        $siteName = Database::fetch("SELECT setting_value FROM settings WHERE setting_key = 'site_name'")['setting_value'] ?? 'School CMS Mix V2.6';
+        $siteName = Database::fetch("SELECT setting_value FROM settings WHERE setting_key = 'site_name'")['setting_value'] ?? 'School CMS Mix V2.7';
         
         $latestNews = Database::fetchAll("SELECT * FROM news WHERE status = 'published' ORDER BY published_at DESC LIMIT 6");
         $personnelCount = Database::fetch("SELECT COUNT(*) as count FROM personnel")['count'];
@@ -76,7 +76,7 @@ class HomeController extends Controller
      */
     public function newsView(): void
     {
-        $siteName = Database::fetch("SELECT setting_value FROM settings WHERE setting_key = 'site_name'")['setting_value'] ?? 'School CMS Mix V2.6';
+        $siteName = Database::fetch("SELECT setting_value FROM settings WHERE setting_key = 'site_name'")['setting_value'] ?? 'School CMS Mix V2.7';
         $news = News::getAll(); // Existing model method
 
         $this->renderWithLayout('Home.Views.news_all', 'themes.default.layout', [
@@ -91,7 +91,7 @@ class HomeController extends Controller
      */
     public function newsDetail(int $id): void
     {
-        $siteName = Database::fetch("SELECT setting_value FROM settings WHERE setting_key = 'site_name'")['setting_value'] ?? 'School CMS Mix V2.6';
+        $siteName = Database::fetch("SELECT setting_value FROM settings WHERE setting_key = 'site_name'")['setting_value'] ?? 'School CMS Mix V2.7';
         $item = News::find($id);
 
         if (!$item) {
@@ -112,7 +112,7 @@ class HomeController extends Controller
      */
     public function personnelView(): void
     {
-        $siteName = Database::fetch("SELECT setting_value FROM settings WHERE setting_key = 'site_name'")['setting_value'] ?? 'School CMS Mix V2.6';
+        $siteName = Database::fetch("SELECT setting_value FROM settings WHERE setting_key = 'site_name'")['setting_value'] ?? 'School CMS Mix V2.7';
         $departments = Personnel::getAllByDepartment();
 
         $this->renderWithLayout('Home.Views.personnel', 'themes.default.layout', [
@@ -127,7 +127,7 @@ class HomeController extends Controller
      */
     public function galleryView(): void
     {
-        $siteName = Database::fetch("SELECT setting_value FROM settings WHERE setting_key = 'site_name'")['setting_value'] ?? 'School CMS Mix V2.6';
+        $siteName = Database::fetch("SELECT setting_value FROM settings WHERE setting_key = 'site_name'")['setting_value'] ?? 'School CMS Mix V2.7';
         $albums = \Modules\Gallery\Models\Gallery::getAlbums();
 
         $this->renderWithLayout('Home.Views.gallery_all', 'themes.default.layout', [
@@ -142,7 +142,7 @@ class HomeController extends Controller
      */
     public function galleryDetail(int $id): void
     {
-        $siteName = Database::fetch("SELECT setting_value FROM settings WHERE setting_key = 'site_name'")['setting_value'] ?? 'School CMS Mix V2.6';
+        $siteName = Database::fetch("SELECT setting_value FROM settings WHERE setting_key = 'site_name'")['setting_value'] ?? 'School CMS Mix V2.7';
         $album = \Modules\Gallery\Models\Gallery::getAlbum($id);
         $images = \Modules\Gallery\Models\Gallery::getImages($id);
 
@@ -173,7 +173,7 @@ class HomeController extends Controller
             exit;
         }
 
-        $siteName = Database::fetch("SELECT setting_value FROM settings WHERE setting_key = 'site_name'")['setting_value'] ?? 'School CMS Mix V2.6';
+        $siteName = Database::fetch("SELECT setting_value FROM settings WHERE setting_key = 'site_name'")['setting_value'] ?? 'School CMS Mix V2.7';
 
         $this->renderWithLayout('Home.Views.page', 'themes.default.layout', [
             'site_name' => $siteName,
