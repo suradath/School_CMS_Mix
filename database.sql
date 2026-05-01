@@ -1,5 +1,5 @@
--- Database Schema for School CMS Mix V2.6
--- Updated: 2026-04-30 (Added Document Submission System)
+-- Database Schema for School CMS Mix V2.7
+-- Updated: 2026-05-01 (Added Booking System - Rooms & Vehicles)
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
@@ -310,12 +310,17 @@ CREATE TABLE IF NOT EXISTS `settings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Initial Data
-INSERT IGNORE INTO `roles` (`name`, `slug`, `description`) VALUES 
-('Administrator', 'admin', 'Full access to the system'),
-('Editor/Staff', 'editor', 'Manage news, gallery and personnel in their department'),
-('Academic/Admin', 'academic', 'Manage document submission system and monitoring'),
-('Teacher/User', 'teacher', 'Manage own profile and contributions'),
-('Director', 'director', 'School executive with monitoring access');
+INSERT INTO `roles` (`id`, `name`, `slug`, `description`) VALUES
+(1, 'ผู้ดูแลระบบ (Admin)', 'admin', 'ผู้ใช้ที่สามารถจัดการระบบได้ทั้งหมด'),
+(2, 'เจ้าหน้าที่ระบบ (Editor)', 'editor', 'ผู้ดูแลข่าวสาร,แกลอรี่และบุคลากรในหน่วยงานของตน'),
+(3, 'ครู/บุคลากร (Teacher)', 'teacher', 'จัดการโปรไฟล์ของตนเองและผลงาน'),
+(5, 'หัวหน้ากลุ่มสาระฯ (Dept Head)', 'dept_head', 'ผู้บริหารกลุ่มสาระการเรียนรู้'),
+(6, 'ฝ่ายบริหารงานทั่วไป (Staff)', 'staff', 'ผู้ดูแลระบบสารบรรณและอื่นๆ'),
+(7, 'เจ้าหน้าที่งานบุคคล (HR)', 'hr', 'เจ้าหน้าที่งานบุคคล'),
+(8, 'ผู้อำนวยการ (Director)', 'director', 'ผู้อำนวยการสถานศึกษา'),
+(9, 'เจ้าหน้าที่ธุรการ', 'officer', 'จัดการระบบสารบรรณโดยเฉพาะ'),
+(10, 'ฝ่ายบริหารวิชาการ (Academic)', 'academic', 'ฝ่ายบริหารวิชาการ');
+
 
 INSERT INTO `leave_types` (`name`, `slug`, `default_quota`, `color`) VALUES 
 ('ลาป่วย', 'sick', 30, '#ef4444'),
@@ -483,4 +488,81 @@ CREATE TABLE IF NOT EXISTS `complaints` (
     FOREIGN KEY (`read_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- 20. Booking System (Rooms & Vehicles)
+CREATE TABLE IF NOT EXISTS `booking_resources` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `type` ENUM('room', 'vehicle') NOT NULL,
+    `name` VARCHAR(255) NOT NULL,
+    `description` TEXT DEFAULT NULL,
+    `capacity` INT DEFAULT 0,
+    `license_plate` VARCHAR(50) DEFAULT NULL COMMENT 'Only for vehicles',
+    `status` ENUM('available', 'maintenance') DEFAULT 'available',
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX (`type`),
+    INDEX (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `bookings` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `user_id` INT NOT NULL,
+    `resource_id` INT NOT NULL,
+    `title` VARCHAR(255) NOT NULL COMMENT 'Purpose/Topic',
+    `details` TEXT DEFAULT NULL,
+    `start_time` DATETIME NOT NULL,
+    `end_time` DATETIME NOT NULL,
+    `participants_count` INT DEFAULT 0,
+    `status` ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+    `rejection_reason` TEXT DEFAULT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`resource_id`) REFERENCES `booking_resources`(`id`) ON DELETE CASCADE,
+    INDEX (`status`),
+    INDEX (`start_time`),
+    INDEX (`end_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT IGNORE INTO `booking_resources` (`type`, `name`, `description`, `capacity`, `status`) VALUES
+('room', 'ห้องประชุมอาคาร 1', 'ห้องประชุมขนาดใหญ่ พร้อมโปรเจคเตอร์', 50, 'available'),
+('room', 'ห้องสมุด', 'โซนเงียบสงบ', 30, 'available');
+
+INSERT IGNORE INTO `booking_resources` (`type`, `name`, `description`, `capacity`, `license_plate`, `status`) VALUES
+('vehicle', 'รถตู้โรงเรียน (1)', 'รถตู้ Toyota Commuter', 12, 'กข-1234', 'available'),
+('vehicle', 'รถบัส (1)', 'รถบัสรับส่งนักเรียน', 40, 'มฐ-5678', 'available');
+
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- Helpdesk / Maintenance Tables
+CREATE TABLE IF NOT EXISTS `repair_categories` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(100) NOT NULL,
+    `slug` VARCHAR(100) NOT NULL UNIQUE,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `repair_requests` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `reporter_id` INT NOT NULL,
+    `category_id` INT NOT NULL,
+    `location` VARCHAR(255) NOT NULL,
+    `description` TEXT NOT NULL,
+    `photos` JSON DEFAULT NULL,
+    `status` ENUM('pending', 'in_progress', 'fixed', 'cancelled') DEFAULT 'pending',
+    `remarks` TEXT DEFAULT NULL,
+    `resolved_at` DATETIME DEFAULT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (`reporter_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`category_id`) REFERENCES `repair_categories`(`id`) ON DELETE CASCADE,
+    INDEX (`status`),
+    INDEX (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT IGNORE INTO `repair_categories` (`name`, `slug`) VALUES
+('ระบบไฟฟ้า', 'electrical'),
+('คอมพิวเตอร์/ไอที', 'it'),
+('ระบบเครือข่าย/เน็ตเวิร์ก', 'network'),
+('อุปกรณ์สำนักงาน/ครุภัณฑ์', 'office-supplies'),
+('อาคารสถานที่', 'building'),
+('ระบบประปา', 'plumbing');

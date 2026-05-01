@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?? 'Dashboard' ?> - School CMS Mix V2.6</title>
+    <title><?= $title ?? 'Dashboard' ?> - School CMS Mix V2.7</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -24,8 +24,15 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.tailwind.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.tailwind.min.css">
+    
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.tailwind.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.tailwind.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
     <style>
         :root {
             --primary-color: <?= \Core\Database::getSetting('primary_color', '#1d4ed8') ?>;
@@ -48,24 +55,26 @@
     <style>
         /* Global Premium DataTables Styling */
         .dataTables_wrapper .dataTables_filter input {
-            @apply bg-slate-50 border-none rounded-xl text-sm px-4 py-2 focus:ring-2 focus:ring-primary/10 ml-2;
+            @apply bg-slate-50 border border-slate-100 rounded-xl text-sm px-4 py-2 focus:ring-2 focus:ring-primary/10 ml-2 transition-all;
             width: 250px;
         }
         .dataTables_wrapper .dataTables_length select {
-            @apply bg-slate-50 border-none rounded-xl text-sm px-8 py-2 focus:ring-2 focus:ring-primary/10 mx-2;
+            @apply bg-slate-50 border border-slate-100 rounded-xl text-sm px-8 py-2 focus:ring-2 focus:ring-primary/10 mx-2 transition-all;
         }
         .dataTables_wrapper .dataTables_info {
-            @apply text-sm text-slate-500 font-medium;
+            @apply text-[11px] font-bold text-slate-400 uppercase tracking-widest;
+            padding-top: 1.5rem;
         }
         .dataTables_wrapper .dataTables_paginate {
-            @apply flex items-center gap-2 mt-6;
+            @apply flex items-center gap-1 mt-6;
         }
         .dataTables_wrapper .dataTables_paginate .paginate_button {
-            @apply px-4 py-2 text-sm font-bold rounded-xl transition-all cursor-pointer border border-slate-200 bg-white text-slate-600 !important;
+            @apply px-4 py-2 text-sm font-bold rounded-xl transition-all cursor-pointer border border-slate-100 bg-white text-slate-600 !important;
             display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
             min-width: 40px;
+            margin: 0 2px !important;
         }
         .dataTables_wrapper .dataTables_paginate .paginate_button.current {
             @apply bg-primary text-white shadow-lg shadow-primary/20 border-primary !important;
@@ -74,11 +83,48 @@
             @apply bg-slate-50 text-primary border-primary/30 !important;
         }
         .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-            @apply text-slate-300 border-slate-100 bg-slate-50 cursor-not-allowed !important;
+            @apply text-slate-200 border-slate-50 bg-slate-50/50 cursor-not-allowed !important;
         }
-        .dataTables_wrapper .dataTables_paginate .paginate_button.previous,
-        .dataTables_wrapper .dataTables_paginate .paginate_button.next {
-            @apply px-6; 
+        
+        /* Table Header Styling */
+        table.dataTable thead th {
+            @apply px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] bg-slate-50/50 border-b border-slate-100 !important;
+        }
+        table.dataTable tbody td {
+            @apply px-6 py-4 text-sm text-slate-600 border-b border-slate-50 transition-colors !important;
+        }
+        table.dataTable tbody tr:hover td {
+            @apply bg-slate-50/50 !important;
+        }
+
+        /* Buttons Styling */
+        .dt-buttons {
+            @apply flex gap-2 mb-2 md:mb-0;
+        }
+        .dt-button {
+            @apply !bg-white !border-slate-100 !rounded-xl !px-4 !py-2 !text-xs !font-bold !text-slate-600 !shadow-sm !transition-all hover:!bg-slate-50 hover:!border-slate-200 !m-0;
+        }
+        .buttons-excel {
+            @apply !bg-emerald-50 !text-emerald-600 !border-emerald-100 hover:!bg-emerald-100 !important;
+        }
+        .buttons-print {
+            @apply !bg-blue-50 !text-blue-600 !border-blue-100 hover:!bg-blue-100 !important;
+        }
+
+        /* Global SweetAlert2 Button Styling Fix */
+        .swal2-container .swal2-styled.swal2-confirm {
+            background-color: #2563eb !important;
+            color: #ffffff !important;
+            border-radius: 0.75rem !important;
+            padding: 0.625rem 1.5rem !important;
+            font-weight: 600 !important;
+        }
+        .swal2-container .swal2-styled.swal2-cancel {
+            background-color: #64748b !important;
+            color: #ffffff !important;
+            border-radius: 0.75rem !important;
+            padding: 0.625rem 1.5rem !important;
+            font-weight: 600 !important;
         }
     </style>
 </head>
@@ -91,7 +137,7 @@
     </button>
 
     <?php 
-        $siteName = \Core\Database::getSetting('site_name', 'School CMS Mix V2.6'); 
+        $siteName = \Core\Database::getSetting('site_name', 'School CMS Mix V2.7'); 
         $siteLogo = \Core\Database::getSetting('site_logo', '');
         $primaryColor = \Core\Database::getSetting('primary_color', '#1d4ed8');
         $currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -125,6 +171,23 @@
             $unreadComplaintCount = 0;
             if (\Core\Security::hasRole(['admin', 'director'])) {
                 $unreadComplaintCount = (int)\Core\Database::fetchColumn("SELECT COUNT(*) FROM complaints WHERE status = 'unread'");
+                // Count pending repairs for badge
+                $pendingRepairCount = 0;
+                try {
+                    $pendingRepairCount = (int)\Core\Database::fetchColumn("SELECT COUNT(*) FROM repair_requests WHERE status = 'pending'");
+                } catch (\Exception $e) {
+                    $pendingRepairCount = 0;
+                }
+            }
+
+            // Check for pending bookings (for Admin/General Admin)
+            $pendingBookingCount = 0;
+            if (\Core\Security::checkRole(['admin', 'officer', 'editor'])) {
+                try {
+                    $pendingBookingCount = (int)\Core\Database::fetchColumn("SELECT COUNT(*) FROM bookings WHERE status = 'pending'");
+                } catch (\Exception $e) {
+                    $pendingBookingCount = 0;
+                }
             }
         }
     ?>
@@ -228,6 +291,28 @@
                     ['url' => '/calendar', 'label' => 'ปฏิทินวิชาการ', 'icon' => 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2V12a2 2 0 002 2z'],
                 ]);
 
+                // Resource Booking System Menu
+                $bookingSubmenu = [
+                    ['url' => '/booking', 'label' => 'ปฏิทินการจอง', 'icon' => 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2V12a2 2 0 002 2z'],
+                    ['url' => '/booking/myBookings', 'label' => 'การจองของฉัน', 'icon' => 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'],
+                ];
+                if (\Core\Security::checkRole(['admin', 'officer', 'editor'])) {
+                    $bookingSubmenu[] = [
+                        'url' => '/adminBooking/approvals', 
+                        'label' => 'พิจารณาคำขอจอง', 
+                        'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+                        'badge' => $pendingBookingCount > 0 ? $pendingBookingCount : null
+                    ];
+                    $bookingSubmenu[] = ['url' => '/adminBooking/resources', 'label' => 'จัดการทรัพยากร', 'icon' => 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4'];
+                }
+
+                $menuItems[] = [
+                    'label' => 'ระบบจองทรัพยากร', 
+                    'icon' => 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2V12a2 2 0 002 2z', 
+                    'badge' => $pendingBookingCount > 0 ? $pendingBookingCount : null,
+                    'submenu' => $bookingSubmenu
+                ];
+
                 // Document Submission System Menu
                 $revisionCount = 0;
                 $pendingReviewCount = 0;
@@ -262,6 +347,27 @@
                     'icon' => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', 
                     'badge' => isset($revisionCount) && $revisionCount > 0 ? $revisionCount : null,
                     'submenu' => $submissionSubmenu
+                ];
+
+                // Helpdesk Menu
+                $helpdeskSubmenu = [
+                    ['url' => '/helpdesk', 'label' => 'แจ้งซ่อมใหม่', 'icon' => 'M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z'],
+                    ['url' => '/helpdesk/my-repairs', 'label' => 'ประวัติการแจ้งซ่อม', 'icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'],
+                ];
+                if (\Core\Security::checkRole(['admin', 'staff', 'officer'])) {
+                    $helpdeskSubmenu[] = [
+                        'url' => '/admin/helpdesk', 
+                        'label' => 'จัดการรายการแจ้งซ่อม', 
+                        'icon' => 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z',
+                        'badge' => $pendingRepairCount > 0 ? $pendingRepairCount : null
+                    ];
+                }
+
+                $menuItems[] = [
+                    'label' => 'ระบบแจ้งซ่อม', 
+                    'icon' => 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', 
+                    'badge' => (\Core\Security::checkRole(['admin', 'staff', 'officer']) && $pendingRepairCount > 0) ? $pendingRepairCount : null,
+                    'submenu' => $helpdeskSubmenu
                 ];
 
                 if (\Core\Security::checkRole('admin')) {
@@ -405,7 +511,7 @@
                 <div class="p-4 bg-slate-900 rounded-3xl text-white relative overflow-hidden">
                     <div class="absolute -top-10 -right-10 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
                     <p class="text-[10px] font-bold text-blue-300 uppercase tracking-[0.2em] mb-1">Status</p>
-                    <p class="text-xs font-bold leading-relaxed">System v2.6 Stable</p>
+                    <p class="text-xs font-bold leading-relaxed">System v2.7 Stable</p>
                     <a href="<?= url('/') ?>" target="_blank" class="mt-4 inline-flex items-center text-[10px] font-bold hover:text-blue-300 transition-colors">
                         VIEW LIVE SITE <svg class="w-2.5 h-2.5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </a>
@@ -468,7 +574,7 @@
             <footer class="mt-20 py-10 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center text-slate-400">
                 <div class="flex items-center space-x-2 text-sm font-bold">
                     <span class="text-slate-900 outfit tracking-tight text-lg">School CMS Mix</span>
-                    <span class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[10px] uppercase tracking-widest">v2.6</span>
+                    <span class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[10px] uppercase tracking-widest">v2.7</span>
                 </div>
                 <div class="mt-6 md:mt-0 text-center md:text-right">
                     <div class="text-[11px] font-bold uppercase tracking-wider text-slate-300">Development & Copyright &copy; 2569</div>
@@ -493,10 +599,24 @@
     <script>
         function initPremiumDataTable(selector, options = {}) {
             const defaultOptions = {
-                dom: '<"flex flex-wrap items-center justify-between gap-4 mb-6 p-6 pb-0"lf>rt<"flex flex-wrap items-center justify-between gap-4 mt-6 p-6 pt-0"ip>',
+                dom: '<"flex flex-col md:flex-row items-center justify-between gap-4 mb-6"Bf>rt<"flex flex-col md:flex-row items-center justify-between gap-4 mt-6"ip>',
+                buttons: [
+                    {
+                        extend: 'excel',
+                        text: '<i class="fa fa-file-excel-o mr-2"></i> ส่งออก Excel',
+                        className: 'buttons-excel',
+                        titleAttr: 'Export to Excel'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print mr-2"></i> พิมพ์',
+                        className: 'buttons-print',
+                        titleAttr: 'Print Table'
+                    }
+                ],
                 language: {
                     url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/th.json',
-                    search: "ค้นหา:",
+                    search: "",
                     searchPlaceholder: "ค้นหาข้อมูล...",
                     lengthMenu: "แสดง _MENU_ รายการ",
                     info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
@@ -506,23 +626,9 @@
                     paginate: {
                         first: '<i class="fa fa-angle-double-left"></i>',
                         last: '<i class="fa fa-angle-double-right"></i>',
-                        next: 'ถัดไป',
-                        previous: 'ก่อนหน้า'
+                        next: '<i class="fa fa-angle-right"></i>',
+                        previous: '<i class="fa fa-angle-left"></i>'
                     }
-                },
-                drawCallback: function() {
-                    $('.dataTables_paginate .paginate_button').each(function() {
-                        $(this).removeClass('px-4 py-2 border rounded-md'); 
-                        $(this).addClass('inline-flex items-center justify-center px-4 py-2 text-sm font-bold rounded-xl transition-all cursor-pointer border mx-0.5');
-                        
-                        if ($(this).hasClass('current')) {
-                            $(this).addClass('bg-primary text-white shadow-lg shadow-primary/20 border-primary').removeClass('bg-white text-slate-600 border-slate-200');
-                        } else if ($(this).hasClass('disabled')) {
-                            $(this).addClass('text-slate-300 border-slate-100 bg-slate-50 cursor-not-allowed').removeClass('bg-white text-slate-600 border-slate-200');
-                        } else {
-                            $(this).addClass('bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-primary hover:border-primary/30');
-                        }
-                    });
                 }
             };
             return $(selector).DataTable($.extend(true, defaultOptions, options));

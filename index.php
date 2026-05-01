@@ -212,5 +212,32 @@ $router->add('admin/complaints/view', 'Modules\Complaint\Controllers\ComplaintCo
 $router->add('admin/complaints/update-status', 'Modules\Complaint\Controllers\ComplaintController@adminUpdateStatus');
 $router->add('admin/complaints/delete', 'Modules\Complaint\Controllers\ComplaintController@adminDelete');
 
+// Resource Booking System Routes
+$router->add('booking', 'Modules\Booking\Controllers\BookingController@index');
+$router->add('booking/events', 'Modules\Booking\Controllers\BookingController@events');
+$router->add('booking/resourcesByType', 'Modules\Booking\Controllers\BookingController@resourcesByType');
+$router->add('booking/store', 'Modules\Booking\Controllers\BookingController@store');
+$router->add('booking/myBookings', 'Modules\Booking\Controllers\BookingController@myBookings');
+$router->add('booking/cancel', 'Modules\Booking\Controllers\BookingController@cancel');
+
+// Admin Resource Booking Routes
+$router->add('adminBooking/approvals', 'Modules\Booking\Controllers\AdminBookingController@approvals');
+$router->add('adminBooking/updateStatus', 'Modules\Booking\Controllers\AdminBookingController@updateStatus');
+$router->add('adminBooking/resources', 'Modules\Booking\Controllers\AdminBookingController@resources');
+$router->add('adminBooking/storeResource', 'Modules\Booking\Controllers\AdminBookingController@storeResource');
+$router->add('adminBooking/updateResource', 'Modules\Booking\Controllers\AdminBookingController@updateResource');
+$router->add('adminBooking/deleteResource', 'Modules\Booking\Controllers\AdminBookingController@deleteResource');
+
 // 7. Resolve Request
+// Helpdesk / Maintenance Routes
+$router->add('helpdesk', 'Modules\Helpdesk\Controllers\HelpdeskController@index');
+$router->add('helpdesk/my-repairs', 'Modules\Helpdesk\Controllers\HelpdeskController@myRepairs');
+$router->add('helpdesk/store', 'Modules\Helpdesk\Controllers\HelpdeskController@store');
+$router->add('admin/helpdesk', 'Modules\Helpdesk\Controllers\AdminHelpdeskController@dashboard');
+$router->add('admin/helpdesk/update-status', 'Modules\Helpdesk\Controllers\AdminHelpdeskController@updateStatus');
+$router->add('admin/helpdesk/delete-request', 'Modules\Helpdesk\Controllers\AdminHelpdeskController@deleteRequest');
+$router->add('admin/helpdesk/categories', 'Modules\Helpdesk\Controllers\AdminHelpdeskController@categories');
+$router->add('admin/helpdesk/categories/store', 'Modules\Helpdesk\Controllers\AdminHelpdeskController@storeCategory');
+$router->add('admin/helpdesk/categories/delete', 'Modules\Helpdesk\Controllers\AdminHelpdeskController@deleteCategory');
+
 $router->resolve();

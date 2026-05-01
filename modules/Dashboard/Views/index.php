@@ -79,6 +79,36 @@
     </div>
     <?php endif; ?>
 
+    <?php if ($stats['pending_bookings'] > 0 && \Core\Security::checkRole(['admin', 'officer', 'editor'])): ?>
+    <div class="mt-4 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 flex items-center justify-between">
+        <div class="flex items-center">
+            <div class="w-10 h-10 bg-indigo-500 rounded-xl flex items-center justify-center text-white mr-4 shadow-lg shadow-indigo-500/30">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2V12a2 2 0 002 2z"></path></svg>
+            </div>
+            <div>
+                <p class="text-sm font-bold">มีรายการคำขอจองใหม่ที่รออนุมัติ</p>
+                <p class="text-xs opacity-75">จำนวน <?= $stats['pending_bookings'] ?> รายการที่รอการตรวจสอบจากคุณ</p>
+            </div>
+        </div>
+        <a href="<?= url('/adminBooking/approvals') ?>" class="px-4 py-2 bg-white text-blue-700 text-xs font-bold rounded-lg hover:bg-blue-50 transition shadow-sm">พิจารณาคำขอ</a>
+    </div>
+    <?php endif; ?>
+
+    <?php if ($stats['pending_repairs'] > 0 && \Core\Security::checkRole(['admin', 'staff', 'officer'])): ?>
+    <div class="mt-4 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 flex items-center justify-between">
+        <div class="flex items-center">
+            <div class="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center text-white mr-4 shadow-lg shadow-amber-500/30">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 011-1h1a2 2 0 100-4H7a1 1 0 01-1-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg>
+            </div>
+            <div>
+                <p class="text-sm font-bold">มีรายการแจ้งซ่อมใหม่ที่รอตรวจสอบ</p>
+                <p class="text-xs opacity-75">จำนวน <?= $stats['pending_repairs'] ?> รายการที่ต้องการการดำเนินการจากช่าง</p>
+            </div>
+        </div>
+        <a href="<?= url('/admin/helpdesk') ?>" class="px-4 py-2 bg-white text-blue-700 text-xs font-bold rounded-lg hover:bg-blue-50 transition shadow-sm">ดูรายการแจ้งซ่อม</a>
+    </div>
+    <?php endif; ?>
+
     <div class="mt-6 flex space-x-4">
         <a href="<?= url('/pages/create') ?>" class="px-5 py-2.5 bg-white text-blue-700 font-semibold rounded-xl text-sm hover:bg-blue-50 transition shadow-sm">สร้างหน้าใหม่</a>
         <a href="<?= url('/news/create') ?>" class="px-5 py-2.5 bg-blue-500 text-white font-semibold rounded-xl text-sm hover:bg-blue-400 transition shadow-sm">ลงข่าวใหม่</a>

@@ -32,7 +32,21 @@ class DashboardController extends Controller
                 AND r.status = 'unread' 
                 AND d.status = 'active'", 
                 [$_SESSION['personnel_id'] ?? 0, $_SESSION['personnel_id'] ?? 0]
-            )['count']
+            )['count'],
+            'pending_bookings' => (function() {
+                try {
+                    return \Core\Database::fetch("SELECT COUNT(*) as count FROM bookings WHERE status = 'pending'")['count'];
+                } catch (\Exception $e) {
+                    return 0;
+                }
+            })(),
+            'pending_repairs' => (function() {
+                try {
+                    return \Core\Database::fetch("SELECT COUNT(*) as count FROM repair_requests WHERE status = 'pending'")['count'];
+                } catch (\Exception $e) {
+                    return 0;
+                }
+            })()
         ];
 
         $this->renderWithLayout('Dashboard.Views.index', 'themes.admin.layout', [

@@ -388,14 +388,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Location DataTable
-    $('#locationDataTable').DataTable({
+    initPremiumDataTable('#locationDataTable', {
         pageLength: 20,
-        lengthMenu: [10, 20, 50, 100],
-        language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/th.json',
-            search: "_INPUT_",
-            searchPlaceholder: "ค้นหาพื้นที่..."
-        },
         order: [[4, 'desc']], // Sort by student count (column index 4)
         columnDefs: [
             { orderable: false, targets: 0 } // Disable sorting for sequence number

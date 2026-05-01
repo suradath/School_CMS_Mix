@@ -72,24 +72,6 @@
 
         initPremiumDataTable('#report-table', {
             pageLength: 25,
-            dom: '<"flex flex-col md:flex-row justify-between items-center mb-6 gap-4"fB>rt<"flex flex-col md:flex-row justify-between items-center mt-6 gap-4"ip>',
-            buttons: [
-                {
-                    extend: 'excel',
-                    text: '<i class="fa fa-file-excel-o mr-1"></i> Excel',
-                    className: 'px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold shadow-lg shadow-emerald-200'
-                },
-                {
-                    extend: 'pdf',
-                    text: '<i class="fa fa-file-pdf-o mr-1"></i> PDF',
-                    className: 'px-4 py-2 bg-rose-600 text-white rounded-xl text-xs font-bold shadow-lg shadow-rose-200'
-                },
-                {
-                    extend: 'print',
-                    text: '<i class="fa fa-print mr-1"></i> พิมพ์',
-                    className: 'px-4 py-2 bg-slate-800 text-white rounded-xl text-xs font-bold shadow-lg shadow-slate-200'
-                }
-            ],
             columnDefs: [
                 { targets: [0, 3, 4, 5, 6, 7, 8, 9], className: 'text-center' },
                 { orderable: false, targets: [9] }
@@ -97,10 +79,3 @@
         });
     }
 </script>
-
-<style>
-    .dt-buttons {
-        display: flex !important;
-        gap: 0.5rem !important;
-    }
-</style>

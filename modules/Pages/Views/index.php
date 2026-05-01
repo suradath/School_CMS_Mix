@@ -1,10 +1,14 @@
-<div class="mb-6 flex justify-between items-center">
-    <a href="<?= url('/pages/create') ?>" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition shadow-md">
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-        สร้างหน้าใหม่
+<div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+    <div>
+        <h2 class="text-3xl font-black text-slate-800 heading-font">จัดการหน้าเว็บ</h2>
+        <p class="text-slate-500 font-medium">สร้างและแก้ไขหน้าเนื้อหาแบบคงที่ (Static Pages)</p>
+    </div>
+    <a href="<?= url('/pages/create') ?>" class="inline-flex items-center px-6 py-3 bg-primary text-white text-sm font-bold rounded-2xl hover:shadow-lg hover:shadow-primary/30 transition-all">
+        <i class="fa fa-plus mr-2"></i> สร้างหน้าใหม่
     </a>
 </div>
 
+<div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden p-8">
     <div class="overflow-x-auto">
         <table id="pagesTable" class="w-full text-left">
             <thead>
