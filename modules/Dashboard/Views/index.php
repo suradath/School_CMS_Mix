@@ -109,6 +109,21 @@
     </div>
     <?php endif; ?>
 
+    <?php if (($stats['bad_discipline_count'] ?? 0) > 0 && \Core\Security::checkRole(['admin', 'discipline_staff'])): ?>
+    <div class="mt-4 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 flex items-center justify-between">
+        <div class="flex items-center">
+            <div class="w-10 h-10 bg-rose-600 rounded-xl flex items-center justify-center text-white mr-4 shadow-lg shadow-rose-600/30">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </div>
+            <div>
+                <p class="text-sm font-bold">พบนักเรียนที่มีคะแนนพฤติกรรมติดลบ</p>
+                <p class="text-xs opacity-75">จำนวน <?= $stats['bad_discipline_count'] ?> คน ที่อาจต้องการการดูแลเป็นพิเศษ</p>
+            </div>
+        </div>
+        <a href="<?= url('/discipline') ?>" class="px-4 py-2 bg-white text-blue-700 text-xs font-bold rounded-lg hover:bg-blue-50 transition shadow-sm">ตรวจสอบคะแนน</a>
+    </div>
+    <?php endif; ?>
+
     <div class="mt-6 flex space-x-4">
         <a href="<?= url('/pages/create') ?>" class="px-5 py-2.5 bg-white text-blue-700 font-semibold rounded-xl text-sm hover:bg-blue-50 transition shadow-sm">สร้างหน้าใหม่</a>
         <a href="<?= url('/news/create') ?>" class="px-5 py-2.5 bg-blue-500 text-white font-semibold rounded-xl text-sm hover:bg-blue-400 transition shadow-sm">ลงข่าวใหม่</a>

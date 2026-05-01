@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /**
- * School CMS Mix V2.7 Entry Point
+ * School CMS Mix V2.8 Entry Point
  */
 
 // 1. Error Reporting
@@ -240,4 +240,31 @@ $router->add('admin/helpdesk/categories', 'Modules\Helpdesk\Controllers\AdminHel
 $router->add('admin/helpdesk/categories/store', 'Modules\Helpdesk\Controllers\AdminHelpdeskController@storeCategory');
 $router->add('admin/helpdesk/categories/delete', 'Modules\Helpdesk\Controllers\AdminHelpdeskController@deleteCategory');
 
+// Student Discipline System Routes
+$router->add('discipline', 'Modules\Discipline\Controllers\DisciplineController@index');
+$router->add('discipline/categories', 'Modules\Discipline\Controllers\DisciplineController@categories');
+$router->add('discipline/saveCategory', 'Modules\Discipline\Controllers\DisciplineController@saveCategory');
+$router->add('discipline/deleteCategory', 'Modules\Discipline\Controllers\DisciplineController@deleteCategory');
+$router->add('discipline/record', 'Modules\Discipline\Controllers\DisciplineController@record');
+$router->add('discipline/storeRecord', 'Modules\Discipline\Controllers\DisciplineController@storeRecord');
+$router->add('discipline/history', 'Modules\Discipline\Controllers\DisciplineController@history');
+$router->add('discipline/deleteLog', 'Modules\Discipline\Controllers\DisciplineController@deleteLog');
+$router->add('my-discipline', 'Modules\Discipline\Controllers\StudentDisciplineController@index');
+
+// PLC (Professional Learning Community) System Routes
+$router->add('plc', 'Modules\PLC\Controllers\PLCController@index');
+$router->add('plc/report', 'Modules\PLC\Controllers\PLCController@report');
+$router->add('plc/groups', 'Modules\PLC\Controllers\PLCGroupController@groups');
+$router->add('plc/groups/store', 'Modules\PLC\Controllers\PLCGroupController@storeGroup');
+$router->add('plc/group/view', 'Modules\PLC\Controllers\PLCGroupController@view');
+$router->add('plc/group/add-member', 'Modules\PLC\Controllers\PLCGroupController@addMember');
+$router->add('plc/group/request-join', 'Modules\PLC\Controllers\PLCGroupController@requestJoin');
+$router->add('plc/group/approve-member', 'Modules\PLC\Controllers\PLCGroupController@approveMember');
+$router->add('plc/meeting/store', 'Modules\PLC\Controllers\PLCGroupController@storeMeeting');
+$router->add('plc/meeting/approve', 'Modules\PLC\Controllers\PLCGroupController@approveMeeting');
+$router->add('plc/report/export', 'Modules\PLC\Controllers\PLCGroupController@exportExcel');
+$router->add('plc/admin/reports', 'Modules\PLC\Controllers\PLCController@adminReports');
+
 $router->resolve();
+
+

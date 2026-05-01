@@ -33,10 +33,12 @@ class UserManagementController extends Controller
     public function create(): void
     {
         $personnel = Database::fetchAll("SELECT id, name FROM personnel ORDER BY name ASC");
+        $students = Database::fetchAll("SELECT id, first_name, last_name, student_code FROM students ORDER BY first_name ASC");
         $allRoles = User::getAvailableRoles();
         $this->renderWithLayout('Auth.Views.management.edit', 'themes.admin.layout', [
             'title' => 'เพิ่มผู้ใช้งานใหม่',
             'personnel' => $personnel,
+            'students' => $students,
             'allRoles' => $allRoles
         ]);
     }
@@ -52,6 +54,7 @@ class UserManagementController extends Controller
             'email' => $_POST['email'],
             'full_name' => $_POST['full_name'],
             'personnel_id' => $_POST['personnel_id'],
+            'student_id' => $_POST['student_id'] ?? null,
             'roles' => $_POST['roles'] ?? [],
             'status' => $_POST['status']
         ];
@@ -71,11 +74,13 @@ class UserManagementController extends Controller
         }
 
         $personnel = Database::fetchAll("SELECT id, name FROM personnel ORDER BY name ASC");
+        $students = Database::fetchAll("SELECT id, first_name, last_name, student_code FROM students ORDER BY first_name ASC");
         $allRoles = User::getAvailableRoles();
         $this->renderWithLayout('Auth.Views.management.edit', 'themes.admin.layout', [
             'title' => 'แก้ไขผู้ใช้งาน',
             'user' => $user,
             'personnel' => $personnel,
+            'students' => $students,
             'allRoles' => $allRoles
         ]);
     }
@@ -89,6 +94,7 @@ class UserManagementController extends Controller
             'email' => $_POST['email'],
             'full_name' => $_POST['full_name'],
             'personnel_id' => $_POST['personnel_id'],
+            'student_id' => $_POST['student_id'] ?? null,
             'roles' => $_POST['roles'] ?? [],
             'status' => $_POST['status'],
             'password' => $_POST['password'] ?? ''

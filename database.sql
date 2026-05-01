@@ -1,5 +1,5 @@
--- Database Schema for School CMS Mix V2.7
--- Updated: 2026-05-01 (Added Booking System - Rooms & Vehicles)
+-- Database Schema for School CMS Mix V2.8
+-- Updated: 2026-05-01 (Added Student Discipline & PLC Systems)
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
@@ -531,7 +531,104 @@ INSERT IGNORE INTO `booking_resources` (`type`, `name`, `description`, `capacity
 ('vehicle', 'รถตู้โรงเรียน (1)', 'รถตู้ Toyota Commuter', 12, 'กข-1234', 'available'),
 ('vehicle', 'รถบัส (1)', 'รถบัสรับส่งนักเรียน', 40, 'มฐ-5678', 'available');
 
+-- 21. Student Discipline System
+INSERT IGNORE INTO `roles` (`name`, `slug`, `description`) 
+VALUES ('เจ้าหน้าที่ฝ่ายปกครอง', 'discipline_staff', 'ผู้ดูแลระบบงานปกครองและพฤติกรรมนักเรียน');
+
+CREATE TABLE IF NOT EXISTS `discipline_categories` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL,
+    `points` INT NOT NULL,
+    `type` ENUM('good', 'bad') NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `student_discipline_logs` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `student_id` INT NOT NULL,
+    `category_id` INT DEFAULT NULL,
+    `points_affected` INT NOT NULL,
+    `remarks` TEXT DEFAULT NULL,
+    `is_auto` TINYINT(1) DEFAULT 0,
+    `created_by` INT DEFAULT NULL,
+    `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+    `deleted_by` INT DEFAULT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`student_id`) REFERENCES `students`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`category_id`) REFERENCES `discipline_categories`(`id`) ON DELETE SET NULL,
+    FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON DELETE SET NULL,
+    FOREIGN KEY (`deleted_by`) REFERENCES `users`(`id`) ON DELETE SET NULL,
+    INDEX (`student_id`),
+    INDEX (`category_id`),
+    INDEX (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT IGNORE INTO `discipline_categories` (`id`, `name`, `points`, `type`) VALUES 
+(1, 'มาสาย (อัตโนมัติ)', -5, 'bad'),
+(2, 'ขาดเรียน (อัตโนมัติ)', -10, 'bad'),
+(3, 'จิตอาสาทำความสะอาด', 5, 'good'),
+(4, 'ช่วยงานห้องสมุด', 10, 'good'),
+(5, 'ทะเลาะวิวาท', -20, 'bad');
+
+-- 22. PLC (Professional Learning Community) System
+CREATE TABLE IF NOT EXISTS `plc_groups` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL,
+    `description` TEXT,
+    `target_goal` INT DEFAULT 50,
+    `academic_year` VARCHAR(10) NOT NULL,
+    `created_by` INT NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `plc_group_members` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `group_id` INT NOT NULL,
+    `user_id` INT NOT NULL,
+    `role` ENUM('head', 'member') DEFAULT 'member',
+    `status` ENUM('pending', 'approved') DEFAULT 'approved',
+    `joined_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`group_id`) REFERENCES `plc_groups`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+    UNIQUE KEY `unique_membership` (`group_id`, `user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `plc_meetings` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `group_id` INT NOT NULL,
+    `topic` VARCHAR(255) NOT NULL,
+    `problem_topic` TEXT,
+    `solution` TEXT,
+    `result` TEXT,
+    `hours` DECIMAL(5,2) NOT NULL,
+    `date` DATE NOT NULL,
+    `status` ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+    `approved_by` INT DEFAULT NULL,
+    `approved_at` DATETIME DEFAULT NULL,
+    `created_by` INT NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`group_id`) REFERENCES `plc_groups`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`approved_by`) REFERENCES `users`(`id`) ON DELETE SET NULL,
+    FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `plc_meeting_materials` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `meeting_id` INT NOT NULL,
+    `file_name` VARCHAR(255) NOT NULL,
+    `file_path` VARCHAR(255) NOT NULL,
+    `file_type` VARCHAR(50),
+    `uploaded_by` INT NOT NULL,
+    `uploaded_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`meeting_id`) REFERENCES `plc_meetings`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`uploaded_by`) REFERENCES `users`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 SET FOREIGN_KEY_CHECKS = 1;
+
+
 
 -- Helpdesk / Maintenance Tables
 CREATE TABLE IF NOT EXISTS `repair_categories` (

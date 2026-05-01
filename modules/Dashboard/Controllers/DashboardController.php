@@ -46,6 +46,21 @@ class DashboardController extends Controller
                 } catch (\Exception $e) {
                     return 0;
                 }
+            })(),
+            'bad_discipline_count' => (function() {
+                try {
+                    return \Core\Database::fetch("
+                        SELECT COUNT(*) as count FROM (
+                            SELECT student_id, SUM(points_affected) as total 
+                            FROM student_discipline_logs 
+                            WHERE deleted_at IS NULL 
+                            GROUP BY student_id 
+                            HAVING total < 0
+                        ) as sub
+                    ")['count'];
+                } catch (\Exception $e) {
+                    return 0;
+                }
             })()
         ];
 

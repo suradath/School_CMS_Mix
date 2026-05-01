@@ -98,6 +98,11 @@ class Attendance
             
             foreach ($records as $studentId => $status) {
                 Database::query($sql, [$date, $courseId, $level, $room, $studentId, $status]);
+                
+                // Integrate with Discipline System
+                if (in_array($status, ['late', 'absent'])) {
+                    \Modules\Discipline\Models\Discipline::triggerAutoDeduction((int)$studentId, $status, $date);
+                }
             }
 
             $pdo->commit();

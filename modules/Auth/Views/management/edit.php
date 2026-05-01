@@ -56,7 +56,21 @@
                             <option value="<?= $p['id'] ?>" <?= (isset($user) && $user['personnel_id'] == $p['id']) ? 'selected' : '' ?>><?= $p['name'] ?></option>
                         <?php endforeach; ?>
                     </select>
-                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tight">* ใช้สำหรับการตรวจสอบสิทธิ์ในกลุ่มสาระฯ</p>
+                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tight">* สำหรับเจ้าหน้าที่/ครู</p>
+                </div>
+
+                <!-- Student Mapping -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">เชื่อมโยงกับข้อมูลนักเรียน</label>
+                    <select name="student_id" class="w-full px-4 py-3 rounded-2xl border border-gray-100 bg-slate-50 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-sm appearance-none">
+                        <option value="">-- ไม่ระบุ --</option>
+                        <?php foreach ($students as $s): ?>
+                            <option value="<?= $s['id'] ?>" <?= (isset($user) && ($user['student_id'] ?? null) == $s['id']) ? 'selected' : '' ?>>
+                                <?= $s['first_name'] . ' ' . $s['last_name'] ?> (<?= $s['student_code'] ?>)
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tight">* สำหรับนักเรียน/ผู้ปกครอง</p>
                 </div>
 
                 <!-- Status -->
