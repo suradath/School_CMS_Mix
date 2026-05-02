@@ -338,7 +338,7 @@ INSERT INTO `menus` (`title`, `url`, `icon`, `sort_order`) VALUES
 ('หน้าแรก', '/', 'fa-home', 1),
 ('ข่าวสาร', '/news-all', 'fa-newspaper-o', 2),
 ('บุคลากร', '/personnel-view', 'fa-users', 3),
-('ภาพกิจกรรม', '/gallery-view', 'fa-picture-o', 4);
+('ภาพกิจกรรม', '/gallery-view', 'fa-picture-o', 4),
 ('รับเรื่องร้องเรียน', '/complaint', 'fa-commenting-o', 5);
 
 INSERT INTO `settings` (`setting_key`, `setting_value`, `category`) VALUES 

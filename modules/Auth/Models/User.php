@@ -60,15 +60,14 @@ class User
             Database::beginTransaction();
 
             $userId = Database::insert("
-                INSERT INTO users (username, password, email, full_name, personnel_id, student_id, status) 
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO users (username, password, email, full_name, personnel_id, status) 
+                VALUES (?, ?, ?, ?, ?, ?)
             ", [
                 $data['username'],
                 password_hash($data['password'], PASSWORD_DEFAULT),
                 $data['email'],
                 $data['full_name'],
                 $data['personnel_id'] ?: null,
-                $data['student_id'] ?: null,
                 $data['status'] ?: 'active'
             ]);
 
@@ -80,7 +79,7 @@ class User
             return $userId;
         } catch (\Exception $e) {
             Database::rollBack();
-            return false;
+            throw $e;
         }
     }
 
@@ -96,20 +95,18 @@ class User
                 $data['email'],
                 $data['full_name'],
                 $data['personnel_id'] ?: null,
-                $data['student_id'] ?: null,
                 $data['status'],
                 $id
             ];
             
-            $sql = "UPDATE users SET email = ?, full_name = ?, personnel_id = ?, student_id = ?, status = ? WHERE id = ?";
+            $sql = "UPDATE users SET email = ?, full_name = ?, personnel_id = ?, status = ? WHERE id = ?";
             
             if (!empty($data['password'])) {
-                $sql = "UPDATE users SET email = ?, full_name = ?, personnel_id = ?, student_id = ?, status = ?, password = ? WHERE id = ?";
+                $sql = "UPDATE users SET email = ?, full_name = ?, personnel_id = ?, status = ?, password = ? WHERE id = ?";
                 $params = [
                     $data['email'],
                     $data['full_name'],
                     $data['personnel_id'] ?: null,
-                    $data['student_id'] ?: null,
                     $data['status'],
                     password_hash($data['password'], PASSWORD_DEFAULT),
                     $id

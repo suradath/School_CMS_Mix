@@ -33,12 +33,12 @@ class UserManagementController extends Controller
     public function create(): void
     {
         $personnel = Database::fetchAll("SELECT id, name FROM personnel ORDER BY name ASC");
-        $students = Database::fetchAll("SELECT id, first_name, last_name, student_code FROM students ORDER BY first_name ASC");
+
         $allRoles = User::getAvailableRoles();
         $this->renderWithLayout('Auth.Views.management.edit', 'themes.admin.layout', [
             'title' => 'เพิ่มผู้ใช้งานใหม่',
             'personnel' => $personnel,
-            'students' => $students,
+
             'allRoles' => $allRoles
         ]);
     }
@@ -54,13 +54,26 @@ class UserManagementController extends Controller
             'email' => $_POST['email'],
             'full_name' => $_POST['full_name'],
             'personnel_id' => $_POST['personnel_id'],
-            'student_id' => $_POST['student_id'] ?? null,
+
             'roles' => $_POST['roles'] ?? [],
             'status' => $_POST['status']
         ];
 
-        User::create($data);
-        $this->redirect('/admin/users');
+
+
+        try {
+            $userId = User::create($data);
+            if ($userId) {
+                $_SESSION['success'] = "เพิ่มผู้ใช้งานเรียบร้อยแล้ว";
+                $this->redirect('/admin/users');
+            } else {
+                $_SESSION['error'] = "ไม่สามารถสร้างบัญชีผู้ใช้ได้ กรุณาลองใหม่อีกครั้ง";
+                $this->redirect('/admin/users/create');
+            }
+        } catch (\Exception $e) {
+            $_SESSION['error'] = "เกิดข้อผิดพลาด: " . $e->getMessage();
+            $this->redirect('/admin/users/create');
+        }
     }
 
     /**
@@ -74,13 +87,13 @@ class UserManagementController extends Controller
         }
 
         $personnel = Database::fetchAll("SELECT id, name FROM personnel ORDER BY name ASC");
-        $students = Database::fetchAll("SELECT id, first_name, last_name, student_code FROM students ORDER BY first_name ASC");
+
         $allRoles = User::getAvailableRoles();
         $this->renderWithLayout('Auth.Views.management.edit', 'themes.admin.layout', [
             'title' => 'แก้ไขผู้ใช้งาน',
             'user' => $user,
             'personnel' => $personnel,
-            'students' => $students,
+
             'allRoles' => $allRoles
         ]);
     }
@@ -94,7 +107,7 @@ class UserManagementController extends Controller
             'email' => $_POST['email'],
             'full_name' => $_POST['full_name'],
             'personnel_id' => $_POST['personnel_id'],
-            'student_id' => $_POST['student_id'] ?? null,
+
             'roles' => $_POST['roles'] ?? [],
             'status' => $_POST['status'],
             'password' => $_POST['password'] ?? ''

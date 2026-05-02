@@ -10,6 +10,20 @@
         </a>
     </div>
 
+    <?php if (isset($_SESSION['error'])): ?>
+    <div class="mx-6 md:mx-8 mb-6 p-4 bg-rose-50 border border-rose-100 rounded-2xl flex items-center text-rose-600">
+        <i class="fa fa-exclamation-triangle mr-3"></i>
+        <p class="text-sm font-bold"><?= $_SESSION['error']; unset($_SESSION['error']); ?></p>
+    </div>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['success'])): ?>
+    <div class="mx-6 md:mx-8 mb-6 p-4 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center text-emerald-600">
+        <i class="fa fa-check-circle mr-3"></i>
+        <p class="text-sm font-bold"><?= $_SESSION['success']; unset($_SESSION['success']); ?></p>
+    </div>
+    <?php endif; ?>
+
     <div class="overflow-x-auto">
         <table id="userTable" class="w-full text-left border-collapse">
             <thead>

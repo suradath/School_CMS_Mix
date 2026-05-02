@@ -23,9 +23,8 @@ class StudentDisciplineController extends Controller
     {
         $userId = (int)$_SESSION['user_id'];
         
-        // Find associated student_id
-        $user = Database::fetch("SELECT student_id FROM users WHERE id = ?", [$userId]);
-        $studentId = (int)($user['student_id'] ?? 0);
+        // Find associated student_id (Feature removed per request)
+        $studentId = 0; // Previously: $user = Database::fetch("SELECT student_id FROM users WHERE id = ?", [$userId]);
 
         if (!$studentId) {
             $this->renderWithLayout('Discipline.Views.no_link', 'themes.admin.layout', [

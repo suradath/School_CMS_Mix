@@ -5,6 +5,20 @@
             <p class="text-sm text-slate-500 mt-1">กรอกข้อมูลบัญชีผู้ใช้งานและกำหนดสิทธิ์การเข้าถึง</p>
         </div>
 
+        <?php if (isset($_SESSION['error'])): ?>
+        <div class="mx-6 md:mx-8 mt-6 p-4 bg-rose-50 border border-rose-100 rounded-2xl flex items-center text-rose-600">
+            <i class="fa fa-exclamation-triangle mr-3"></i>
+            <p class="text-sm font-bold"><?= $_SESSION['error']; unset($_SESSION['error']); ?></p>
+        </div>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['success'])): ?>
+        <div class="mx-6 md:mx-8 mt-6 p-4 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center text-emerald-600">
+            <i class="fa fa-check-circle mr-3"></i>
+            <p class="text-sm font-bold"><?= $_SESSION['success']; unset($_SESSION['success']); ?></p>
+        </div>
+        <?php endif; ?>
+
         <form action="<?= isset($user) ? url('/admin/users/update/' . $user['id']) : url('/admin/users/store') ?>" method="POST" class="p-6 md:p-8 space-y-6">
             <?= \Core\Security::csrf_field() ?>
             
@@ -59,19 +73,7 @@
                     <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tight">* สำหรับเจ้าหน้าที่/ครู</p>
                 </div>
 
-                <!-- Student Mapping -->
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">เชื่อมโยงกับข้อมูลนักเรียน</label>
-                    <select name="student_id" class="w-full px-4 py-3 rounded-2xl border border-gray-100 bg-slate-50 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-sm appearance-none">
-                        <option value="">-- ไม่ระบุ --</option>
-                        <?php foreach ($students as $s): ?>
-                            <option value="<?= $s['id'] ?>" <?= (isset($user) && ($user['student_id'] ?? null) == $s['id']) ? 'selected' : '' ?>>
-                                <?= $s['first_name'] . ' ' . $s['last_name'] ?> (<?= $s['student_code'] ?>)
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tight">* สำหรับนักเรียน/ผู้ปกครอง</p>
-                </div>
+
 
                 <!-- Status -->
                 <div>
