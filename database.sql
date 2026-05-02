@@ -339,6 +339,7 @@ INSERT INTO `menus` (`title`, `url`, `icon`, `sort_order`) VALUES
 ('ข่าวสาร', '/news-all', 'fa-newspaper-o', 2),
 ('บุคลากร', '/personnel-view', 'fa-users', 3),
 ('ภาพกิจกรรม', '/gallery-view', 'fa-picture-o', 4);
+('รับเรื่องร้องเรียน', '/complaint', 'fa-commenting-o', 5);
 
 INSERT INTO `settings` (`setting_key`, `setting_value`, `category`) VALUES 
 ('site_name', 'โรงเรียนของเรา', 'general'),
@@ -663,3 +664,18 @@ INSERT IGNORE INTO `repair_categories` (`name`, `slug`) VALUES
 ('อุปกรณ์สำนักงาน/ครุภัณฑ์', 'office-supplies'),
 ('อาคารสถานที่', 'building'),
 ('ระบบประปา', 'plumbing');
+
+
+CREATE TABLE `user_roles` (
+  `user_id` int(11) NOT NULL,
+  `role_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user_roles`
+--
+
+INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES
+(1, 1),
+(2, 2),
+(2, 3);
