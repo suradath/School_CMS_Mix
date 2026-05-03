@@ -12,7 +12,7 @@
     <div class="overflow-x-auto">
         <table id="pagesTable" class="w-full text-left">
             <thead>
-                <tr class="bg-slate-50/50 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
+                <tr class="bg-slate-50/50 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] heading-font">
                     <th class="px-8 py-5">หัวข้อหน้าเว็บ</th>
                     <th class="px-8 py-5">URL Slug</th>
                     <th class="px-8 py-5">สถานะ</th>
@@ -32,7 +32,7 @@
                                         <i class="fa fa-file-text-o text-xl"></i>
                                     <?php endif; ?>
                                 </div>
-                                <div class="font-bold text-slate-900 outfit line-clamp-1"><?= htmlspecialchars($p['title']) ?></div>
+                                <div class="font-bold text-slate-900 heading-font line-clamp-1 text-base"><?= htmlspecialchars($p['title']) ?></div>
                             </div>
                         </td>
                         <td class="px-8 py-5">
