@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เข้าสู่ระบบ - School CMS Mix V2.8</title>
+    <title>เข้าสู่ระบบ - School CMS Mix V2.9</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&family=K2D:wght@400;600;700&display=swap"
@@ -24,7 +24,7 @@
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="max-w-md w-full bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
         <div class="bg-blue-700 p-6 text-white text-center">
-            <h1 class="text-2xl font-bold">School CMS Mix V2.8</h1>
+            <h1 class="text-2xl font-bold">School CMS Mix V2.9</h1>
             <p class="text-blue-100 text-sm">เข้าสู่ระบบจัดการข้อมูล</p>
         </div>
         <div class="p-8">
@@ -61,7 +61,7 @@
             </form>
         </div>
         <div class="p-4 bg-gray-50 border-t border-gray-100 text-center">
-            <p class="text-xs text-gray-500">&copy; 2026 School CMS Mix V2.8. All rights reserved.</p>
+            <p class="text-xs text-gray-500">&copy; 2026 School CMS Mix V2.9. All rights reserved.</p>
         </div>
     </div>
 </body>

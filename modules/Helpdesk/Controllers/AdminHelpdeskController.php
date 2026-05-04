@@ -13,8 +13,8 @@ class AdminHelpdeskController extends Controller
     public function __construct()
     {
         parent::__construct();
-        // Check for admin or staff role
-        $this->requireRole(['admin', 'staff', 'officer']);
+        // Only admin and staff (General Administration) can manage repairs
+        $this->requireRole(['admin', 'staff']);
         $this->model = new HelpdeskModel();
     }
 

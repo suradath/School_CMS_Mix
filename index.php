@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /**
- * School CMS Mix V2.8 Entry Point
+ * School CMS Mix V2.9 Entry Point
  */
 
 // 1. Error Reporting
@@ -179,6 +179,18 @@ $router->add('students/clear', 'Modules\Students\Controllers\StudentController@c
 // Health & Nutrition Routes
 $router->add('health', 'Modules\Health\Controllers\HealthController@index');
 $router->add('health/data', 'Modules\Health\Controllers\HealthController@data');
+$router->add('admin/health', 'Modules\Health\Controllers\AdminHealthController@dashboard');
+$router->add('admin/health/bmi', 'Modules\Health\Controllers\AdminHealthController@bmi');
+$router->add('admin/health/export-csv', 'Modules\Health\Controllers\AdminHealthController@exportCSV');
+$router->add('admin/health/import-csv', 'Modules\Health\Controllers\AdminHealthController@importCSV');
+$router->add('admin/health/inventory', 'Modules\Health\Controllers\AdminHealthController@inventory');
+$router->add('admin/health/medicine/store', 'Modules\Health\Controllers\AdminHealthController@storeMedicine');
+$router->add('admin/health/medicine/update', 'Modules\Health\Controllers\AdminHealthController@updateMedicine');
+$router->add('admin/health/medicine/delete', 'Modules\Health\Controllers\AdminHealthController@deleteMedicine');
+$router->add('admin/health/student-update', 'Modules\Health\Controllers\AdminHealthController@updateStudentHealth');
+$router->add('admin/health/create-treatment', 'Modules\Health\Controllers\AdminHealthController@createTreatment');
+$router->add('admin/health/store-treatment', 'Modules\Health\Controllers\AdminHealthController@storeTreatment');
+$router->add('admin/health/search-students', 'Modules\Health\Controllers\AdminHealthController@searchStudents');
 
 // Attendance System Routes
 $router->add('attendance', 'Modules\Attendance\Controllers\AttendanceController@index');
@@ -264,6 +276,30 @@ $router->add('plc/meeting/store', 'Modules\PLC\Controllers\PLCGroupController@st
 $router->add('plc/meeting/approve', 'Modules\PLC\Controllers\PLCGroupController@approveMeeting');
 $router->add('plc/report/export', 'Modules\PLC\Controllers\PLCGroupController@exportExcel');
 $router->add('plc/admin/reports', 'Modules\PLC\Controllers\PLCController@adminReports');
+
+// Club Registration System Routes
+$router->add('club', 'Modules\Club\Controllers\ClubController@index');
+$router->add('club/create', 'Modules\Club\Controllers\ClubController@create');
+$router->add('club/store', 'Modules\Club\Controllers\ClubController@store');
+$router->add('club/edit', 'Modules\Club\Controllers\ClubController@edit');
+$router->add('club/update', 'Modules\Club\Controllers\ClubController@update');
+$router->add('club/delete', 'Modules\Club\Controllers\ClubController@delete');
+$router->add('club/attendance', 'Modules\Club\Controllers\ClubController@attendance');
+$router->add('club/attendance/save', 'Modules\Club\Controllers\ClubController@saveAttendance');
+$router->add('club/evaluation', 'Modules\Club\Controllers\ClubController@evaluation');
+$router->add('club/evaluation/save', 'Modules\Club\Controllers\ClubController@saveEvaluation');
+$router->add('club/export', 'Modules\Club\Controllers\ClubController@export');
+$router->add('club/summary', 'Modules\Club\Controllers\ClubController@summary');
+$router->add('club/settings', 'Modules\Club\Controllers\ClubController@settings');
+$router->add('club/settings/update', 'Modules\Club\Controllers\ClubController@updateSettings');
+
+// Student Club Routes
+$router->add('club-login', 'Modules\Club\Controllers\StudentClubController@login');
+$router->add('club-auth', 'Modules\Club\Controllers\StudentClubController@authenticate');
+$router->add('club-logout', 'Modules\Club\Controllers\StudentClubController@logout');
+$router->add('club-dashboard', 'Modules\Club\Controllers\StudentClubController@dashboard');
+$router->add('club-register', 'Modules\Club\Controllers\StudentClubController@register');
+$router->add('club-withdraw', 'Modules\Club\Controllers\StudentClubController@withdraw');
 
 $router->resolve();
 

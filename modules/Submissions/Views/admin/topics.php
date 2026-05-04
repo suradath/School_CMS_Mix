@@ -23,14 +23,7 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-50">
-                <?php if (empty($topics)): ?>
-                    <tr>
-                        <td colspan="6" class="px-8 py-20 text-center text-slate-400">
-                            ยังไม่มีข้อมูลหัวข้อการส่งเอกสารในระบบ
-                        </td>
-                    </tr>
-                <?php else: ?>
-                    <?php foreach ($topics as $t): ?>
+                <?php foreach ($topics as $t): ?>
                         <tr class="hover:bg-slate-50/50 transition-colors">
                             <td class="px-8 py-5 font-medium text-slate-600">
                                 <?= $t['academic_year'] ?> / <?= $t['semester'] ?>
@@ -67,8 +60,7 @@
                                 </div>
                             </td>
                         </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+                <?php endforeach; ?>
             </tbody>
         </table>
     </div>

@@ -1,4 +1,4 @@
-# School CMS Mix V2.8
+# School CMS Mix V2.9
 
 [![PHP Version](https://img.shields.io/badge/php-%3E%3D%208.1-777bb4.svg)](https://www.php.net/)
 [![Tailwind CSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
@@ -11,17 +11,24 @@
 ## 🇹🇭 ภาษาไทย
 
 ### รายละเอียดโปรเจกต์
-**School CMS Mix V2.8** คือระบบบริหารจัดการเนื้อหาเว็บไซต์โรงเรียนที่สมบูรณ์แบบที่สุด พัฒนาด้วย PHP 8.1+ ร่วมกับ Tailwind CSS มอบประสบการณ์การใช้งานระดับพรีเมียม (Premium UI/UX) พร้อมโมดูลสารบรรณอิเล็กทรอนิกส์ (E-Saraban) ระบบงานปกครองนักเรียน และระบบชุมชนแห่งการเรียนรู้ทางวิชาชีพ (PLC) ที่ครบถ้วน
+**School CMS Mix V2.9** คือระบบบริหารจัดการเนื้อหาเว็บไซต์โรงเรียนที่สมบูรณ์แบบที่สุด พัฒนาด้วย PHP 8.1+ ร่วมกับ Tailwind CSS มอบประสบการณ์การใช้งานระดับพรีเมียม (Premium UI/UX)
+- **ระบบสารบรรณอิเล็กทรอนิกส์ (E-Saraban)**: รับ-ส่งหนังสือราชการ, เกษียณหนังสือ, และจัดเก็บเอกสาร
+- **ระบบชุมนุมออนไลน์ (Online Club Registration)**: ระบบรับสมัครชุมนุมสำหรับนักเรียน, จัดการโควตา, เช็คชื่อ และประเมินผลการเรียน
+- **ระบบลาออนไลน์ (Leave Management)**: จัดการการลาของบุคลากรพร้อมระบบอนุมัติ
+- **ระบบงานปกครองและ PLC**: จัดการพฤติกรรมนักเรียนและชุมชนแห่งการเรียนรู้ทางวิชาชีพที่ครบถ้วน
 
 ### ✨ คุณสมบัติเด่น
 - **E-Saraban (ระบบสารบรรณ):** ลงทะเบียนรับ-ส่ง, ออกเลขที่อัตโนมัติ, เกษียณหนังสือแบบ Timeline, และระบบเวียนเอกสารดิจิทัล
 - **Leave Management (ระบบลาออนไลน์):** เขียนใบลาออนไลน์, คำนวณวันลาอัตโนมัติ (หักวันหยุด), และสรุปรายงานสำหรับ HR
+- **Online Club Registration (ระบบชุมนุมออนไลน์):** ระบบให้นักเรียนเลือกชุมนุมผ่านระบบออนไลน์, กำหนดโควตาจำนวนนักเรียนต่อชุมนุม, ระบบตรวจสอบซ้ำ, ระบบยกเลิกการสมัครเพื่อเปลี่ยนชุมนุม (ตราบเท่าที่ระบบยังเปิด), ระบบเช็คชื่อรายครั้ง, รายงานสรุปการเข้าเรียน (รายบุคคล/ร้อยละ), และระบบประเมินผลผ่าน/ไม่ผ่านสำหรับครูประจำชุมนุม
 - **Modern UI/UX:** ดีไซน์พรีเมียมด้วย Glassmorphism รองรับการแสดงผลทุกหน้าจอ (Responsive)
 - **Dashboard & Analytics:** สรุปสถิติภาพรวมโรงเรียนในรูปแบบกราฟและตัวเลข
 - **SIS (Student Information System):** ระบบจัดการข้อมูลนักเรียนครบวงจร (DMC Compatible)
 - **Attendance System:** ระบบเช็คชื่อเข้าเรียนรายวิชา/รายวัน พร้อมระบบ Upsert กันข้อมูลซ้ำ
 - **Attendance Reports:** รายงานสถิติการเข้าเรียนรายบุคคล/รายห้อง พร้อมร้อยละการมาเรียน
-- **Student Health & Nutrition:** ติดตามสถิติน้ำหนัก ส่วนสูง และการคำนวณ BMI อัตโนมัติ พร้อมกราฟวิเคราะห์สถานะโภชนาการแยกตามห้องเรียน (AJAX-powered)
+- **Student Health & Clinic System:** ระบบงานพยาบาลครบวงจร จัดการน้ำหนัก-ส่วนสูง (BMI), ประวัติการรักษา, การเบิกจ่ายยาพร้อมระบบตัดสต๊อกอัตโนมัติ (Inventory Control), ระบบส่งต่อโรงพยาบาล, และระบบแจ้งเตือนยาใกล้หมด
+- **BMI Data Management:** ระบบนำเข้า/ส่งออกข้อมูลน้ำหนัก-ส่วนสูงผ่านไฟล์ CSV (Excel Compatible) เพื่อการติดตามภาวะโภชนาการแบบรายห้องเรียน
+- **Health Records & Pharmacy:** บันทึกประวัติการแพ้ยาและโรคประจำตัวรายบุคคล, ระบบจ่ายยาที่เชื่อมโยงกับคลังยาแบบ Real-time ด้วย Database Transaction ป้องกันความผิดพลาดของข้อมูลสต๊อก
 - **User Management & RBAC:** ระบบจัดการผู้ใช้และสิทธิ์แบบ **Multi-Role** (1 ผู้ใช้มีได้หลายบทบาท) พร้อม UI ที่ทันสมัย
 - **Academic Calendar:** ปฏิทินวิชาการแสดงผลแบบ Interactive พร้อมรายละเอียดกิจกรรม
 - **Entry Popup:** ระบบจัดการป๊อปอัพแจ้งเตือนหน้าแรก (Welcome Popup)
@@ -44,7 +51,7 @@
 ## 🇺🇸 English
 
 ### Project Overview
-**School CMS Mix V2.8** is a comprehensive School Management System built on PHP 8.1+ and Tailwind CSS. It features a premium UI/UX design with integrated E-Saraban, Student Discipline System, and PLC Management modules tailored for modern educational institutions.
+**School CMS Mix V2.9** is a comprehensive School Management System built on PHP 8.1+ and Tailwind CSS. It features a premium UI/UX design with integrated E-Saraban, Online Club Registration, Student Discipline System, and PLC Management modules tailored for modern educational institutions.
 
 ### ✨ Key Features
 - **User Management & RBAC:** Advanced role-based access control with **Multi-Role support** (1 user can have multiple roles).
@@ -53,7 +60,10 @@
 - **Modern UI/UX:** Premium design using Glassmorphism, fully responsive for all devices.
 - **Student Information System (SIS):** Student directory and dashboard with easy CSV import from DMC.
 - **Attendance System:** Individual and subject-based attendance tracking with daily reports and percentage calculation.
-- **Student Health & Nutrition:** Health monitoring system with auto BMI calculation and nutrition analysis dashboard (AJAX-powered).
+- **Student Health & Clinic System:** Comprehensive health management with BMI tracking, medical records, and automatic pharmacy inventory control with real-time stock deduction.
+- **BMI Data Management:** CSV import/export system for weight and height tracking (Excel compatible) with nutritional status analysis.
+- **Pharmacy & Treatment Logs:** Individual allergy and chronic disease profiles, treatment logging with hospital referral support, and stock management with Low-Stock alerts.
+- **Online Club Registration:** Student-side club selection system with quota management, smart filtering, registration withdrawal (while system is open), attendance tracking with summary reports (individual & percentage), and teacher evaluation tools.
 - **Academic Calendar:** Interactive school calendar with event management.
 - **Document Submission System:** Secure academic document upload system with Drag & Drop, MIME validation, and approval workflow.
 - **Complaint System:** Public feedback and complaint management system with badge notifications and status tracking.
@@ -104,6 +114,6 @@
 
 ---
 ---
-&copy; 2569 **School CMS Mix V2.8**. พัฒนาโดย **ครูสุรเดช ปุยะติ** (โรงเรียนลำปลายมาศ)
+&copy; 2569 **School CMS Mix V2.9**. พัฒนาโดย **ครูสุรเดช ปุยะติ** (โรงเรียนลำปลายมาศ)
 
 ---

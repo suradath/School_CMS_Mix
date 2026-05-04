@@ -28,7 +28,7 @@
         <div class="flex justify-between items-start border-b-2 border-slate-900 pb-8 mb-10">
             <div>
                 <h1 class="text-3xl font-bold text-slate-900 mb-2">ใบปะหน้าเกษียณหนังสือ</h1>
-                <p class="text-slate-600">งานสารบรรณอิเล็กทรอนิกส์ - ระบบ School CMS Mix</p>
+                <p class="text-slate-600">งานสารบรรณอิเล็กทรอนิกส์ - ระบบ School CMS Mix V2.9</p>
             </div>
             <div class="text-right">
                 <p class="text-sm font-bold">เลขทะเบียนรับ: <span class="text-xl"><?= $doc['doc_no'] ?></span></p>
@@ -99,7 +99,7 @@
         </div>
 
         <div class="text-center text-[10px] text-slate-400 mt-20 border-t pt-4 italic">
-            * เอกสารนี้สร้างโดยระบบงานสารบรรณอิเล็กทรอนิกส์ School CMS Mix V2.8 และมีการยืนยันตัวตนผ่านระบบดิจิทัล *
+            * เอกสารนี้สร้างโดยระบบงานสารบรรณอิเล็กทรอนิกส์ School CMS Mix V2.9 และมีการยืนยันตัวตนผ่านระบบดิจิทัล *
         </div>
     </div>
 </body>

@@ -112,8 +112,29 @@
     </section>
 <?php endif; ?>
 
+<!-- Club Registration Banner -->
+<?php if (\Core\Database::getSetting('club_registration_enabled', '0') === '1'): ?>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 mb-12 relative z-20">
+    <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 rounded-[3rem] p-8 md:p-12 shadow-2xl shadow-blue-200 overflow-hidden relative group">
+        <div class="absolute -right-20 -top-20 w-64 h-64 bg-white/10 rounded-full blur-3xl transition-transform group-hover:scale-150 duration-700"></div>
+        <div class="absolute -left-20 -bottom-20 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl"></div>
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="text-center md:text-left">
+                <span class="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-black text-white uppercase tracking-[0.2em] mb-4">Registration Open</span>
+                <h3 class="text-3xl md:text-5xl font-black text-white heading-font mb-2">ลงทะเบียนชุมนุมออนไลน์</h3>
+                <p class="text-blue-100 text-lg font-medium">เปิดรับสมัครนักเรียนเข้าร่วมกิจกรรมชุมนุม ประจำปีการศึกษา <?= (date('Y') + 543) ?></p>
+            </div>
+            <a href="<?= url('/club-login') ?>" class="px-10 py-5 bg-white text-blue-600 font-black rounded-2xl shadow-xl hover:bg-blue-50 transition-all hover:scale-105 active:scale-95 text-xl flex items-center gap-3">
+                <i class="fa fa-pencil-square-o"></i> ลงทะเบียนตอนนี้
+            </a>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
 <!-- Stats / Highlights -->
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 relative z-20">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 <?= (\Core\Database::getSetting('club_registration_enabled', '0') === '1') ? '' : '-mt-24' ?> relative z-20">
+
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div class="card-glass p-8 rounded-5xl shadow-2xl transition-all hover:-translate-y-2 group text-center">
             <div

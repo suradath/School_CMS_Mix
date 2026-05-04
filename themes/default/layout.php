@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php
-    $siteName = \Core\Database::getSetting('site_name', 'School CMS Mix');
+    $siteName = \Core\Database::getSetting('site_name', 'School CMS Mix V2.9');
     $siteLogo = \Core\Database::getSetting('site_logo', '');
     $siteFavicon = \Core\Database::getSetting('site_favicon', '');
     $primaryColor = \Core\Database::getSetting('primary_color', '#1d4ed8');
@@ -270,7 +270,7 @@
                         <h3 class="text-2xl font-bold heading-font tracking-tight"><?= $siteName ?></h3>
                     </div>
                     <p class="text-slate-400 text-base max-w-md leading-relaxed mb-8">
-                        <?= \Core\Database::getSetting('footer_description', 'ยกระดับการศึกษาด้วยเทคโนโลยีที่ทันสมัย ระบบบริหารจัดการเนื้อหาโรงเรียน (School CMS) ที่ออกแบบมาเพื่อความง่ายและประสิทธิภาพสูงสุด') ?>
+                        <?= \Core\Database::getSetting('footer_description', 'ยกระดับการศึกษาด้วยเทคโนโลยีที่ทันสมัย ระบบบริหารจัดการเนื้อหาโรงเรียน (School CMS Mix V2.9) ที่ออกแบบมาเพื่อความง่ายและประสิทธิภาพสูงสุด') ?>
                     </p>
                     <div class="flex space-x-3">
                         <!-- ... (Social Icons stay same) ... -->
@@ -347,7 +347,7 @@
             </div>
             <div
                 class="mt-16 pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center text-xs text-slate-500 space-y-4 md:space-y-0">
-                <p><?= \Core\Database::getSetting('footer_copyright', '&copy; ' . date('Y') . ' ' . $siteName . '. All rights reserved.') ?>
+                <p><?= \Core\Database::getSetting('footer_copyright', '&copy; ' . (date('Y') + 543) . ' ' . $siteName . '. All rights reserved.') ?>
                 </p>
                 <div class="flex space-x-6">
                     <a href="#" class="hover:text-slate-300">Privacy Policy</a>

@@ -51,7 +51,6 @@ class HelpdeskController extends Controller
 
         $photoPaths = [];
         if (!empty($_FILES['photos']['name'][0])) {
-            $uploader = new Uploader('uploads/helpdesk');
             $files = $_FILES['photos'];
             
             // Handle multiple files
@@ -66,7 +65,7 @@ class HelpdeskController extends Controller
                     'size' => $files['size'][$i]
                 ];
                 
-                $path = $uploader->upload($fileData);
+                $path = Uploader::uploadImage($fileData, 'helpdesk');
                 if ($path) {
                     $photoPaths[] = $path;
                 }

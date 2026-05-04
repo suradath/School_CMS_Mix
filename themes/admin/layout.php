@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?? 'Dashboard' ?> - School CMS Mix V2.8</title>
+    <title><?= $title ?? 'Dashboard' ?> - School CMS Mix V2.9</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -175,7 +175,7 @@
     </button>
 
     <?php
-    $siteName = \Core\Database::getSetting('site_name', 'School CMS Mix V2.8');
+    $siteName = \Core\Database::getSetting('site_name', 'School CMS Mix V2.9');
     $siteLogo = \Core\Database::getSetting('site_logo', '');
     $primaryColor = \Core\Database::getSetting('primary_color', '#1d4ed8');
     $currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -323,7 +323,11 @@
                     $studentSubmenu[] = ['url' => '/my-discipline', 'label' => 'ประวัติพฤติกรรมของฉัน', 'icon' => 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'];
                 }
 
-                $studentSubmenu[] = ['url' => '/health', 'label' => 'สุขภาพและโภชนาการ', 'icon' => 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'];
+                if (\Core\Security::checkRole(['admin', 'nurse'])) {
+                    $studentSubmenu[] = ['url' => '/admin/health', 'label' => 'ระบบงานพยาบาล (Clinic)', 'icon' => 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'];
+                }
+
+                $studentSubmenu[] = ['url' => '/health', 'label' => 'สุขภาพและโภชนาการ', 'icon' => 'M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'];
 
                 $menuItems = [
                     ['url' => '/dashboard', 'label' => 'แผงควบคุม', 'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'],
@@ -426,6 +430,20 @@
                     'label' => 'ระบบ PLC',
                     'icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
                     'submenu' => $plcSubmenu
+                ];
+
+                // Club Registration Menu
+                $clubSubmenu = [
+                    ['url' => '/club', 'label' => 'จัดการชุมนุม/สมาชิก', 'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'],
+                ];
+                if (\Core\Security::checkRole('admin')) {
+                    $clubSubmenu[] = ['url' => '/club/settings', 'label' => 'ตั้งค่าเปิด-ปิดระบบ', 'icon' => 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z'];
+                }
+
+                $menuItems[] = [
+                    'label' => 'ระบบชุมนุมออนไลน์',
+                    'icon' => 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4',
+                    'submenu' => $clubSubmenu
                 ];
 
                 // Helpdesk Menu
@@ -645,7 +663,7 @@
             <div class="p-4 bg-slate-900 rounded-3xl text-white relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
                 <p class="text-[10px] font-bold text-blue-300 uppercase tracking-[0.2em] mb-1">Status</p>
-                <p class="text-xs font-bold leading-relaxed">System v2.8 Stable</p>
+                <p class="text-xs font-bold leading-relaxed">System v2.9 Stable</p>
                 <a href="<?= url('/') ?>" target="_blank"
                     class="mt-4 inline-flex items-center text-[10px] font-bold hover:text-blue-300 transition-colors">
                     VIEW LIVE SITE <svg class="w-2.5 h-2.5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -697,7 +715,8 @@
                                         'dept_head' => 'หัวหน้ากลุ่มสาระฯ',
                                         'staff' => 'เจ้าหน้าที่ทั่วไป',
                                         'director' => 'ผู้อำนวยการ',
-                                        'hr' => 'งานบุคคล'
+                                        'hr' => 'งานบุคคล',
+                                        'nurse' => 'เจ้าหน้าที่พยาบาล'
                                     ][$slug] ?? ucfirst($slug);
                                 }
                                 echo implode(' / ', $roleNames);
@@ -724,13 +743,13 @@
             <footer
                 class="mt-20 py-10 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center text-slate-400">
                 <div class="flex items-center space-x-2 text-sm font-bold">
-                    <span class="text-slate-900 outfit tracking-tight text-lg">School CMS Mix</span>
+                    <span class="text-slate-900 outfit tracking-tight text-lg">School CMS Mix V2.9</span>
                     <span
-                        class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[10px] uppercase tracking-widest">v2.8</span>
+                        class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[10px] uppercase tracking-widest">v2.9</span>
                 </div>
                 <div class="mt-6 md:mt-0 text-center md:text-right">
                     <div class="text-[11px] font-bold uppercase tracking-wider text-slate-300">Development & Copyright
-                        &copy; 2569</div>
+                        &copy; <?= (date('Y') + 543) ?></div>
                     <div class="text-sm font-bold text-slate-700 mt-1">ครูสุรเดช ปุยะติ <span
                             class="mx-1 text-slate-200">|</span> <a href="mailto:suradath@lamplaimat.ac.th"
                             class="hover:text-primary transition-colors">suradath@lamplaimat.ac.th</a></div>
