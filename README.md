@@ -79,10 +79,10 @@
 
 ```text
 /cms
-├── core/               # Core System (Database, Router, Security)
+├── Core/               # Core System (Database, Router, Security)
 ├── docs/               # Manuals & Documentation
-├── modules/            # Functional Modules (Saraban, Leave, Students, Health)
-├── themes/             # UI Templates (Default & Admin)
+├── Modules/            # Functional Modules (Saraban, Leave, Students, Health)
+├── Themes/             # UI Templates (Default & Admin)
 ├── uploads/            # Media & Document Storage
 ├── index.php           # Main Entry Point
 └── install.php         # Web Installer Script
@@ -93,6 +93,7 @@
 2. สร้างฐานข้อมูล MySQL (Collation: `utf8mb4_unicode_ci`)
 3. เข้าใช้งานไฟล์ `install.php` ผ่าน Browser และทำตามขั้นตอน
 4. **สำคัญ:** เมื่อติดตั้งเสร็จแล้ว ให้ลบไฟล์ `install.php` เพื่อความปลอดภัย
+5. 📺 **วิดีโอสอนการติดตั้ง:** [ดูบน YouTube](https://www.youtube.com/watch?v=w7unbm3_Yr4)
 
 ## 📖 เอกสารประกอบการใช้งาน (Documentation)
 - [🇹🇭 คู่มือการติดตั้ง (Installation Guide)](docs/installation_guide.md)
