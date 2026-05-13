@@ -31,6 +31,15 @@ class View
         // Convert dot notation to path (e.g., Home.Views.index -> Home/Views/index)
         $path = str_replace('.', '/', $view);
 
+        // Handle case-sensitivity for top-level directories
+        if (strpos($path, 'themes/') === 0) {
+            $path = 'Themes' . substr($path, 6);
+        } elseif (strpos($path, 'modules/') === 0) {
+            $path = 'Modules' . substr($path, 7);
+        } elseif (strpos($path, 'core/') === 0) {
+            $path = 'Core' . substr($path, 4);
+        }
+
         // 1. Check in themes/current_theme/views/
         $themeViewPath = THEMES_PATH . '/' . self::$theme . '/views/' . $path . '.php';
         

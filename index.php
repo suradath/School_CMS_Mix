@@ -12,9 +12,9 @@ error_reporting(E_ALL);
 
 // 2. Constants
 define('ROOT_PATH', __DIR__);
-define('CORE_PATH', ROOT_PATH . '/core');
-define('MODULES_PATH', ROOT_PATH . '/modules');
-define('THEMES_PATH', ROOT_PATH . '/themes');
+define('CORE_PATH', ROOT_PATH . '/Core');
+define('MODULES_PATH', ROOT_PATH . '/Modules');
+define('THEMES_PATH', ROOT_PATH . '/Themes');
 
 // 3. Simple PSR-4 Autoloader
 spl_autoload_register(function ($class) {
